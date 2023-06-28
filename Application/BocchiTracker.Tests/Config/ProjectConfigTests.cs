@@ -1,19 +1,20 @@
-﻿using BocchiTracker.ProjectConfig;
+﻿using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Tests.ProjectConfig
+namespace BocchiTracker.Tests.Config
 {
-    public class ConfigTests
+    public class ProjectConfigTests
     {
         [Fact]
         public void GetServiceURL_ServiceURLExists_ReturnsURL()
         {
             // Arrange
-            var config = new Config
+            var config = new ProjectConfig
             {
                 ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>
                 {
@@ -40,7 +41,7 @@ namespace BocchiTracker.Tests.ProjectConfig
         public void GetServiceURL_NoServiceURL_ReturnsNull()
         {
             // Arrange
-            var config = new Config();
+            var config = new ProjectConfig();
 
             // Act
             var url = config.GetServiceURL(ServiceDefinitions.Github);

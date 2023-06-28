@@ -1,4 +1,5 @@
-﻿using BocchiTracker.ProjectConfig;
+﻿using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Tests.ProjectConfig
+namespace BocchiTracker.Tests.Config
 {
     public class ConfigRepositoryTests
     {
@@ -18,8 +19,8 @@ namespace BocchiTracker.Tests.ProjectConfig
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository(filepath, fileSystemMock.Object);
-            var config = new Config
+            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
+            var config = new ProjectConfig
             {
                 ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>
                 {
@@ -57,7 +58,7 @@ namespace BocchiTracker.Tests.ProjectConfig
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository(filepath, fileSystemMock.Object);
+            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
 
             var yaml = "Invalid YAML";
 
@@ -72,10 +73,12 @@ namespace BocchiTracker.Tests.ProjectConfig
                 .Returns(new StreamReader(memory_stream));
 
             // Act
-            var result = configRepository.Load();
+            ProjectConfig? outConfig;
+            var result = configRepository.TryLoad(out outConfig);
 
             // Assert
-            Assert.Null(result);
+            Assert.Null(outConfig);
+            Assert.False(result);
         }
 
         [Fact]
@@ -84,8 +87,8 @@ namespace BocchiTracker.Tests.ProjectConfig
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository(filepath, fileSystemMock.Object);
-            var config = new Config { ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>() };
+            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
+            var config = new ProjectConfig { ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>() };
             config.ServiceURLs.Add(new Dictionary<ServiceDefinitions, string> { { ServiceDefinitions.Github, "https://service1.example.com" } });
 
             var writer = new StreamWriter(new MemoryStream());

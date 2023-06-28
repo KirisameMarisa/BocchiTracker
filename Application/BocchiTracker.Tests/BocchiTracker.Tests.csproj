@@ -56,7 +56,7 @@
     <ProjectReference Include="..\Models\IssueInfoCollector\IssueInfoCollector.csproj" />
     <ProjectReference Include="..\Models\ModelEventBusDef\ModelEventBus.csproj" />
     <ProjectReference Include="..\Models\ProcessLink\ProcessLink.csproj" />
-    <ProjectReference Include="..\Models\ProjectConfig\ProjectConfig.csproj" />
+    <ProjectReference Include="..\Models\ProjectConfig\Config.csproj" />
     <ProjectReference Include="..\Models\QueryTypeLibrary\ProcessLinkQuery.csproj" />
     <ProjectReference Include="..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
   </ItemGroup>
@@ -78,6 +78,7 @@
 
   <ItemGroup>
     <Folder Include="Collector\IssueInfoCollector\" />
+    <Folder Include="Configs\UserConfig\" />
     <Folder Include="CrossServiceReporter\" />
     <Folder Include="CrossServiceUploader\" />
   </ItemGroup>

@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.ProjectConfig;
+using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Controllers
 {

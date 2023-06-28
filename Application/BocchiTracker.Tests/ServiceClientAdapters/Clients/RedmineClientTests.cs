@@ -1,7 +1,8 @@
 ﻿using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.ProjectConfig;
+using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -30,7 +31,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             }
 
             {
-                var repository = new ConfigRepository(Path.Combine("Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
+                var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
                 _project_url = config.GetServiceURL(ServiceDefinitions.Redmine);
             }

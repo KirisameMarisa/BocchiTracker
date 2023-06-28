@@ -1,4 +1,5 @@
-﻿using BocchiTracker.ProjectConfig;
+﻿using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;

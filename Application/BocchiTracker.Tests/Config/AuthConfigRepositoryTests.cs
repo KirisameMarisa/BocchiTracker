@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
+using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Tests.ServiceClientAdapters
+namespace BocchiTracker.Tests.Config
 {
     public class AuthConfigRepositoryTests
     {
@@ -23,7 +25,7 @@ APIKey: testapikey";
                 { filePath, new MockFileData(fileContent) }
             });
 
-            var repo = new AuthConfigRepository(filePath, fileSystemMock);
+            var repo = new ConfigRepository<AuthConfig>(filePath, fileSystemMock);
 
             // Act
             var result = repo.Load();
