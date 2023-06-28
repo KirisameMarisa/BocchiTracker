@@ -1,0 +1,33 @@
+namespace BocchiTracker.ProcessLinkQuery.Queries;
+
+union QueryID { AppBasicInfo, RequestQuery, PlayerPosition, ScreenshotData }
+
+table ScreenshotData {
+    width:      int;
+    height:     int;
+    data:       [ubyte];
+}
+
+table PlayerPosition {
+    x:          float;
+    y:          float;
+    z:          float;
+    stage:      string;
+}
+
+table AppBasicInfo {
+    pid:        int;
+    app_name:   string;
+    args:       string;
+    platform:   string;
+}
+
+table RequestQuery {
+    query_id:   int;
+}
+
+table Packet {
+    query_id:   QueryID;
+}
+
+root_type Packet;
