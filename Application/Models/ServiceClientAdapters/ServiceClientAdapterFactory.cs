@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BocchiTracker.ProjectConfig;
+using BocchiTracker.Config;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using Octokit;
 

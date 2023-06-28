@@ -1,4 +1,5 @@
-﻿using BocchiTracker.ProjectConfig;
+﻿using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using System;
 using System.Collections.Concurrent;
@@ -19,7 +20,7 @@ namespace BocchiTracker.ServiceClientAdapters
 
     public class AuthConfigRepositoryFactory : IAuthConfigRepositoryFactory
     {
-        private static ConcurrentDictionary<ServiceDefinitions, AuthConfigRepository> _caches = new ConcurrentDictionary<ServiceDefinitions, AuthConfigRepository>();
+        private static ConcurrentDictionary<ServiceDefinitions, ConfigRepository<AuthConfig>> _caches = new ConcurrentDictionary<ServiceDefinitions, ConfigRepository<AuthConfig>>();
 
         public AuthConfigRepositoryFactory(string inBaseDirectory)
         {
@@ -28,7 +29,7 @@ namespace BocchiTracker.ServiceClientAdapters
                 if (_caches.ContainsKey(service_type))
                     continue;
                 string filepath = Path.Combine(inBaseDirectory, $"{service_type}.AuthConfig.yaml");
-                _caches.TryAdd(service_type, new AuthConfigRepository(filepath, new FileSystem()));
+                _caches.TryAdd(service_type, new ConfigRepository<AuthConfig>(filepath, new FileSystem()));
             }
         }
 

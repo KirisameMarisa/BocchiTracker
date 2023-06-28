@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace BocchiTracker.ProjectConfig
+namespace BocchiTracker.Config.Configs
 {
-    public class Config
+    public class ProjectConfig
     {
         public List<Dictionary<ServiceDefinitions, string>>? ServiceURLs { get; set; }
 

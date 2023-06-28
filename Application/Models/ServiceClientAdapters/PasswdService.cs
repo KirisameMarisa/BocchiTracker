@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using BocchiTracker.ProjectConfig;
+using BocchiTracker.Config;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using System.IO;
 
-namespace BocchiTracker.ProjectConfig
+namespace BocchiTracker.Config
 {
-    public class ConfigRepository
+    public class ConfigRepository<T>
     {
         private string _file_path;
         private IFileSystem _file_system;
@@ -19,7 +20,26 @@ namespace BocchiTracker.ProjectConfig
             _file_system = inFileSystem;
         }
 
-        public Config? Load()
+        public bool TryLoad(out T? outConfig)
+        {
+            try
+            {
+                outConfig = Load();
+                return true;
+            }
+            catch (FileNotFoundException)
+            {
+                outConfig = default;
+                return false;
+            }
+            catch (InvalidDataException)
+            {
+                outConfig = default;
+                return false;
+            }
+        }
+
+        public T? Load()
         {
             try
             {
@@ -28,17 +48,17 @@ namespace BocchiTracker.ProjectConfig
                     .Build();
 
                 using var reader = _file_system.File.OpenText(_file_path);
-                var settings = deserializer.Deserialize<Config>(reader);
+                var settings = deserializer.Deserialize<T>(reader);
 
                 return settings;
             }
-            catch
+            catch (Exception ex) 
             {
-                return null;
+                throw new InvalidDataException($"Failed to deserialize cache file {_file_path}.", ex);
             }
         }
 
-        public void Save(Config settings)
+        public void Save(T settings)
         {
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)

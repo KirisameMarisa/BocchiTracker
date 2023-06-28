@@ -38,7 +38,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\ProjectConfig\ProjectConfig.csproj" />
+    <ProjectReference Include="..\ProjectConfig\Config.csproj" />
   </ItemGroup>
 
 </Project>

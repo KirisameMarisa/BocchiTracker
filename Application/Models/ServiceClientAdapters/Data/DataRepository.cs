@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ProjectConfig;
+﻿using BocchiTracker.Config;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using System;
 using System.Collections.Generic;

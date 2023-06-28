@@ -4,7 +4,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.ProjectConfig;
+using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Controllers;
 using BocchiTracker.ServiceClientAdapters.Data;
@@ -18,7 +19,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 
         Task<T?> GetUnifiedData();
 
-        Task<T?> GetData(ProjectConfig.ServiceDefinitions inServiceType);
+        Task<T?> GetData(ServiceDefinitions inServiceType);
     }
 
     public class UserListService : IMetaService<List<UserData>>
@@ -39,11 +40,11 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
             var factory = new ServiceClientAdapterFactory();
             var controller = new AuthenticationController(factory);
 
-            bool result = await controller.Authenticate(ProjectConfig.ServiceDefinitions.Github, new AuthConfig(), "", "");
+            bool result = await controller.Authenticate(ServiceDefinitions.Github, new AuthConfig(), "", "");
 
             DataRepository data_repository = new DataRepository(factory, cache);
 
-            var users = await data_repository.GetUsers(ProjectConfig.ServiceDefinitions.Github);
+            var users = await data_repository.GetUsers(ServiceDefinitions.Github);
         }
     }
 }

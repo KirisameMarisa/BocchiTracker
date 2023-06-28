@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.ProjectConfig
+namespace BocchiTracker.Config
 {
     public enum ServiceDefinitions
     {
