@@ -16,11 +16,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void IsExpired_FileDoesNotExist_ReturnsTrue()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider(file_system.Object);
+            var cache_provider = new CacheProvider("", file_system.Object);
 
             // Arrange
             string label = "testLabel";
-            string file_path = Path.Combine(Path.GetTempPath(), "BocchiTracker", string.Format("{0}.Cache.yaml", label));
+            string file_path = Path.Combine("BocchiTracker", string.Format("{0}.Cache.yaml", label));
 
             file_system
                 .Setup(x => x.File.Exists(file_path))
@@ -37,11 +37,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void IsExpired_FileExistsAndNotExpired_ReturnsFalse()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider(file_system.Object);
+            var cache_provider = new CacheProvider("",file_system.Object);
 
             // Arrange
             string label = "testLabel";
-            string file_path = Path.Combine(Path.GetTempPath(), "BocchiTracker", string.Format("{0}.Cache.yaml", label));
+            string file_path = Path.Combine("BocchiTracker", string.Format("{0}.Cache.yaml", label));
             DateTime lastModified = DateTime.Now.AddDays(-10);
 
             file_system
@@ -62,11 +62,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void Set_ValidData_CreatesCacheFile()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider(file_system.Object);
+            var cache_provider = new CacheProvider("", file_system.Object);
 
             // Arrange
             string label = "testLabel";
-            string file_path = Path.Combine(Path.GetTempPath(), "BocchiTracker", string.Format("{0}.Cache.yaml", label));
+            string file_path = Path.Combine("BocchiTracker", string.Format("{0}.Cache.yaml", label));
             var data = new TestData { Value = "Test" };
 
             var writer = new StreamWriter(new MemoryStream());
@@ -85,11 +85,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void Get_ValidData_ReturnsCachedValue()
         {
             var file_system     = new Mock<IFileSystem>();
-            var cache_provider  = new CacheProvider(file_system.Object);
+            var cache_provider  = new CacheProvider("", file_system.Object);
 
             // Arrange
             string label = "testLabel";
-            string filePath = Path.Combine(Path.GetTempPath(), "BocchiTracker", string.Format("{0}.Cache.yaml", label));
+            string filePath = Path.Combine("BocchiTracker", string.Format("{0}.Cache.yaml", label));
             var data = new TestData { Value = "Test" };
 
             using var memory_stream = new MemoryStream();

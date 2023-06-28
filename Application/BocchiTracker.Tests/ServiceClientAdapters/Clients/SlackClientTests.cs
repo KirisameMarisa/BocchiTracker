@@ -21,7 +21,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
         public SlackClientTests()
         {
             {
-                var factory = new AuthConfigRepositoryFactory(Path.Combine("Configs", "AuthConfigs"));
+                var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
                 _auth_config = factory.Load(ServiceDefinitions.Slack);
             }
 
@@ -31,7 +31,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             }
 
             {
-                var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
+                var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
                 _channel = config.GetServiceURL(ServiceDefinitions.Slack);
             }

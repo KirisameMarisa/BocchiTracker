@@ -62,23 +62,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Configs\AuthConfigs\Github.AuthConfig.yaml">
+    <None Update="Resources\Configs\AuthConfigs\Github.AuthConfig.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configs\AuthConfigs\Redmine.AuthConfig.yaml">
+    <None Update="Resources\Configs\AuthConfigs\Redmine.AuthConfig.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Configs\AuthConfigs\Slack.AuthConfig.yaml">
+    <None Update="Resources\Configs\AuthConfigs\Slack.AuthConfig.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Configs\ProjectConfigs\Test.ProjectConfig.yaml">
+    <None Update="Resources\Configs\ProjectConfigs\Test.ProjectConfig.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Collector\IssueInfoCollector\" />
-    <Folder Include="Configs\UserConfig\" />
+    <Folder Include="Resources\Configs\UserConfig\" />
     <Folder Include="CrossServiceReporter\" />
     <Folder Include="CrossServiceUploader\" />
   </ItemGroup>

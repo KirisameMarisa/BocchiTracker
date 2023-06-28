@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.Tests.Config
 {
-    public class ConfigRepositoryTests
+    public class ProjectConfigRepositoryTests
     {
         [Fact]
         public void Load_ValidConfig_ReturnsConfigObject()
