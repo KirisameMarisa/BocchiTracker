@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 
         public async Task Load()
         {
-            var cache = new CacheProvider(new FileSystem());
+            var cache = new CacheProvider(Path.GetTempPath(), new FileSystem());
             var factory = new ServiceClientAdapterFactory();
             var controller = new AuthenticationController(factory);
 

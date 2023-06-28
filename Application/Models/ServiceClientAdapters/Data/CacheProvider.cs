@@ -24,9 +24,9 @@ namespace BocchiTracker.ServiceClientAdapters.Data
         private IFileSystem _file_system;
         private readonly int _expiry_day;
 
-        public CacheProvider(IFileSystem inFileSystem, int inExpiryDay = 30)
+        public CacheProvider(string inBaseDirectory, IFileSystem inFileSystem, int inExpiryDay = 30)
         {
-            _file_path      = Path.Combine(Path.GetTempPath(), "BocchiTracker", "{0}.Cache.yaml");
+            _file_path      = Path.Combine(inBaseDirectory, "BocchiTracker", "{0}.Cache.yaml");
             _file_system    = inFileSystem;
             _expiry_day     = inExpiryDay;
         }
