@@ -2,6 +2,7 @@
 using BocchiTracker.ModelEventBus;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using MediatR;
+using SixLabors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;

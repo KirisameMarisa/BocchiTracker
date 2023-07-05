@@ -13,7 +13,7 @@ namespace BocchiTracker.ModelEventBus
 
         public int ClientID { get; set; }
 
-        public Dictionary<string, dynamic> Status { get; set; } = new Dictionary<string, dynamic>();
+        public Dictionary<string, string> Status { get; set; } = new Dictionary<string, string>();
     }
 
     public class AppStatusQueryEvent : IRequest 

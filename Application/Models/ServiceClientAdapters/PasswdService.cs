@@ -2,13 +2,6 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using BocchiTracker.Config;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Paddings;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
-using Slack.NetStandard;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BocchiTracker.ServiceClientAdapters
 {

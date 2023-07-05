@@ -2,23 +2,36 @@
 
 namespace BocchiTracker.Config.Configs
 {
+    public class ServiceConfig
+    {
+        public IssueServiceDefinitions               Service { get; set; }
+
+        public string?                          URL { get; set; }
+
+        public string?                          DescriptionFormat { get; set; }
+
+        public Dictionary<string, string>?      PriorityMappings { get; set; }
+
+        public Dictionary<string, string>?      TicketTypeMappings { get; set; }
+
+        public Dictionary<string, string>?      QueryFieldMappings { get; set; }
+
+        public Dictionary<string, string>?      DefaultValue { get; set;}
+    }
+
     public class ProjectConfig
     {
-        public List<Dictionary<ServiceDefinitions, string>>? ServiceURLs { get; set; }
+        public List<string>? TicketTypes { get; set; }
 
-        public string? GetServiceURL(ServiceDefinitions inServiceDefinitions)
+        public List<string>? Priorities { get; set; }
+
+        public List<ServiceConfig>? ServiceConfigs { get; set; }
+
+        public ServiceConfig? GetServiceConfig(IssueServiceDefinitions inServiceDefinitions)
         {
-            if (ServiceURLs == null)
+            if (ServiceConfigs == null)
                 return null;
-
-            foreach (var item in ServiceURLs)
-            {
-                if (item.ContainsKey(inServiceDefinitions))
-                {
-                    return item[inServiceDefinitions];
-                }
-            }
-            return null;
+            return ServiceConfigs.Find(x => x.Service == inServiceDefinitions);
         }
     }
 }

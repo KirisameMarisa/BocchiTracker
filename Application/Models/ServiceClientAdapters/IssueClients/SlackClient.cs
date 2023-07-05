@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.Clients
+namespace BocchiTracker.ServiceClientAdapters.IssueClients
 {
-    public class SlackClient : IServiceClientAdapter
+    public class SlackClient : IServiceIssueClient, IServiceUploadClient
     {
         private SlackWebApiClient? _client;
         private string? _channel;
@@ -33,13 +34,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
             }
         }
 
-        public async Task<bool> Post(TicketData inTicketData)
+        public async Task<(bool, string?)> Post(TicketData inTicketData)
         {
             if (_client == null)
-                return false;
+                return (false, null);
 
             if (string.IsNullOrEmpty(_channel) || _channel[0] != '#')
-                return false;
+                return (false, null);
 
             var text = string.Empty;
             text += $"{inTicketData.Summary}\n{inTicketData.Description}";
@@ -54,29 +55,35 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
                 Text    = text
             });
             
-            return response.OK;
+            return (response.OK, "success");
+        }
+
+        public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        {
+            throw new NotImplementedException();
         }
 
 #pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetTicketTypes()
-#pragma warning restore CS1998
         {
             return null;
         }
+#pragma warning restore CS1998
 
 #pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetLabels()
-#pragma warning restore CS1998
         {
             return null;
         }
+#pragma warning restore CS1998
+
 
 #pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetPriorities()
-#pragma warning restore CS1998
         {
             return null;
         }
+#pragma warning restore CS1998
 
         public async Task<List<UserData>?> GetUsers()
         {

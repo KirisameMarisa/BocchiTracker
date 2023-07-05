@@ -4,6 +4,7 @@ using System.IO.Abstractions;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace BocchiTracker.ServiceClientAdapters.Data
 {
@@ -23,12 +24,14 @@ namespace BocchiTracker.ServiceClientAdapters.Data
         private string _file_path;
         private IFileSystem _file_system;
         private readonly int _expiry_day;
+        private readonly Dictionary<string, object> _cache;
 
         public CacheProvider(string inBaseDirectory, IFileSystem inFileSystem, int inExpiryDay = 30)
         {
             _file_path      = Path.Combine(inBaseDirectory, "BocchiTracker", "{0}.Cache.yaml");
             _file_system    = inFileSystem;
             _expiry_day     = inExpiryDay;
+            _cache          = new Dictionary<string, object>();
         }
 
         public bool IsExpired(string inLabel)
@@ -45,6 +48,9 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
         public void Set<T>(string inLabel, T value)
         {
+            if (value == null)
+                return;
+
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
@@ -52,10 +58,17 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             string filename = string.Format(_file_path, inLabel);
             using var writer = _file_system.File.CreateText(filename);
             serializer.Serialize(writer, value);
+
+            _cache[inLabel] = value;
         }
 
         public T Get<T>(string inLabel)
         {
+            if (_cache.TryGetValue(inLabel, out object? cachedValue))
+            {
+                return (T)cachedValue;
+            }
+
             string filename = string.Format(_file_path, inLabel);
             if (!_file_system.File.Exists(filename))
             {
@@ -71,6 +84,8 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             try
             {
                 var settings = deserializer.Deserialize<T>(reader);
+                if (settings != null)
+                    _cache[inLabel] = settings;
                 return settings;
             }
             catch (YamlDotNet.Core.YamlException ex)

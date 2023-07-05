@@ -1,37 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-    <AssemblyName>BocchiTracker.$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>BocchiTracker.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <Configurations>Debug;Release;Debug Blazor;Release Blazor</Configurations>
-  </PropertyGroup>
+  <Import Project="..\..\BocchiTracker.Common.props" />
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'">
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug Blazor' Or '$(Configuration)' == 'Release Blazor'">
-    <TargetFramework>net7.0</TargetFramework>
-    <UseWPF>false</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-  </PropertyGroup>
-  
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
   <ItemGroup>

@@ -32,7 +32,7 @@ namespace BocchiTracker.ApplicationInfoCollector.Handlers
             return Task.CompletedTask;
         }
 
-        private void ProcessAppBasicInfo(int inClientID, Dictionary<string, dynamic>? inData)
+        private void ProcessAppBasicInfo(int inClientID, Dictionary<string, string>? inData)
         {
             _bundles.Add(inClientID);
             
@@ -45,7 +45,7 @@ namespace BocchiTracker.ApplicationInfoCollector.Handlers
             }
         }
 
-        private void ProcessAppStatusDynamic(int inClientID, Dictionary<string, dynamic>? inData)
+        private void ProcessAppStatusDynamic(int inClientID, Dictionary<string, string>? inData)
         {
             _bundles.Add(inClientID);
 

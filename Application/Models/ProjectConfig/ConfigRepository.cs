@@ -1,11 +1,12 @@
 ﻿using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.IO;
+using System.IO.Abstractions;
+
 
 namespace BocchiTracker.Config
 {

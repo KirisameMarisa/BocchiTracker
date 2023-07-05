@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.Clients
+namespace BocchiTracker.ServiceClientAdapters.IssueClients
 {
-    public class GitlabClient : IServiceClientAdapter
+    public class DiscordClient : IServiceIssueClient, IServiceUploadClient
     {
         public Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {
@@ -35,7 +36,12 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
             throw new NotImplementedException();
         }
 
-        public Task<bool> Post(TicketData inTicketData)
+        public Task<(bool, string?)> Post(TicketData inTicketData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace BocchiTracker.ApplicationInfoCollector
     {
         public int ClientID { get; set; }
 
-        public int Pid { get; set; }
+        public string Pid { get; set; } = string.Empty;
 
         public string AppName { get; set; } = string.Empty;
 

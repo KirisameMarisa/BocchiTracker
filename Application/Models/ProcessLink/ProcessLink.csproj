@@ -1,29 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-    <RootNamespace>BocchiTracker.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <AssemblyName>BocchiTracker.$(MSBuildProjectName)</AssemblyName>
-    <Configurations>Debug;Release;Debug Blazor;Release Blazor</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release'">
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug Blazor' OR '$(Configuration)' == 'Release Blazor'">
-    <TargetFramework>net7.0</TargetFramework>
-    <UseWPF>false</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-  </PropertyGroup>
+  <Import Project="..\..\BocchiTracker.Common.props" />
   
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.0.1" />

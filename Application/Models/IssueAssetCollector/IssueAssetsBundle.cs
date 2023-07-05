@@ -11,7 +11,7 @@ namespace BocchiTracker.IssueAssetCollector
 {
     public class IssueAssetsBundle
     {
-        public ObservableCollection<string> Bundle { get; set; } = new ObservableCollection<string>();
+        public List<string> Bundle { get; set; } = new List<string>();
 
         public void Add(string inAsset)
         {

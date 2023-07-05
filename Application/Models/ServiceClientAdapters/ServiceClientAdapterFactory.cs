@@ -1,30 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using BocchiTracker.Config;
-using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.IssueClients;
+using BocchiTracker.ServiceClientAdapters.UploadClients;
 using Octokit;
 
 namespace BocchiTracker.ServiceClientAdapters
 {
-    public interface IServiceClientAdapterFactory
+    public interface IServiceIssueClientFactory
     {
-        IServiceClientAdapter CreateServiceClientAdapter(ServiceDefinitions serviceType);
+        IServiceIssueClient CreateServiceClientAdapter(IssueServiceDefinitions serviceType);
     }
 
-    public class ServiceClientAdapterFactory : IServiceClientAdapterFactory
+    public interface IServiceUploadClientFactory
     {
-        private static Dictionary<ServiceDefinitions, IServiceClientAdapter> _services = new Dictionary<ServiceDefinitions, IServiceClientAdapter>()
+        IServiceUploadClient CreateServiceClientAdapter(UploadServiceDefinitions serviceType);
+    }
+
+    public class ServiceIssueClientAdapterFactory : IServiceIssueClientFactory
+    {
+        private static Dictionary<IssueServiceDefinitions, IServiceIssueClient> _services = new Dictionary<IssueServiceDefinitions, IServiceIssueClient>()
         {
-            { ServiceDefinitions.JIRA,     new JIRAClient() },
-            { ServiceDefinitions.Redmine,  new RedmineClient() },
-            { ServiceDefinitions.Slack,    new SlackClient() },
-            { ServiceDefinitions.Github,   new GithubClient() },
-            { ServiceDefinitions.Glitlab,   new GitlabClient() },
-            { ServiceDefinitions.Discord,   new DiscordClient() },
+            { IssueServiceDefinitions.JIRA,      new JIRAClient()    },
+            { IssueServiceDefinitions.Redmine,   new RedmineClient() },
+            { IssueServiceDefinitions.Slack,     new SlackClient()   },
+            { IssueServiceDefinitions.Github,    new GithubClient()  },
+            { IssueServiceDefinitions.Glitlab,   new GitlabClient()  },
+            { IssueServiceDefinitions.Discord,   new DiscordClient() },
 
         };
 
-        public IServiceClientAdapter CreateServiceClientAdapter(ServiceDefinitions serviceType)
+        public IServiceIssueClient CreateServiceClientAdapter(IssueServiceDefinitions serviceType)
+        {
+            return _services[serviceType];
+        }
+    }
+
+    public class ServiceUploadClientAdapterFactory : IServiceUploadClientFactory
+    {
+        private static Dictionary<UploadServiceDefinitions, IServiceUploadClient> _services = new Dictionary<UploadServiceDefinitions, IServiceUploadClient>()
+        {
+            { UploadServiceDefinitions.JIRA,      new JIRAClient()    },
+            { UploadServiceDefinitions.Redmine,   new RedmineClient() },
+            { UploadServiceDefinitions.Slack,     new SlackClient()   },
+            { UploadServiceDefinitions.Github,    new GithubClient()  },
+            { UploadServiceDefinitions.Glitlab,   new GitlabClient()  },
+            { UploadServiceDefinitions.Discord,   new DiscordClient() },
+            { UploadServiceDefinitions.Explorer,  new ExplorerClients()    },
+            { UploadServiceDefinitions.Dropbox,   new DropboxClients() },
+        };
+
+        public IServiceUploadClient CreateServiceClientAdapter(UploadServiceDefinitions serviceType)
         {
             return _services[serviceType];
         }

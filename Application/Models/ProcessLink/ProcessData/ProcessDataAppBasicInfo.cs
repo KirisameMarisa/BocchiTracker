@@ -20,8 +20,8 @@ namespace BocchiTracker.ProcessLink.ProcessData
 
         public async Task Process(IMediator inMediator, int inClientID)
         {
-            var status = new Dictionary<string, dynamic>();
-            status["Pid"] = _data.Pid;
+            var status = new Dictionary<string, string>();
+            status["Pid"] = _data.Pid.ToString();
             status["AppName"] = _data.AppName;
             status["Args"] = _data.Args;
             status["Platform"] = _data.Platform;

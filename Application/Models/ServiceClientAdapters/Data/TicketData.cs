@@ -6,20 +6,11 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ServiceClientAdapters.Data
 {
-    public class CustomField
-    {
-        public string? Name { get; set; }
-
-        public List<string>? Values { get; set; }
-    }
-
     public class TicketData
     {
-        public string? Project { get; set; }
-
         public string? Summary { get; set; }
 
-        public string? Description { get; set; }
+        public string  Description { get; set; } = string.Empty;
 
         public string? Assignee { get; set; }
 
@@ -29,7 +20,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
         public string? Priority { get; set; }
 
-        public List<CustomField>? CustomFields { get; set; }
+        public Dictionary<string, List<string>>? CustomFields { get; set; }
 
         public List<string>? Lables { get; set; }
     }

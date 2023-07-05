@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.Config;
-using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.IssueClients;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,27 +12,27 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 {
     public interface IDataRepository
     {
-        Task<List<IdentifierData>?>     GetTicketTypes(ServiceDefinitions inServiceType);
+        Task<List<IdentifierData>?>     GetTicketTypes(IssueServiceDefinitions inServiceType);
 
-        Task<List<IdentifierData>?>     GetLabels(ServiceDefinitions inServiceType);
+        Task<List<IdentifierData>?>     GetLabels(IssueServiceDefinitions inServiceType);
 
-        Task<List<IdentifierData>?>     GetPriorities(ServiceDefinitions inServiceType);
+        Task<List<IdentifierData>?>     GetPriorities(IssueServiceDefinitions inServiceType);
 
-        Task<List<UserData>?>           GetUsers(ServiceDefinitions inServiceType);
+        Task<List<UserData>?>           GetUsers(IssueServiceDefinitions inServiceType);
     }
 
     public class DataRepository : IDataRepository
     {
-        private readonly IServiceClientAdapterFactory _service_client_adapter_factory;
+        private readonly IServiceIssueClientFactory _service_client_adapter_factory;
         private readonly ICacheProvider _cache_provider;
 
-        public DataRepository(IServiceClientAdapterFactory inServiceClientAdapterFactory, ICacheProvider inCacheProvider)
+        public DataRepository(IServiceIssueClientFactory inServiceClientAdapterFactory, ICacheProvider inCacheProvider)
         {
             _service_client_adapter_factory = inServiceClientAdapterFactory;
             _cache_provider                 = inCacheProvider;
         }
 
-        public async Task<List<IdentifierData>?> GetLabels(ServiceDefinitions inServiceType)
+        public async Task<List<IdentifierData>?> GetLabels(IssueServiceDefinitions inServiceType)
         {
             var cache_name = $"{inServiceType}.Labels";
             List<IdentifierData>? result;
@@ -51,7 +51,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             return result;
         }
 
-        public async Task<List<IdentifierData>?> GetPriorities(ServiceDefinitions inServiceType)
+        public async Task<List<IdentifierData>?> GetPriorities(IssueServiceDefinitions inServiceType)
         {
             var cache_name = $"{inServiceType}.Priorities";
             List<IdentifierData>? result;
@@ -70,7 +70,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             return result;
         }
 
-        public async Task<List<IdentifierData>?> GetTicketTypes(ServiceDefinitions inServiceType)
+        public async Task<List<IdentifierData>?> GetTicketTypes(IssueServiceDefinitions inServiceType)
         {
             var cache_name = $"{inServiceType}.TicketTypes";
             List<IdentifierData>? result;
@@ -89,7 +89,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             return result;
         }
 
-        public async Task<List<UserData>?> GetUsers(ServiceDefinitions inServiceType)
+        public async Task<List<UserData>?> GetUsers(IssueServiceDefinitions inServiceType)
         {
             var cache_name = $"{inServiceType}.Users";
             List<UserData>? result;
