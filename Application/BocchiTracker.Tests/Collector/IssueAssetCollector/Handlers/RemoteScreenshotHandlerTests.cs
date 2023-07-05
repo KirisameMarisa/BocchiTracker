@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using BocchiTracker.ModelEventBus;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
+using System.IO;
+using System.Threading;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 {

@@ -22,16 +22,20 @@ namespace BocchiTracker.Tests.Config
             var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
             var config = new ProjectConfig
             {
-                ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>
+                ServiceConfigs = new List<ServiceConfig>
                 {
-                    new Dictionary<ServiceDefinitions, string> { { ServiceDefinitions.Github, "https://service1.example.com" } },
-                    new Dictionary<ServiceDefinitions, string> { { ServiceDefinitions.Redmine, "https://service2.example.com" } },
+                    new ServiceConfig { Service = IssueServiceDefinitions.Github,    URL = "https://service1.example.com" },
+                    new ServiceConfig { Service = IssueServiceDefinitions.Redmine,   URL = "https://service2.example.com" },
                 }
             };
 
-            var yaml = @"ServiceURLs:
-  - Github: https://service1.example.com
-  - Redmine: https://service2.example.com";
+            var yaml = @"
+ServiceConfigs:
+    - Service: Github
+      URL: https://service1.example.com
+    - Service: Redmine
+      URL: https://service2.example.com";
+
             using var memory_stream = new MemoryStream();
             using var writer = new StreamWriter(memory_stream);
             writer.WriteLine(yaml);
@@ -47,9 +51,12 @@ namespace BocchiTracker.Tests.Config
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(config.ServiceURLs.Count, result.ServiceURLs.Count);
-            Assert.Equal(config.ServiceURLs[0][ServiceDefinitions.Github], result.ServiceURLs[0][ServiceDefinitions.Github]);
-            Assert.Equal(config.ServiceURLs[1][ServiceDefinitions.Redmine], result.ServiceURLs[1][ServiceDefinitions.Redmine]);
+            Assert.Equal(config.ServiceConfigs.Count, result.ServiceConfigs.Count);
+            Assert.Equal(config.ServiceConfigs[0].Service,  result.ServiceConfigs[0].Service);
+            Assert.Equal(config.ServiceConfigs[0].URL,      result.ServiceConfigs[0].URL);
+
+            Assert.Equal(config.ServiceConfigs[1].Service,  result.ServiceConfigs[1].Service);
+            Assert.Equal(config.ServiceConfigs[1].URL,      result.ServiceConfigs[1].URL);
         }
 
         [Fact]
@@ -88,8 +95,13 @@ namespace BocchiTracker.Tests.Config
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
             var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
-            var config = new ProjectConfig { ServiceURLs = new List<Dictionary<ServiceDefinitions, string>>() };
-            config.ServiceURLs.Add(new Dictionary<ServiceDefinitions, string> { { ServiceDefinitions.Github, "https://service1.example.com" } });
+            var config = new ProjectConfig
+            {
+                ServiceConfigs = new List<ServiceConfig>
+                {
+                    new ServiceConfig { Service = IssueServiceDefinitions.Github,    URL = "https://service1.example.com" },
+                }
+            };
 
             var writer = new StreamWriter(new MemoryStream());
             fileSystemMock

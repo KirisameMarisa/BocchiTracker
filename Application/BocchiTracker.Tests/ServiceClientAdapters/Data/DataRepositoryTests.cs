@@ -1,6 +1,6 @@
 ﻿using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.IssueClients;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using Moq;
@@ -14,13 +14,13 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
 {
     public class DataRepositoryTests
     {
-        private readonly Mock<IServiceClientAdapterFactory> _serviceClientAdapterFactoryMock;
+        private readonly Mock<IServiceIssueClientFactory> _serviceClientAdapterFactoryMock;
         private readonly Mock<ICacheProvider> _cacheProviderMock;
         private readonly DataRepository _dataRepository;
 
         public DataRepositoryTests()
         {
-            _serviceClientAdapterFactoryMock = new Mock<IServiceClientAdapterFactory>();
+            _serviceClientAdapterFactoryMock = new Mock<IServiceIssueClientFactory>();
             _cacheProviderMock = new Mock<ICacheProvider>();
             _dataRepository = new DataRepository(_serviceClientAdapterFactoryMock.Object, _cacheProviderMock.Object);
         }
@@ -29,7 +29,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public async Task Test_GetLabels()
         {
             // Arrange
-            var serviceType = ServiceDefinitions.Github;
+            var serviceType = IssueServiceDefinitions.Github;
             var expectedLabels = new List<IdentifierData> 
             { 
                 new IdentifierData { Id = "1", Name = "Label1" }, 
@@ -41,7 +41,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateServiceClientAdapter(serviceType))
-                .Returns(Mock.Of<IServiceClientAdapter>(c => c.GetLabels() == Task.FromResult(expectedLabels)));
+                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetLabels() == Task.FromResult(expectedLabels)));
 
             // Act
             var result = await _dataRepository.GetLabels(serviceType);
@@ -54,7 +54,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public async Task Test_GetPriorities()
         {
             // Arrange
-            var serviceType = ServiceDefinitions.Github;
+            var serviceType = IssueServiceDefinitions.Github;
             var expectedLabels = new List<IdentifierData>
             {
                 new IdentifierData { Id = "1", Name = "Middle" },
@@ -67,7 +67,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateServiceClientAdapter(serviceType))
-                .Returns(Mock.Of<IServiceClientAdapter>(c => c.GetPriorities() == Task.FromResult(expectedLabels)));
+                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetPriorities() == Task.FromResult(expectedLabels)));
 
             // Act
             var result = await _dataRepository.GetPriorities(serviceType);
@@ -80,7 +80,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public async Task Test_GetTicketTypes()
         {
             // Arrange
-            var serviceType = ServiceDefinitions.Github;
+            var serviceType = IssueServiceDefinitions.Github;
             var expectedLabels = new List<IdentifierData>
             {
                 new IdentifierData { Id = "1", Name = "バグ" },
@@ -92,7 +92,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateServiceClientAdapter(serviceType))
-                .Returns(Mock.Of<IServiceClientAdapter>(c => c.GetTicketTypes() == Task.FromResult(expectedLabels)));
+                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetTicketTypes() == Task.FromResult(expectedLabels)));
 
             // Act
             var result = await _dataRepository.GetTicketTypes(serviceType);
@@ -105,7 +105,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public async Task Test_GetUsers()
         {
             // Arrange
-            var serviceType = ServiceDefinitions.Github;
+            var serviceType = IssueServiceDefinitions.Github;
             var expectedLabels = new List<UserData>
             {
                 new UserData { Id = "1", Name = "User1" },
@@ -117,7 +117,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateServiceClientAdapter(serviceType))
-                .Returns(Mock.Of<IServiceClientAdapter>(c => c.GetUsers() == Task.FromResult(expectedLabels)));
+                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetUsers() == Task.FromResult(expectedLabels)));
 
             // Act
             var result = await _dataRepository.GetUsers(serviceType);

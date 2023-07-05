@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ServiceClientAdapters.Clients;
+﻿using BocchiTracker.ServiceClientAdapters.IssueClients;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.Config;
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
+using System.IO;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
@@ -16,24 +17,24 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
     {
         private string? _channel;
         private AuthConfig? _auth_config;
-        private IServiceClientAdapter _client;
+        private IServiceIssueClient _client;
 
         public SlackClientTests()
         {
             {
                 var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
-                _auth_config = factory.Load(ServiceDefinitions.Slack);
+                _auth_config = factory.Load(IssueServiceDefinitions.Slack);
             }
 
             {
-                var factory = new ServiceClientAdapterFactory();
-                _client = factory.CreateServiceClientAdapter(ServiceDefinitions.Slack);
+                var factory = new ServiceIssueClientAdapterFactory();
+                _client = factory.CreateServiceClientAdapter(IssueServiceDefinitions.Slack);
             }
 
             {
                 var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
-                _channel = config.GetServiceURL(ServiceDefinitions.Slack);
+                _channel = config.GetServiceConfig(IssueServiceDefinitions.Slack).URL;
             }
         }
 
@@ -61,8 +62,10 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
                 Summary = "Test Summary",
                 Description = "Test Description",
             };
-            result = await _client.Post(ticket);
-            Assert.True(result);
+            var post_result = await _client.Post(ticket);
+            Assert.True(post_result.Item1);
+            Assert.NotNull(post_result.Item2);
+            Assert.Equal("success", post_result.Item2);
         }
 
         [Fact]

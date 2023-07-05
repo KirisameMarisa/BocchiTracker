@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BocchiTracker.IssueAssetCollector.Utils;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.ModelEventBus;
+using System.IO;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 {

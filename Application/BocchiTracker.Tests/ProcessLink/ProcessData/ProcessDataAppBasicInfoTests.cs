@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace BocchiTracker.Tests.ProcessLink.ProcessData
 {
@@ -62,10 +63,10 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             Assert.Equal((byte)QueryID.AppBasicInfo, captured?.QueryID);
             Assert.Equal(cClientID, captured?.ClientID);
 
-            var status = captured?.Status as Dictionary<string, dynamic>;
+            var status = captured?.Status as Dictionary<string, string>;
             Assert.NotNull(status);
 
-            Assert.Equal(app_pid, (long)status["Pid"]);
+            Assert.Equal(app_pid.ToString(), status["Pid"]);
             Assert.Equal(cAppName, (string)status["AppName"]);
             Assert.Equal(cArgs, (string)status["Args"]);
             Assert.Equal(cPlatform, (string)status["Platform"]);

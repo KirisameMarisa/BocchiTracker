@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ServiceClientAdapters;
-using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.IssueClients;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
@@ -9,6 +9,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
@@ -16,24 +17,24 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
     {
         private string? _project_url;
         private AuthConfig? _auth_config;
-        private IServiceClientAdapter _client;
+        private IServiceIssueClient _client;
 
         public RedmineClientTests()
         {
             {
                 var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
-                _auth_config = factory.Load(ServiceDefinitions.Redmine);
+                _auth_config = factory.Load(IssueServiceDefinitions.Redmine);
             }
 
             {
-                var factory = new ServiceClientAdapterFactory();
-                _client = factory.CreateServiceClientAdapter(ServiceDefinitions.Redmine);
+                var factory = new ServiceIssueClientAdapterFactory();
+                _client = factory.CreateServiceClientAdapter(IssueServiceDefinitions.Redmine);
             }
 
             {
                 var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
-                _project_url = config.GetServiceURL(ServiceDefinitions.Redmine);
+                _project_url = config.GetServiceConfig(IssueServiceDefinitions.Redmine).URL;
             }
         }
 
@@ -64,8 +65,9 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
                 Description = "Test Description",
                 TicketType = "2",
             };
-            result = await _client.Post(ticket);
-            Assert.True(result);
+            var post_result = await _client.Post(ticket);
+            Assert.True(post_result.Item1);
+            Assert.NotNull(post_result.Item2);
         }
 
         [Fact]

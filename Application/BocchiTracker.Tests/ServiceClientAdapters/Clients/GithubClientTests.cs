@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ServiceClientAdapters;
-using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.IssueClients;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
@@ -9,6 +9,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
@@ -16,24 +17,24 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
     {
         private string?                 _project_url;
         private AuthConfig?             _auth_config;
-        private IServiceClientAdapter   _client;
+        private IServiceIssueClient   _client;
 
         public GithubClientTests()
         {
             {
                 var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
-                _auth_config = factory.Load(ServiceDefinitions.Github);
+                _auth_config = factory.Load(IssueServiceDefinitions.Github);
             }
 
             {
-                var factory = new ServiceClientAdapterFactory();
-                _client = factory.CreateServiceClientAdapter(ServiceDefinitions.Github);
+                var factory = new ServiceIssueClientAdapterFactory();
+                _client = factory.CreateServiceClientAdapter(IssueServiceDefinitions.Github);
             }
 
             {
                 var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
-                _project_url = config.GetServiceURL(ServiceDefinitions.Github);
+                _project_url = config.GetServiceConfig(IssueServiceDefinitions.Github).URL;
             }
         }
 
@@ -64,8 +65,9 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
                 Description = "Test Description",
                 Lables = new List<string> { "Label1", "Label2", "Label3" }
             };
-            result = await _client.Post(ticket);
-            Assert.True(result);
+            var post_result = await _client.Post(ticket);
+            Assert.True(post_result.Item1);
+            Assert.NotNull(post_result.Item2);
         }
 
         [Fact]

@@ -3,6 +3,9 @@ using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
 using MediatR;
 using Moq;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BocchiTracker.Tests.ProcessLink.ProcessData
 {
@@ -56,13 +59,13 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             Assert.Equal((byte)QueryID.PlayerPosition, captured?.QueryID);
             Assert.Equal(cClientID, captured?.ClientID);
 
-            var status = captured?.Status as Dictionary<string, dynamic>;
+            var status = captured?.Status as Dictionary<string, string>;
             Assert.NotNull(status);
 
             Assert.Equal(cStage, (string)status["Stage"]);
-            Assert.Equal(PosX, (float)status["X"]);
-            Assert.Equal(PosY, (float)status["Y"]);
-            Assert.Equal(PosZ, (float)status["Z"]);
+            Assert.Equal(PosX.ToString(), status["X"]);
+            Assert.Equal(PosY.ToString(), status["Y"]);
+            Assert.Equal(PosZ.ToString(), status["Z"]);
         }
     }
 }

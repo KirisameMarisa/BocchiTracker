@@ -5,6 +5,7 @@ using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
 using BocchiTracker.ModelEventBus;
 using BocchiTracker.ProcessLinkQuery.Queries;
+using System.Threading.Tasks;
 
 namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
 {
@@ -27,9 +28,9 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             {
                 ClientID = 1,
                 QueryID = (byte)QueryID.AppBasicInfo,
-                Status = new Dictionary<string, dynamic>
+                Status = new Dictionary<string, string>
                 {
-                    { "Pid", 1234 },
+                    { "Pid", "1234" },
                     { "AppName", "TestApp" },
                     { "Args", "TestArgs" },
                     { "Platform", "Windows" },
@@ -43,7 +44,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             var asset_bundle = _bundles.GetBundlesByClientID(1);
             Assert.NotNull(asset_bundle);
 
-            Assert.Equal(1234, asset_bundle.AppBasicInfo.Pid);
+            Assert.Equal("1234", asset_bundle.AppBasicInfo.Pid);
             Assert.Equal("TestApp", asset_bundle.AppBasicInfo.AppName);
             Assert.Equal("TestArgs", asset_bundle.AppBasicInfo.Args);
             Assert.Equal("Windows", asset_bundle.AppBasicInfo.Platform);
@@ -57,7 +58,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             {
                 ClientID = 2,
                 QueryID = 0,
-                Status = new Dictionary<string, dynamic>
+                Status = new Dictionary<string, string>
                 {
                     {"Memory", "4GB"},
                     {"CPU", "2.4 GHz"}
