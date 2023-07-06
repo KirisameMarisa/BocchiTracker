@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:behaviors="clr-namespace:BocchiTracker.Behaviors"
+             xmlns:local="clr-namespace:BocchiTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" >
@@ -13,7 +14,6 @@
             <ColumnDefinition Width="0.45*"/>
         </Grid.ColumnDefinitions>
         <Border Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="0,0,0,1"/>
-
         <Grid>
             <ItemsControl ItemsSource="{Binding RegisteredItems}">
                 <ItemsControl.ItemsPanel>
@@ -37,31 +37,12 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-
         <Grid Grid.Column="1">
-            <ComboBox 
-                        x:Name="_comboBox"
-                        ItemsSource="{Binding FilteredItems}"
-                        SelectedItem="{Binding SelectedItem}"
-                        Text="{Binding EditText}"
-                        Foreground="White"
-                        IsDropDownOpen="{Binding IsOpen}"
-                        IsTextSearchEnabled="False"
-                        IsEditable="True"
-                        StaysOpenOnEdit="True"
-                        materialDesign:HintAssist.Hint="{Binding HintText}"
-                        Margin="5, 0, 5, 8.5" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-
-                <ComboBox.InputBindings>
+            <local:SingleItem>
+                <local:SingleItem.InputBindings>
                     <KeyBinding Command="{Binding AddCommand}" CommandParameter="{Binding Text, ElementName=_comboBox}" Key="Return" />
-                </ComboBox.InputBindings>
-
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="GotFocus">
-                        <i:InvokeCommandAction Command="{Binding ShowCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
+                </local:SingleItem.InputBindings>
+            </local:SingleItem>
         </Grid>
     </Grid>
 </UserControl>
