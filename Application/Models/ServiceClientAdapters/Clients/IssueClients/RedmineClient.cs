@@ -17,11 +17,10 @@ using System.Xml.Linq;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
-    public class RedmineClient : IServiceIssueClient, IServiceUploadClient
+    public class RedmineClient : IServiceIssueClient
     {
         private RedmineManager? _client;
         private int? _project_id;
@@ -35,7 +34,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
 
             if (segments.Length < 3 || segments[^2] != "projects")
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} Invalid Redmine project URL format. The format should be: http://[base_url]/projects/[project_name]");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} Invalid Redmine project URL format. The format should be: http://[base_url]/projects/[project_name]");
                 return false;
             }
 
@@ -68,7 +67,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
             }
             catch
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} Failed authenticate");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} Failed authenticate");
                 return false;
             }
         }
@@ -171,13 +170,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _client is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _client is null");
                 return null;
             }
 
             if (string.IsNullOrEmpty(_project_name))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _project_name is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 
@@ -197,13 +196,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _client is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _client is null");
                 return null;
             }
 
             if (string.IsNullOrEmpty(_project_name))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _project_name is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 
@@ -223,13 +222,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _client is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _client is null");
                 return null;
             }
 
             if (string.IsNullOrEmpty(_project_name))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Redmine} _project_name is null");
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 

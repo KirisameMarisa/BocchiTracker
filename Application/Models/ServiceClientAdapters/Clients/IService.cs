@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.ServiceClientAdapters.UploadClients
+namespace BocchiTracker.ServiceClientAdapters.Clients
 {
-    public interface IServiceUploadClient
+    public interface IService 
     {
         Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null);
-
-        Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames);
     }
 }

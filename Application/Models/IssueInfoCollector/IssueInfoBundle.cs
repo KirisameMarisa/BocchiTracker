@@ -22,7 +22,7 @@ namespace BocchiTracker.IssueInfoCollector
         
         public MetaListService<UserData>        UserListService         { get; } = new UserListService();
 
-        public List<IssueServiceDefinitions>    IssuePostServices       { get; set; } = new List<IssueServiceDefinitions>();
+        public List<ServiceDefinitions>         IssuePostServices       { get; set; } = new List<ServiceDefinitions>();
 
         public TicketData                       TicketData              { get; set; } = new TicketData();
 

@@ -5,26 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.ServiceClientAdapters.UploadClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
 {
-    public class ExplorerClients : IServiceUploadClient
+    public class DropboxClients : IServiceUploadClient
     {
         public Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {
-#if WINDOWS
-            return Task.FromResult(true);
-#else
-            return Task.FromResult(false);
-#endif
+            throw new NotImplementedException();
         }
 
         public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
         {
-#if WINDOWS
-            return Task.FromResult(false);
-#else
-            return Task.FromResult(false);
-#endif
+            throw new NotImplementedException();
         }
     }
 }

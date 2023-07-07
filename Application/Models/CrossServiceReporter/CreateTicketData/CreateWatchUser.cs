@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateWatchUser : ICreateUnifiedTicketData<List<string>>
     {
-        public List<string>? Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public List<string>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             var users = inBundle.UserListService.GetData(inService);
             if (users == null)

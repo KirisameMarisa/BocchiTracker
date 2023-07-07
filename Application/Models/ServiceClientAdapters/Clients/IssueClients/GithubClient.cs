@@ -11,11 +11,10 @@ using System.Diagnostics;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
 using BocchiTracker.Config;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
-    public class GithubClient : IServiceIssueClient, IServiceUploadClient
+    public class GithubClient : IServiceIssueClient
     {
         private Octokit.GitHubClient? _client;
         private long? _repo_id;
@@ -24,13 +23,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (string.IsNullOrEmpty(inAuthConfig.APIKey))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} APIKey is null");
+                Trace.TraceError($"{ServiceDefinitions.Github} APIKey is null");
                 return false;
             }
 
             if (!inURL.Contains("https://github.com/"))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} not contains GithubURL");
+                Trace.TraceError($"{ServiceDefinitions.Github} not contains GithubURL");
                 return false;
             }
 
@@ -46,7 +45,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
 
             if (string.IsNullOrEmpty(owner_repository) || string.IsNullOrEmpty(name_repository))
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} Cannt get repository informations");
+                Trace.TraceError($"{ServiceDefinitions.Github} Cannt get repository informations");
                 return false;
             }
 
@@ -72,13 +71,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _client is null.");
+                Trace.TraceError($"{ServiceDefinitions.Github} _client is null.");
                 return (false, null);
             }
 
             if (_repo_id == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _repo_id is null");
+                Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return (false, null);
             }
 
@@ -102,7 +101,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
             }
             catch
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} Failed to post");
+                Trace.TraceError($"{ServiceDefinitions.Github} Failed to post");
                 return (false, null);
             }
         }
@@ -123,13 +122,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _client is null.");
+                Trace.TraceError($"{ServiceDefinitions.Github} _client is null.");
                 return null;
             }
 
             if (_repo_id == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _repo_id is null");
+                Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return null;
             }
 
@@ -145,7 +144,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
             }
             catch
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} Cannot get lables.");
+                Trace.TraceError($"{ServiceDefinitions.Github} Cannot get lables.");
                 return null;
             }
         }
@@ -161,13 +160,13 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
         {
             if (_client == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _client is null.");
+                Trace.TraceError($"{ServiceDefinitions.Github} _client is null.");
                 return null;
             }
 
             if (_repo_id == null)
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} _repo_id is null");
+                Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return null;
             }
 
@@ -190,7 +189,7 @@ namespace BocchiTracker.ServiceClientAdapters.IssueClients
             }
             catch
             {
-                Trace.TraceError($"{IssueServiceDefinitions.Github} Cannot get users.");
+                Trace.TraceError($"{ServiceDefinitions.Github} Cannot get users.");
                 return null;
             }
         }

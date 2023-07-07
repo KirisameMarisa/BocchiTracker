@@ -4,7 +4,7 @@ namespace BocchiTracker.Config.Configs
 {
     public class ServiceConfig
     {
-        public IssueServiceDefinitions               Service { get; set; }
+        public ServiceDefinitions               Service { get; set; }
 
         public string?                          URL { get; set; }
 
@@ -25,9 +25,11 @@ namespace BocchiTracker.Config.Configs
 
         public List<string>? Priorities { get; set; }
 
+        public List<string>? Classes { get; set; }
+
         public List<ServiceConfig>? ServiceConfigs { get; set; }
 
-        public ServiceConfig? GetServiceConfig(IssueServiceDefinitions inServiceDefinitions)
+        public ServiceConfig? GetServiceConfig(ServiceDefinitions inServiceDefinitions)
         {
             if (ServiceConfigs == null)
                 return null;

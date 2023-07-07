@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateDescription : ICreateUnifiedTicketData<string>
     {
-        public string Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public string Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             if (string.IsNullOrEmpty(inConfig.DescriptionFormat))
                 return inBundle.TicketData.Description;

@@ -12,7 +12,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateTicketData : ICreateUnifiedTicketData<TicketData>
     {
-        public TicketData? Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public TicketData? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             var ticket_data = new TicketData
             {

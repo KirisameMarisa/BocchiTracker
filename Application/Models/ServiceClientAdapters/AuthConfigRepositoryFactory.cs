@@ -1,6 +1,5 @@
 ﻿using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.IssueClients;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,17 +13,17 @@ namespace BocchiTracker.ServiceClientAdapters
 {
     public interface IAuthConfigRepositoryFactory
     {
-        AuthConfig? Load(IssueServiceDefinitions serviceType);
-        void        Save(IssueServiceDefinitions inServiceType, AuthConfig inAuthConfig);
+        AuthConfig? Load(ServiceDefinitions serviceType);
+        void        Save(ServiceDefinitions inServiceType, AuthConfig inAuthConfig);
     }
 
     public class AuthConfigRepositoryFactory : IAuthConfigRepositoryFactory
     {
-        private static ConcurrentDictionary<IssueServiceDefinitions, ConfigRepository<AuthConfig>> _caches = new ConcurrentDictionary<IssueServiceDefinitions, ConfigRepository<AuthConfig>>();
+        private static ConcurrentDictionary<ServiceDefinitions, ConfigRepository<AuthConfig>> _caches = new ConcurrentDictionary<ServiceDefinitions, ConfigRepository<AuthConfig>>();
 
         public AuthConfigRepositoryFactory(string inBaseDirectory)
         {
-            foreach (IssueServiceDefinitions service_type in Enum.GetValues(typeof(IssueServiceDefinitions)))
+            foreach (ServiceDefinitions service_type in Enum.GetValues(typeof(ServiceDefinitions)))
             {
                 if (_caches.ContainsKey(service_type))
                     continue;
@@ -33,12 +32,12 @@ namespace BocchiTracker.ServiceClientAdapters
             }
         }
 
-        public AuthConfig? Load(IssueServiceDefinitions inServiceType)
+        public AuthConfig? Load(ServiceDefinitions inServiceType)
         {
             return _caches[inServiceType].Load();
         }
 
-        public void Save(IssueServiceDefinitions inServiceType, AuthConfig inAuthConfig)
+        public void Save(ServiceDefinitions inServiceType, AuthConfig inAuthConfig)
         {
             _caches[inServiceType].Save(inAuthConfig);
         }

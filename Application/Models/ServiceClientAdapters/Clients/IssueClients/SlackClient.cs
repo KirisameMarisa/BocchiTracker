@@ -9,11 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
-    public class SlackClient : IServiceIssueClient, IServiceUploadClient
+    public class SlackClient : IServiceIssueClient
     {
         private SlackWebApiClient? _client;
         private string? _channel;

@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
-    internal class JIRAClient : IServiceIssueClient, IServiceUploadClient
+    internal class JIRAClient : IServiceIssueClient
     {
         private Jira? _client;
 

@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateCustomfields : ICreateUnifiedTicketData<Dictionary<string, List<string>>>
     {
-        public Dictionary<string, List<string>>? Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public Dictionary<string, List<string>>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             if (inConfig.QueryFieldMappings == null || inBundle.TicketData.CustomFields == null)
                 return null;

@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
-    public class GitlabClient : IServiceIssueClient, IServiceUploadClient
+    public class DiscordClient : IServiceIssueClient
     {
         public Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {

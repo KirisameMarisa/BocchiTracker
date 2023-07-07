@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ApplicationInfoCollector;
-using BocchiTracker.ServiceClientAdapters.IssueClients;
 
 namespace BocchiTracker.CrossServiceReporter
 {
@@ -19,10 +18,10 @@ namespace BocchiTracker.CrossServiceReporter
 
     public class IssuePoster : IIssuePoster
     {
-        private readonly IServiceIssueClientFactory _client_factory;
+        private readonly IServiceClientFactory _client_factory;
         private readonly ITicketDataFactory _ticket_factory;
 
-        public IssuePoster(IServiceIssueClientFactory inClientFactory, ITicketDataFactory inTicketDataFactory) 
+        public IssuePoster(IServiceClientFactory inClientFactory, ITicketDataFactory inTicketDataFactory) 
         {
             _client_factory = inClientFactory;
             _ticket_factory = inTicketDataFactory;
@@ -32,12 +31,15 @@ namespace BocchiTracker.CrossServiceReporter
         {
             foreach(var service in inIssueBundle.IssuePostServices) 
             {
-                var client = _client_factory.CreateServiceClientAdapter(service);
+                var client = _client_factory.CreateIssueService(service);
+                if (client == null)
+                    continue;
+
                 var ticket = _ticket_factory.Create(service, inIssueBundle, inAppBundle, inConfig);
-                if (ticket != null)
-                {
-                    client.Post(ticket);
-                }
+                if (ticket == null)
+                    continue;
+
+                client.Post(ticket);
             }
         }
     }

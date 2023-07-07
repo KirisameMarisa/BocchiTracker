@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
 
-namespace BocchiTracker.ServiceClientAdapters.IssueClients
+namespace BocchiTracker.ServiceClientAdapters.Clients
 {
-    public interface IServiceIssueClient
+    public interface IServiceIssueClient : IService, IServiceUploadClient
     {
-        Task<bool>                      Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null);
-
         Task<(bool, string?)>           Post(TicketData inTicketData);
 
         Task<List<IdentifierData>?>     GetTicketTypes();

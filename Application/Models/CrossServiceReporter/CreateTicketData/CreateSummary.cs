@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateSummary : ICreateUnifiedTicketData<string>
     {
-        public string? Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public string? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             return inBundle.TicketData?.Summary;
         }

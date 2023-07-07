@@ -13,11 +13,11 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 {
     public abstract class MetaListService<T> : IMetaService<List<T>>
     {
-        protected Dictionary<IssueServiceDefinitions, List<T>> _data = new Dictionary<IssueServiceDefinitions, List<T>>();
+        protected Dictionary<ServiceDefinitions, List<T>> _data = new Dictionary<ServiceDefinitions, List<T>>();
 
         public async Task Load(IDataRepository inRepository)
         {
-            foreach (IssueServiceDefinitions serviceType in Enum.GetValues(typeof(IssueServiceDefinitions)))
+            foreach (ServiceDefinitions serviceType in Enum.GetValues(typeof(ServiceDefinitions)))
             {
                 var value = await GetDataAsync(inRepository, serviceType);
                 if (value == null)
@@ -26,7 +26,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
             }
         }
 
-        public List<T>? GetData(IssueServiceDefinitions inServiceType)
+        public List<T>? GetData(ServiceDefinitions inServiceType)
         {
             List<T>? result;
             if (_data.TryGetValue(inServiceType, out result))
@@ -50,12 +50,12 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
             return result;
         }
 
-        protected abstract Task<List<T>?> GetDataAsync(IDataRepository dataRepository, IssueServiceDefinitions serviceType);
+        protected abstract Task<List<T>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType);
     }
 
     public class TicketTypeListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, IssueServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
         {
             return await dataRepository.GetTicketTypes(serviceType);
         }
@@ -63,7 +63,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 
     public class PriorityListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, IssueServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
         {
             return await dataRepository.GetPriorities(serviceType);
         }
@@ -71,7 +71,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 
     public class LabelListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, IssueServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
         {
             return await dataRepository.GetLabels(serviceType);
         }
@@ -79,7 +79,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
 
     public class UserListService : MetaListService<UserData>
     {
-        protected override async Task<List<UserData>?> GetDataAsync(IDataRepository dataRepository, IssueServiceDefinitions serviceType)
+        protected override async Task<List<UserData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
         {
             return await dataRepository.GetUsers(serviceType);
         }

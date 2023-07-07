@@ -6,17 +6,7 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.Config
 {
-    public enum IssueServiceDefinitions
-    {
-        JIRA,
-        Redmine,
-        Slack,
-        Github,
-        Glitlab,
-        Discord,
-    }
-
-    public enum UploadServiceDefinitions
+    public enum ServiceDefinitions
     {
         JIRA,
         Redmine,

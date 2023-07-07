@@ -1,58 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BocchiTracker.Config;
-using BocchiTracker.ServiceClientAdapters.IssueClients;
-using BocchiTracker.ServiceClientAdapters.UploadClients;
-using Octokit;
+using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientAdapters.Clients.IssueClients;
+using BocchiTracker.ServiceClientAdapters.Clients.UploadClients;
 
 namespace BocchiTracker.ServiceClientAdapters
 {
-    public interface IServiceIssueClientFactory
+    public interface IServiceClientFactory
     {
-        IServiceIssueClient CreateServiceClientAdapter(IssueServiceDefinitions serviceType);
+        IService              CreateService(ServiceDefinitions serviceType);
+        IServiceIssueClient?  CreateIssueService(ServiceDefinitions serviceType);
+        IServiceUploadClient? CreateUploadService(ServiceDefinitions serviceType);
     }
-
-    public interface IServiceUploadClientFactory
+   
+    public class ServiceClientAdapterFactory : IServiceClientFactory
     {
-        IServiceUploadClient CreateServiceClientAdapter(UploadServiceDefinitions serviceType);
-    }
-
-    public class ServiceIssueClientAdapterFactory : IServiceIssueClientFactory
-    {
-        private static Dictionary<IssueServiceDefinitions, IServiceIssueClient> _services = new Dictionary<IssueServiceDefinitions, IServiceIssueClient>()
+        private static Dictionary<ServiceDefinitions, IService> _services = new Dictionary<ServiceDefinitions, IService>()
         {
-            { IssueServiceDefinitions.JIRA,      new JIRAClient()    },
-            { IssueServiceDefinitions.Redmine,   new RedmineClient() },
-            { IssueServiceDefinitions.Slack,     new SlackClient()   },
-            { IssueServiceDefinitions.Github,    new GithubClient()  },
-            { IssueServiceDefinitions.Glitlab,   new GitlabClient()  },
-            { IssueServiceDefinitions.Discord,   new DiscordClient() },
-
+            { ServiceDefinitions.JIRA,      new JIRAClient()          },
+            { ServiceDefinitions.Redmine,   new RedmineClient()       },
+            { ServiceDefinitions.Slack,     new SlackClient()         },
+            { ServiceDefinitions.Github,    new GithubClient()        },
+            { ServiceDefinitions.Glitlab,   new GitlabClient()        },
+            { ServiceDefinitions.Discord,   new DiscordClient()       },
+            { ServiceDefinitions.Explorer,  new ExplorerClients()     },
+            { ServiceDefinitions.Dropbox,   new DropboxClients()      },
         };
 
-        public IServiceIssueClient CreateServiceClientAdapter(IssueServiceDefinitions serviceType)
+        public IService CreateService(ServiceDefinitions serviceType)
         {
             return _services[serviceType];
         }
-    }
 
-    public class ServiceUploadClientAdapterFactory : IServiceUploadClientFactory
-    {
-        private static Dictionary<UploadServiceDefinitions, IServiceUploadClient> _services = new Dictionary<UploadServiceDefinitions, IServiceUploadClient>()
+        public IServiceIssueClient? CreateIssueService(ServiceDefinitions serviceType)
         {
-            { UploadServiceDefinitions.JIRA,      new JIRAClient()    },
-            { UploadServiceDefinitions.Redmine,   new RedmineClient() },
-            { UploadServiceDefinitions.Slack,     new SlackClient()   },
-            { UploadServiceDefinitions.Github,    new GithubClient()  },
-            { UploadServiceDefinitions.Glitlab,   new GitlabClient()  },
-            { UploadServiceDefinitions.Discord,   new DiscordClient() },
-            { UploadServiceDefinitions.Explorer,  new ExplorerClients()    },
-            { UploadServiceDefinitions.Dropbox,   new DropboxClients() },
-        };
+            return _services[serviceType] as IServiceIssueClient;
+        }
 
-        public IServiceUploadClient CreateServiceClientAdapter(UploadServiceDefinitions serviceType)
+        public IServiceUploadClient? CreateUploadService(ServiceDefinitions serviceType)
         {
-            return _services[serviceType];
+            return _services[serviceType] as IServiceUploadClient;
         }
     }
 }

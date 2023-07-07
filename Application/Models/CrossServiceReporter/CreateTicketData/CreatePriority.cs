@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreatePriority : ICreateUnifiedTicketData<string>
     {
-        public string? Create(IssueServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public string? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             if (inConfig.PriorityMappings == null || inBundle.TicketData.Priority == null)
                 return null;

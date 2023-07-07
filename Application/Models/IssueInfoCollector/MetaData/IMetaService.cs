@@ -17,7 +17,7 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
     {
         Task            Load(IDataRepository inRepository);
 
-        T?              GetData(IssueServiceDefinitions inServiceType);
+        T?              GetData(ServiceDefinitions inServiceType);
 
         T?              GetUnifiedData();
     }

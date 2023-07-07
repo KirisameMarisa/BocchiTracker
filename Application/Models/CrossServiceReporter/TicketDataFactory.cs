@@ -14,7 +14,7 @@ namespace BocchiTracker.CrossServiceReporter
 {
     public interface ITicketDataFactory
     {
-        TicketData? Create(IssueServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig);
+        TicketData? Create(ServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig);
     }
 
     public class TicketDataFactory : ITicketDataFactory
@@ -26,7 +26,7 @@ namespace BocchiTracker.CrossServiceReporter
             _converter = inConverter;
         }
 
-        public TicketData? Create(IssueServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig)
+        public TicketData? Create(ServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig)
         {
             var config = inConfig.GetServiceConfig(inService);
             if (config == null)
