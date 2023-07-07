@@ -9,13 +9,11 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector
 {
     public class TrackerApplicationTests
     {
-        private readonly AppStatusBundles _bundles;
         private readonly TrackerApplication _trackerApplication;
 
         public TrackerApplicationTests()
         {
-            _bundles = new AppStatusBundles();
-            _trackerApplication = new TrackerApplication(_bundles);
+            _trackerApplication = new TrackerApplication();
         }
 
         [Fact]
@@ -23,8 +21,8 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector
         {
             // Arrange
             int testClientID = 1;
-            _bundles.Add(testClientID);
-            var testBundle = _bundles.GetBundlesByClientID(testClientID);
+            _trackerApplication.Bundles.Add(testClientID);
+            var testBundle = _trackerApplication.Bundles.GetBundlesByClientID(testClientID);
 
             // Act
             _trackerApplication.SetTracker(testClientID);
