@@ -8,18 +8,13 @@ namespace BocchiTracker.ApplicationInfoCollector
 {
     public class TrackerApplication
     {
-        private readonly AppStatusBundles _bundles;
+        public AppStatusBundles Bundles { get; set; } = new AppStatusBundles();
 
         public AppStatusBundle? Tracker { private set; get; }
 
-        public TrackerApplication(AppStatusBundles inBundles)
-        {
-            _bundles = inBundles;
-        }
-
         public void SetTracker(int inClientID)
         {
-            Tracker = _bundles.GetBundlesByClientID(inClientID);
+            Tracker = Bundles.GetBundlesByClientID(inClientID);
         }
     }
 }

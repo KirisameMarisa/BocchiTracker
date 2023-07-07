@@ -22,9 +22,11 @@ namespace BocchiTracker.IssueInfoCollector
         
         public MetaListService<UserData>        UserListService         { get; } = new UserListService();
 
-        public List<IssueServiceDefinitions>         IssuePostServices       { get; set; } = new List<IssueServiceDefinitions>();
+        public List<IssueServiceDefinitions>    IssuePostServices       { get; set; } = new List<IssueServiceDefinitions>();
 
         public TicketData                       TicketData              { get; set; } = new TicketData();
+
+        public bool                             IsInitializeed          { get; private set; } = false;
 
         public async Task Initialize(IDataRepository inRepository)
         {
@@ -32,6 +34,8 @@ namespace BocchiTracker.IssueInfoCollector
             await PriorityListService.Load(inRepository);
             await TicketTypeListService.Load(inRepository);
             await UserListService.Load(inRepository);
+
+            IsInitializeed = true;
         }
     }
 }
