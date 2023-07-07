@@ -12,6 +12,8 @@ namespace BocchiTracker.ViewModels
 {
     public abstract class SingleItemViewModel : BindableBase
     {
+        public ICommand RetrunKeyCommand { get; private set; }
+
         public ICommand ShowCommand { get; private set; }
 
         private string _hintText;
@@ -63,6 +65,28 @@ namespace BocchiTracker.ViewModels
             set { SetProperty(ref _filteredItems, value); }
         }
 
+        public SingleItemViewModel()
+        {
+            ShowCommand = new DelegateCommand(() =>
+            {
+                IsOpen = true;
+                FilteredItems.Clear();
+                foreach (var item in Items)
+                {
+                    FilteredItems.Add(item);
+                }
+            });
+            RetrunKeyCommand = new DelegateCommand<string>(OnReturnKey);
+        }
+
+        protected virtual void OnReturnKey(string inItem) {}
+
+        protected virtual void OnSetSelectedItem(string inItem)
+        {
+            SetProperty(ref _selectedItem, inItem);
+            Keyboard.ClearFocus();
+        }
+
         private void FilterItems(string inItem)
         {
             FilteredItems.Clear();
@@ -74,25 +98,6 @@ namespace BocchiTracker.ViewModels
                     FilteredItems.Add(item);
                 }
             }
-        }
-
-        public SingleItemViewModel()
-        {
-            ShowCommand = new DelegateCommand(() => 
-            {
-                IsOpen = true;
-                FilteredItems.Clear();
-                foreach (var item in Items)
-                {
-                    FilteredItems.Add(item);
-                }
-            });
-        }
-
-        protected virtual void OnSetSelectedItem(string inItem)
-        {
-            SetProperty(ref _selectedItem, inItem);
-            Keyboard.ClearFocus();
         }
     }
 }

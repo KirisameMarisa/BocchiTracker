@@ -11,13 +11,11 @@ namespace BocchiTracker.ViewModels
     {
         public PriorityViewModel()
         {
-            HintText = "Select Priority...";
+            HintText = "Priority";
 
-            Items.Add("1");
-            Items.Add("2");
-            Items.Add("3");
-            Items.Add("4");
-            Items.Add("5");
+            Items.Add("High");
+            Items.Add("Middle");
+            Items.Add("Low");
         }
     }
 }

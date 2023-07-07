@@ -24,7 +24,11 @@ namespace BocchiTracker.Views
         public MainWindow(IRegionManager regionManager)
         {
             InitializeComponent();
-
+            
+            regionManager.RegisterViewWithRegion("UploadFilesRegion",   typeof(UploadFilesView));
+            regionManager.RegisterViewWithRegion("SummaryRegion",       typeof(SummaryView));
+            regionManager.RegisterViewWithRegion("UtilityRegion",       typeof(UtilityView));
+            regionManager.RegisterViewWithRegion("DescriptionRegion",   typeof(DescriptionView));
             regionManager.RegisterViewWithRegion("WatchesRegion",       typeof(WatchesView));
             regionManager.RegisterViewWithRegion("LabelsRegion",        typeof(LabelsView));
             regionManager.RegisterViewWithRegion("AssigneRegion",       typeof(AssigneView));

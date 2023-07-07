@@ -10,13 +10,13 @@ namespace BocchiTracker.ViewModels
     {
         public AssigneViewModel()
         {
-            HintText = "Select Assigne...";
+            HintText = "Assigne";
 
-            Items.Add("1");
-            Items.Add("2");
-            Items.Add("3");
-            Items.Add("4");
-            Items.Add("5");
+            Items.Add("Apple");
+            Items.Add("Banana");
+            Items.Add("Cherry");
+            Items.Add("Kiwi");
+            Items.Add("Orange");
         }
     }
 }

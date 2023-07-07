@@ -37,12 +37,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        <Grid Grid.Column="1">
-            <local:SingleItem>
-                <local:SingleItem.InputBindings>
-                    <KeyBinding Command="{Binding AddCommand}" CommandParameter="{Binding Text, ElementName=_comboBox}" Key="Return" />
-                </local:SingleItem.InputBindings>
-            </local:SingleItem>
-        </Grid>
+        <local:SingleItem Grid.Column="1"/>
     </Grid>
 </UserControl>

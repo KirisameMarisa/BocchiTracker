@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Unity;
 
 namespace BocchiTracker.ViewModels
 {
@@ -20,14 +21,11 @@ namespace BocchiTracker.ViewModels
             set { SetProperty(ref _registeredItems, value); }
         }
 
-        public ICommand AddCommand { get; private set; }
-
         public ICommand DeleteCommand { get; private set; }
 
         public MultipleItemsViewModel()
         {
-            AddCommand = new DelegateCommand<string>(AddItem);
-            DeleteCommand = new DelegateCommand<string>(DeleteItem);
+            DeleteCommand = new DelegateCommand<string>(OnDeleteItem);
         }
 
         private void AddItem(string inItem)
@@ -36,10 +34,15 @@ namespace BocchiTracker.ViewModels
                 RegisteredItems.Add(inItem);
         }
 
-        private void DeleteItem(string inItem)
+        private void OnDeleteItem(string inItem)
         {
             if (RegisteredItems.Contains(inItem))
                 RegisteredItems.Remove(inItem);
+        }
+
+        protected override void OnReturnKey(string inItem)
+        {
+            AddItem(inItem);
         }
 
         protected override void OnSetSelectedItem(string inItem)

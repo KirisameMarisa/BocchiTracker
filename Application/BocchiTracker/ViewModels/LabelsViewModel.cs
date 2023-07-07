@@ -10,13 +10,11 @@ namespace BocchiTracker.ViewModels
     {
         public LabelsViewModel() 
         {
-            HintText = "Add Labels...";
+            HintText = "Labels";
 
-            Items.Add("1");
-            Items.Add("2");
-            Items.Add("3");
-            Items.Add("4");
-            Items.Add("5");
+            Items.Add("Bug");
+            Items.Add("Question");
+            Items.Add("Feature");
         }
     }
 }

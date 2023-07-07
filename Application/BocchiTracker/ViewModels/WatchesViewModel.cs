@@ -11,7 +11,7 @@ namespace BocchiTracker.ViewModels
     {
         public WatchesViewModel()
         {
-            HintText = "Add Watches...";
+            HintText = "Watches";
 
             Items.Add("Apple");
             Items.Add("Banana");

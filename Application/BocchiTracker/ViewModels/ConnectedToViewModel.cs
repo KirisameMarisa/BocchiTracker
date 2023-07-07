@@ -10,13 +10,8 @@ namespace BocchiTracker.ViewModels
     {
         public ConnectedToViewModel()
         {
-            HintText = "Connected To...";
-
-            Items.Add("1");
-            Items.Add("2");
-            Items.Add("3");
-            Items.Add("4");
-            Items.Add("5");
+            HintText = "Connected To";
+            Items.Add("Connected To Windows11 SampleGame, CL:12252");
         }
     }
 }

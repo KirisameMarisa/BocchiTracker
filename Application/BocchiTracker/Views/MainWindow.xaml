@@ -9,131 +9,37 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="800" MinWidth="800">
+        Title="MainWindow" Height="800" Width="800" MinWidth="400">
     <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Margin="10">
             <Grid Name="SettingAndSummary">
-                <Grid>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.15*"/>
-                            <ColumnDefinition Width="0.2*"/>
-                            <ColumnDefinition Width="0.7*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="15,5,15,5" ToolTip="Show Setting" >
-                            <materialDesign:PackIcon Kind="CogOutline" Width="18" Height="18" Foreground="White"/>
-                        </Button>
-                        <ComboBox Grid.Column="1" Margin="5,0,5,0" />
-                        <TextBox
-                            materialDesign:HintAssist.Hint="Summary..."
-                            Foreground="White"
-                            Grid.Column="2" Margin="5, 0, 5, 8.5" TextWrapping="NoWrap" FontSize="16" VerticalContentAlignment="Center" />
-                    </Grid>
-                </Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" Margin="15,5,15,5" ToolTip="Show Setting" >
+                    <materialDesign:PackIcon Kind="CogOutline" Width="18" Height="18" Foreground="White"/>
+                </Button>
+                <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="SummaryRegion"/>
             </Grid>
-            <Grid Name="Description">
-                <TextBox
-                        MinHeight="250"
-                        materialDesign:HintAssist.Hint="Input: Description..."
-                        Foreground="White"
-                        Grid.Row="1" Margin="5" FontSize="16" AcceptsReturn="True" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow"/>
-            </Grid>
-
+            <ContentControl Margin="3" prism:RegionManager.RegionName="DescriptionRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="ConnectedToRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="AssigneRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="PriorityRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="ClassRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="LabelsRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="WatchesRegion"/>
-            
-            <Grid Grid.Row="2">
+            <Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="0.45*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Margin="3">
-                        <ListView Name="test_view" ItemsSource="{Binding Items}">
-                            <ListView.View>
-                                <GridView >
-                                    <GridView.ColumnHeaderContainerStyle>
-                                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </Style>
-                                    </GridView.ColumnHeaderContainerStyle>
-                                    <GridViewColumn Header="CloseBtn">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Width="48" Height="24">
-                                                    <materialDesign:PackIcon Kind="Close" VerticalAlignment="Center" Width="12" Height="12"/>
-                                                </Button>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Filename">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Label Content="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Margin="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <materialDesign:PackIcon Kind="Camera" VerticalAlignment="Center" Width="24" Height="24" />
-                                    <StackPanel Grid.Column="1">
-                                        <Label Content="Take screenshot" FontWeight="Bold" VerticalContentAlignment="Center" />
-                                    </StackPanel>
-                                </Grid>
-                            </Button>
-                            <Button Grid.Row="1" Margin="2" >
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <materialDesign:PackIcon Kind="IceCream" VerticalAlignment="Center" Width="24" Height="24"/>
-                                    <StackPanel Grid.Column="1">
-                                        <Label Content="Capture coredump" FontWeight="Bold" VerticalContentAlignment="Center" />
-                                    </StackPanel>
-                                </Grid>
-                            </Button>
-
-                            <ComboBox Grid.Row="2" Margin="2" HorizontalContentAlignment="Center" Foreground="White" materialDesign:HintAssist.Hint="Select Post Service"></ComboBox>
-
-                            <Button Grid.Row="3" Margin="2" >
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <materialDesign:PackIcon Kind="Post" VerticalAlignment="Center" Width="24" Height="24"/>
-                                    <StackPanel Grid.Column="1">
-                                        <Label Content="Post Issue" FontWeight="Bold" VerticalContentAlignment="Bottom" />
-                                    </StackPanel>
-                                </Grid>
-                            </Button>
-                        </Grid>
-                    </Grid>
-
+                    <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion"/>
+                    <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion"/>
                 </Grid>
             </Grid>
         </StackPanel>
     </ScrollViewer>
-
 </Window>

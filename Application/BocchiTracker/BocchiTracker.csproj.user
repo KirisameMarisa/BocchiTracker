@@ -16,6 +16,9 @@
     <Compile Update="Views\ConnectedToView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\DescriptionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\LabelsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -29,6 +32,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SingleItem.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SummaryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\UploadFilesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\UtilityView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\WatchesView.xaml.cs">
@@ -45,6 +57,9 @@
     <Page Update="Views\ConnectedToView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\DescriptionView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\LabelsView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -58,6 +73,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SingleItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SummaryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UploadFilesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UtilityView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WatchesView.xaml">

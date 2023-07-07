@@ -1,8 +1,12 @@
-﻿using System;
+﻿using BocchiTracker.IssueInfoCollector;
+using Prism.Ioc;
+using Prism.Unity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BocchiTracker.ViewModels
 {
@@ -10,13 +14,9 @@ namespace BocchiTracker.ViewModels
     {
         public ClassViewModel()
         {
-            HintText = "Select Class...";
+            HintText = "Class";
 
-            Items.Add("1");
-            Items.Add("2");
-            Items.Add("3");
-            Items.Add("4");
-            Items.Add("5");
+            var issue_info_bundle = (Application.Current as PrismApplication).Container.Resolve<IssueInfoBundle>();
         }
     }
 }
