@@ -18,15 +18,15 @@ namespace BocchiTracker.Tests.Config
             {
                 ServiceConfigs = new List<ServiceConfig>
                 {
-                    new ServiceConfig { Service = IssueServiceDefinitions.Github,    URL = "https://service1.example.com" },
-                    new ServiceConfig { Service = IssueServiceDefinitions.Redmine,   URL = "https://service2.example.com" },
+                    new ServiceConfig { Service = ServiceDefinitions.Github,    URL = "https://service1.example.com" },
+                    new ServiceConfig { Service = ServiceDefinitions.Redmine,   URL = "https://service2.example.com" },
                 }
             };
 
             // Act
-            var config1 = config.GetServiceConfig(IssueServiceDefinitions.Github);
-            var config2 = config.GetServiceConfig(IssueServiceDefinitions.Redmine);
-            var config3 = config.GetServiceConfig(IssueServiceDefinitions.Slack);
+            var config1 = config.GetServiceConfig(ServiceDefinitions.Github);
+            var config2 = config.GetServiceConfig(ServiceDefinitions.Redmine);
+            var config3 = config.GetServiceConfig(ServiceDefinitions.Slack);
 
             // Assert
             Assert.NotNull(config1);
@@ -43,7 +43,7 @@ namespace BocchiTracker.Tests.Config
             var config = new ProjectConfig();
 
             // Act
-            var service_config = config.GetServiceConfig(IssueServiceDefinitions.Github);
+            var service_config = config.GetServiceConfig(ServiceDefinitions.Github);
 
             // Assert
             Assert.Null(service_config);

@@ -24,8 +24,8 @@ namespace BocchiTracker.Tests.Config
             {
                 ServiceConfigs = new List<ServiceConfig>
                 {
-                    new ServiceConfig { Service = IssueServiceDefinitions.Github,    URL = "https://service1.example.com" },
-                    new ServiceConfig { Service = IssueServiceDefinitions.Redmine,   URL = "https://service2.example.com" },
+                    new ServiceConfig { Service = ServiceDefinitions.Github,    URL = "https://service1.example.com" },
+                    new ServiceConfig { Service = ServiceDefinitions.Redmine,   URL = "https://service2.example.com" },
                 }
             };
 
@@ -99,7 +99,7 @@ ServiceConfigs:
             {
                 ServiceConfigs = new List<ServiceConfig>
                 {
-                    new ServiceConfig { Service = IssueServiceDefinitions.Github,    URL = "https://service1.example.com" },
+                    new ServiceConfig { Service = ServiceDefinitions.Github,    URL = "https://service1.example.com" },
                 }
             };
 

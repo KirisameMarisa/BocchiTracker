@@ -17,7 +17,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnTicketType_WhenMappingExists()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { TicketType = "Bug" };
 
@@ -41,7 +41,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenMappingDoesNotExist()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { TicketType = "Task" };
 
@@ -65,7 +65,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenTicketTypeIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { TicketType = null };
 

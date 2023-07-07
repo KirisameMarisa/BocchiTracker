@@ -17,7 +17,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnLabels_WhenTicketDataExists()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData
             {
@@ -43,7 +43,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenTicketDataIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             var inConfig = new ServiceConfig();
 

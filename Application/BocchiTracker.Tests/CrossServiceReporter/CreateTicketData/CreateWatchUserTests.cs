@@ -18,7 +18,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnWatchUserIds_WhenWatchersExist()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
                 new UserData { Id = "1", Name = "John" },
@@ -49,7 +49,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenWatchersDoNotExist()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
                 new UserData { Id = "1", Name = "John" },
@@ -78,7 +78,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenUsersAreNotLoaded()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
 
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { Watcheres = new List<string> { "John", "Jane" } };
@@ -98,7 +98,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenWatchersAreNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
                 new UserData { Id = "1", Name = "John" },

@@ -17,7 +17,7 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         {
             // Arrange
             var mockDataRepository = new Mock<IDataRepository>();
-            var serviceType = IssueServiceDefinitions.Redmine;
+            var serviceType = ServiceDefinitions.Redmine;
             var expectedData = new List<IdentifierData> { new IdentifierData() };
             mockDataRepository.Setup(repo => repo.GetLabels(serviceType)).ReturnsAsync(expectedData);
 
@@ -35,8 +35,8 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         public async Task GetUnifiedData_ShouldReturnCombinedData()
         {
             // Arrange
-            var serviceType1 = IssueServiceDefinitions.Redmine;
-            var serviceType2 = IssueServiceDefinitions.JIRA;
+            var serviceType1 = ServiceDefinitions.Redmine;
+            var serviceType2 = ServiceDefinitions.JIRA;
             var data1 = new List<IdentifierData> { new IdentifierData() };
             var data2 = new List<IdentifierData> { new IdentifierData() };
             var expectedUnifiedData = new List<IdentifierData> { new IdentifierData() };
@@ -63,7 +63,7 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         {
             // Arrange
             var mockDataRepository = new Mock<IDataRepository>();
-            var serviceType = IssueServiceDefinitions.Redmine;
+            var serviceType = ServiceDefinitions.Redmine;
             var expectedData = new List<UserData> { new UserData() };
             mockDataRepository.Setup(repo => repo.GetUsers(serviceType)).ReturnsAsync(expectedData);
 
@@ -81,8 +81,8 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         public async Task GetUnifiedData_ShouldReturnCombinedData()
         {
             // Arrange
-            var serviceType1 = IssueServiceDefinitions.Redmine;
-            var serviceType2 = IssueServiceDefinitions.JIRA;
+            var serviceType1 = ServiceDefinitions.Redmine;
+            var serviceType2 = ServiceDefinitions.JIRA;
             var data1 = new List<UserData> { new UserData() };
             var data2 = new List<UserData> { new UserData() };
             var expectedUnifiedData = new List<UserData> { new UserData() };
@@ -109,7 +109,7 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         {
             // Arrange
             var mockDataRepository = new Mock<IDataRepository>();
-            var serviceType = IssueServiceDefinitions.Redmine;
+            var serviceType = ServiceDefinitions.Redmine;
             var expectedData = new List<IdentifierData> { new IdentifierData() };
             mockDataRepository.Setup(repo => repo.GetTicketTypes(serviceType)).ReturnsAsync(expectedData);
 
@@ -127,8 +127,8 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         public async Task GetUnifiedData_ShouldReturnCombinedData()
         {
             // Arrange
-            var serviceType1 = IssueServiceDefinitions.Redmine;
-            var serviceType2 = IssueServiceDefinitions.JIRA;
+            var serviceType1 = ServiceDefinitions.Redmine;
+            var serviceType2 = ServiceDefinitions.JIRA;
             var data1 = new List<IdentifierData> { new IdentifierData() };
             var data2 = new List<IdentifierData> { new IdentifierData() };
             var expectedUnifiedData = new List<IdentifierData> { new IdentifierData() };
@@ -155,7 +155,7 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         {
             // Arrange
             var mockDataRepository = new Mock<IDataRepository>();
-            var serviceType = IssueServiceDefinitions.Redmine;
+            var serviceType = ServiceDefinitions.Redmine;
             var expectedData = new List<IdentifierData> { new IdentifierData() };
             mockDataRepository.Setup(repo => repo.GetPriorities(serviceType)).ReturnsAsync(expectedData);
 
@@ -173,8 +173,8 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         public async Task GetUnifiedData_ShouldReturnCombinedData()
         {
             // Arrange
-            var serviceType1 = IssueServiceDefinitions.Redmine;
-            var serviceType2 = IssueServiceDefinitions.JIRA;
+            var serviceType1 = ServiceDefinitions.Redmine;
+            var serviceType2 = ServiceDefinitions.JIRA;
             var data1 = new List<IdentifierData> { new IdentifierData() };
             var data2 = new List<IdentifierData> { new IdentifierData() };
             var expectedUnifiedData = new List<IdentifierData> { new IdentifierData() };
@@ -201,7 +201,7 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         {
             // Arrange
             var mockDataRepository = new Mock<IDataRepository>();
-            var serviceType = IssueServiceDefinitions.Redmine;
+            var serviceType = ServiceDefinitions.Redmine;
             var expectedData = new List<IdentifierData> { new IdentifierData() };
             mockDataRepository.Setup(repo => repo.GetLabels(serviceType)).ReturnsAsync(expectedData);
 
@@ -219,8 +219,8 @@ namespace BocchiTracker.Tests.Collector.IssueInfoCollector
         public async Task GetUnifiedData_ShouldReturnCombinedData()
         {
             // Arrange
-            var serviceType1 = IssueServiceDefinitions.Redmine;
-            var serviceType2 = IssueServiceDefinitions.JIRA;
+            var serviceType1 = ServiceDefinitions.Redmine;
+            var serviceType2 = ServiceDefinitions.JIRA;
             var data1 = new List<IdentifierData> { new IdentifierData() };
             var data2 = new List<IdentifierData> { new IdentifierData() };
             var expectedUnifiedData = new List<IdentifierData> { new IdentifierData() };

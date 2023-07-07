@@ -17,7 +17,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnSummary_WhenSummaryExists()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { Summary = "Sample Summary" };
 
@@ -36,7 +36,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenSummaryIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { Summary = null };
 

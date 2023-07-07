@@ -1,5 +1,4 @@
-﻿using BocchiTracker.ServiceClientAdapters.IssueClients;
-using BocchiTracker.ServiceClientAdapters.Data;
+﻿using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.IO;
+using BocchiTracker.ServiceClientAdapters.Clients;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
@@ -17,24 +17,24 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
     {
         private string? _channel;
         private AuthConfig? _auth_config;
-        private IServiceIssueClient _client;
+        private IServiceIssueClient? _client;
 
         public SlackClientTests()
         {
             {
                 var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
-                _auth_config = factory.Load(IssueServiceDefinitions.Slack);
+                _auth_config = factory.Load(ServiceDefinitions.Slack);
             }
 
             {
-                var factory = new ServiceIssueClientAdapterFactory();
-                _client = factory.CreateServiceClientAdapter(IssueServiceDefinitions.Slack);
+                var factory = new ServiceClientAdapterFactory();
+                _client = factory.CreateIssueService(ServiceDefinitions.Slack);
             }
 
             {
                 var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
                 var config = repository.Load();
-                _channel = config.GetServiceConfig(IssueServiceDefinitions.Slack).URL;
+                _channel = config.GetServiceConfig(ServiceDefinitions.Slack).URL;
             }
         }
 

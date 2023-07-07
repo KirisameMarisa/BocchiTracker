@@ -19,7 +19,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnUserId_WhenAssigneeExists()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
                 new UserData { Id = "1", Name = "John" },
@@ -46,7 +46,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenAssigneeDoesNotExist()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
                 new UserData { Id = "1", Name = "Jane" },
@@ -73,7 +73,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenUserListIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var mockDataRepository = new Mock<IDataRepository>();
 
             var inBundle = new IssueInfoBundle();

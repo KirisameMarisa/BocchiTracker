@@ -17,7 +17,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnCustomFields_WhenConfigAndTicketDataExist()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var customFields = new Dictionary<string, List<string>>
             {
                 { "Field1", new List<string> { "Value1", "Value2" } },
@@ -54,7 +54,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenConfigIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var customFields = new Dictionary<string, List<string>>
             {
                 { "Field1", new List<string> { "Value1", "Value2" } },
@@ -79,7 +79,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public void Create_ShouldReturnNull_WhenTicketDataIsNull()
         {
             // Arrange
-            var inService = IssueServiceDefinitions.Redmine;
+            var inService = ServiceDefinitions.Redmine;
             var inBundle = new IssueInfoBundle();
             var inConfig = new ServiceConfig
             {
