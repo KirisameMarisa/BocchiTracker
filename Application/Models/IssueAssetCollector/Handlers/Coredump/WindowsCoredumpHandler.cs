@@ -13,17 +13,17 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Coredump
 {
     public class WindowsCoredumpHandler : CoredumpHandler
     {
-        private string _proc_dump_app;
+        private string _procDumpApp;
 
         public WindowsCoredumpHandler(IFilenameGenerator inFilenameGenerator, string inProcDumpPath)
             : base(inFilenameGenerator)
         {
-            _proc_dump_app = inProcDumpPath;
+            _procDumpApp = inProcDumpPath;
         }
 
         public override void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput)
         {
-            if(!File.Exists(_proc_dump_app))
+            if(!File.Exists(_procDumpApp))
             {
                 //!< needs to set procdump app path.
                 return;
@@ -31,10 +31,10 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Coredump
 
             using (Process proc = new Process())
             {
-                string output = Path.Combine(inOutput, _filename_generator.Generate() + ".dmp");
+                string output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".dmp");
                 proc.StartInfo = new ProcessStartInfo
                 {
-                    FileName = _proc_dump_app,
+                    FileName = _procDumpApp,
                     UseShellExecute = false,
                     Verb = "RunAs",
                     Arguments = $"-ma {inPID} {output}"

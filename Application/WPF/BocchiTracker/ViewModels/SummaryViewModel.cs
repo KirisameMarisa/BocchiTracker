@@ -17,11 +17,11 @@ namespace BocchiTracker.ViewModels
 {
     public class SummaryViewModel : BindableBase
     {
-        private string _ticket_type;
+        private string _ticketType;
         public string TicketType
         {
-            get => _ticket_type;
-            set { SetProperty(ref _ticket_type, value); }
+            get => _ticketType;
+            set { SetProperty(ref _ticketType, value); }
         }
 
         private string _summary;

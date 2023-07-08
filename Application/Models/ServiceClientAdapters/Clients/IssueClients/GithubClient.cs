@@ -17,7 +17,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     public class GithubClient : IServiceIssueClient
     {
         private Octokit.GitHubClient? _client;
-        private long? _repo_id;
+        private long? _repoId;
         private bool _isAuthenticated;
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
@@ -34,17 +34,17 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return false;
             }
 
-            string? owner_repository = null, name_repository = null;
+            string? ownerRepository = null, nameRepository = null;
 
             var uri = new Uri(inURL);
             var segments = uri.AbsolutePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries); ;
             if (segments.Length >= 2)
             {
-                owner_repository = segments[segments.Length - 2].Trim('/');
-                name_repository  = segments[segments.Length - 1].Trim('/');
+                ownerRepository = segments[segments.Length - 2].Trim('/');
+                nameRepository  = segments[segments.Length - 1].Trim('/');
             }
 
-            if (string.IsNullOrEmpty(owner_repository) || string.IsNullOrEmpty(name_repository))
+            if (string.IsNullOrEmpty(ownerRepository) || string.IsNullOrEmpty(nameRepository))
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} Cannt get repository informations");
                 return false;
@@ -55,11 +55,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             try
             {
-                var repo = await _client.Repository.Get(owner_repository, name_repository);
+                var repo = await _client.Repository.Get(ownerRepository, nameRepository);
                 if (repo == null)
                     return false;
 
-                _repo_id = repo.Id;
+                _repoId = repo.Id;
                 _isAuthenticated = true;
                 return _isAuthenticated;
             }
@@ -82,7 +82,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return (false, null);
             }
 
-            if (_repo_id == null)
+            if (_repoId == null)
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return (false, null);
@@ -103,7 +103,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
             try
             {
-                var issue = await _client.Issue.Create(_repo_id.Value, createIssue);
+                var issue = await _client.Issue.Create(_repoId.Value, createIssue);
                 return (issue != null, issue?.Id.ToString());
             }
             catch
@@ -133,7 +133,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return null;
             }
 
-            if (_repo_id == null)
+            if (_repoId == null)
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return null;
@@ -141,7 +141,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             try
             {
-                var labels = await _client.Issue.Labels.GetAllForRepository(_repo_id.Value);
+                var labels = await _client.Issue.Labels.GetAllForRepository(_repoId.Value);
                 var result = new List<IdentifierData>();
                 foreach (var value in labels)
                 {
@@ -171,7 +171,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return null;
             }
 
-            if (_repo_id == null)
+            if (_repoId == null)
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
                 return null;
@@ -179,7 +179,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             try
             {
-                var users = await _client.Repository.Collaborator.GetAll(_repo_id.Value);
+                var users = await _client.Repository.Collaborator.GetAll(_repoId.Value);
 
                 var result = new List<UserData>();
                 foreach (var user in users)

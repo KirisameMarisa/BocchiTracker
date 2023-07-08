@@ -23,8 +23,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     public class RedmineClient : IServiceIssueClient
     {
         private RedmineManager? _client;
-        private int? _project_id;
-        private string? _project_name;
+        private int? _projectId;
+        private string? _projectName;
         private bool _isAuthenticated;
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
@@ -39,21 +39,21 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return false;
             }
 
-            _project_name = segments[^1];
-            var base_url = string.Join('/', segments.Take(segments.Length - 2));
+            _projectName = segments[^1];
+            var baseUrl = string.Join('/', segments.Take(segments.Length - 2));
 
-            var web_proxy = !string.IsNullOrEmpty(inProxyURL)
+            var webProxy = !string.IsNullOrEmpty(inProxyURL)
                 ? new WebProxy(inProxyURL, true)
                 : null;
 
             if (inAuthConfig.APIKey != null)
             {
-                _client = new RedmineManager(host: base_url, apiKey:inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: web_proxy);
+                _client = new RedmineManager(host: baseUrl, apiKey:inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: webProxy);
 
             }
             else if(inAuthConfig.Username != null && inAuthConfig.Password != null)
             {
-                _client = new RedmineManager(host: base_url, login: inAuthConfig.Username, password: inAuthConfig.Password, mimeFormat: MimeFormat.Json, proxy: web_proxy);
+                _client = new RedmineManager(host: baseUrl, login: inAuthConfig.Username, password: inAuthConfig.Password, mimeFormat: MimeFormat.Json, proxy: webProxy);
             }
 
             if (_client == null)
@@ -62,8 +62,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             try
             {
                 var projects = await _client.GetObjectsAsync<Project>(null);
-                _project_id = projects.Where(c => c.Identifier == _project_name).Select(c => c.Id).FirstOrDefault();
-                _isAuthenticated = _project_id != null;
+                _projectId = projects.Where(c => c.Identifier == _projectName).Select(c => c.Id).FirstOrDefault();
+                _isAuthenticated = _projectId != null;
                 return _isAuthenticated;
             }
             catch
@@ -83,14 +83,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if (_client == null)
                 return (false, null);
 
-            if (_project_id == null)
+            if (_projectId == null)
                 return (false, null);
 
-            Issue new_issue = new Issue
+            Issue newIssue = new Issue
             {
                 Subject         = inTicketData.Summary,
                 Description     = inTicketData.Description,
-                Project         = IdentifiableName.Create<IdentifiableName>(_project_id.Value),
+                Project         = IdentifiableName.Create<IdentifiableName>(_projectId.Value),
                 Tracker         = new IdentifiableName { Name = inTicketData.TicketType },
             };
 
@@ -98,17 +98,17 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             if(inTicketData.TicketType != null && int.TryParse(inTicketData.TicketType, out id))
             {
-                new_issue.Tracker = IdentifiableName.Create<IdentifiableName>(id);
+                newIssue.Tracker = IdentifiableName.Create<IdentifiableName>(id);
             }
 
             if(inTicketData.Assignee != null && int.TryParse(inTicketData.Assignee, out id))
             {
-                new_issue.AssignedTo = IdentifiableName.Create<IdentifiableName>(id);
+                newIssue.AssignedTo = IdentifiableName.Create<IdentifiableName>(id);
             }
 
             if (inTicketData.Priority != null && int.TryParse(inTicketData.Priority, out id))
             {
-                new_issue.Priority = IdentifiableName.Create<IdentifiableName>(id);
+                newIssue.Priority = IdentifiableName.Create<IdentifiableName>(id);
             }
 
             if (inTicketData.Watcheres != null)
@@ -117,7 +117,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 foreach (var name in inTicketData.Watcheres)
                 {
                     if(int.TryParse(name, out id))
-                        new_issue.Watchers.Add(IdentifiableName.Create<Watcher>(id));
+                        newIssue.Watchers.Add(IdentifiableName.Create<Watcher>(id));
                 }
             }
 
@@ -128,12 +128,12 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     if (values == null)
                         continue;
 
-                    var new_issue_custom_filed = new IssueCustomField { Name = key };
+                    var newIssueCustomFiled = new IssueCustomField { Name = key };
                     foreach (var value in values)
                     {
-                        new_issue_custom_filed.Values.Add(new CustomFieldValue { Info = value });
+                        newIssueCustomFiled.Values.Add(new CustomFieldValue { Info = value });
                     }
-                    new_issue.CustomFields.Add(new_issue_custom_filed);
+                    newIssue.CustomFields.Add(newIssueCustomFiled);
                 }
             }
 
@@ -143,13 +143,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 if(category != null)
                 {
                     if (int.TryParse(category, out id))
-                        new_issue.Category = IdentifiableName.Create<IdentifiableName>(id);
+                        newIssue.Category = IdentifiableName.Create<IdentifiableName>(id);
                 }
             }
 
             try
             {
-                Issue createdIssue = await _client.CreateObjectAsync(new_issue);
+                Issue createdIssue = await _client.CreateObjectAsync(newIssue);
                 return (true, createdIssue?.Id.ToString());
             }
             catch (WebException ex)
@@ -180,13 +180,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return null;
             }
 
-            if (string.IsNullOrEmpty(_project_name))
+            if (string.IsNullOrEmpty(_projectName))
             {
                 Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 
-            var trackers = await _client.GetObjectsAsync<Tracker>(new NameValueCollection { { "project_id", _project_name } });
+            var trackers = await _client.GetObjectsAsync<Tracker>(new NameValueCollection { { "project_id", _projectName } });
             if (trackers == null)
                 return null;
 
@@ -206,13 +206,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return null;
             }
 
-            if (string.IsNullOrEmpty(_project_name))
+            if (string.IsNullOrEmpty(_projectName))
             {
                 Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 
-            var categories = await _client.GetObjectsAsync<IssueCategory>(new NameValueCollection { { "project_id", _project_name } });
+            var categories = await _client.GetObjectsAsync<IssueCategory>(new NameValueCollection { { "project_id", _projectName } });
             if (categories == null)
                 return null;
 
@@ -232,18 +232,18 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 return null;
             }
 
-            if (string.IsNullOrEmpty(_project_name))
+            if (string.IsNullOrEmpty(_projectName))
             {
                 Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
                 return null;
             }
 
-            var Priorities = await _client.GetObjectsAsync<IssuePriority>(new NameValueCollection { { "project_id", _project_name } });
-            if (Priorities == null)
+            var priorities = await _client.GetObjectsAsync<IssuePriority>(new NameValueCollection { { "project_id", _projectName } });
+            if (priorities == null)
                 return null;
 
             var result = new List<IdentifierData>();
-            foreach (var value in Priorities)
+            foreach (var value in priorities)
             {
                 result.Add(new IdentifierData { Name = value.Name, Id = value.Id.ToString() });
             }

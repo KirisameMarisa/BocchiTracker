@@ -14,16 +14,16 @@ namespace BocchiTracker.CrossServiceUploader
 
     public class IssueAssetUploader : IIssueAssetUploader
     {
-        private readonly IServiceClientFactory _client_factory;
+        private readonly IServiceClientFactory _clientFactory;
 
         public IssueAssetUploader(IServiceClientFactory inClientFactory)
         {
-            _client_factory = inClientFactory;
+            _clientFactory = inClientFactory;
         }
 
         public Task Upload(ServiceDefinitions inService, string inIssueKey, IssueAssetsBundle inBundle, ProjectConfig inConfig)
         {
-            var client = _client_factory.CreateUploadService(inService);
+            var client = _clientFactory.CreateUploadService(inService);
 
 
             throw new NotImplementedException();

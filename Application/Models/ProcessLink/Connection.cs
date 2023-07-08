@@ -31,13 +31,13 @@ namespace BocchiTracker.ProcessLink
                 try
                 {
                     var client = await _listener.AcceptTcpClientAsync();
-                    var end_point = client.Client?.RemoteEndPoint;
+                    var endPoint = client.Client?.RemoteEndPoint;
 
-                    if (end_point is not null)
+                    if (endPoint is not null)
                     {
-                        if (_clients.TryAdd((IPEndPoint)end_point, client))
+                        if (_clients.TryAdd((IPEndPoint)endPoint, client))
                         {
-                            _ = HandleClientAsync((IPEndPoint)end_point, client); // Fire and forget, intentionally not awaited
+                            _ = HandleClientAsync((IPEndPoint)endPoint, client); // Fire and forget, intentionally not awaited
                         }
                     }
                 }
@@ -51,12 +51,12 @@ namespace BocchiTracker.ProcessLink
         private async Task HandleClientAsync(IPEndPoint inIP, TcpClient ioClient)
         {
             Console.WriteLine($"Client connected: {inIP}");
-            AppStatusQuery app_status_query = new AppStatusQuery(_mediator, inIP.GetHashCode(), ioClient);
+            AppStatusQuery appStatusQuery = new AppStatusQuery(_mediator, inIP.GetHashCode(), ioClient);
             while (ioClient.Connected)
             {
                 try
                 {
-                    await app_status_query.QueryAsync();
+                    await appStatusQuery.QueryAsync();
                 }
                 catch (Exception ex)
                 {

@@ -14,7 +14,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
     {
         public TicketData? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            var ticket_data = new TicketData
+            var ticketData = new TicketData
             {
                 TicketType      = new CreateTicketType().Create(inService, inBundle, inConfig),
                 Summary         = new CreateSummary().Create(inService, inBundle, inConfig),
@@ -25,7 +25,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
                 Priority        = new CreatePriority().Create(inService, inBundle, inConfig),
                 Description     = new CreateDescription().Create(inService, inBundle, inConfig)
             };
-            return ticket_data;
+            return ticketData;
         }
     }
 }

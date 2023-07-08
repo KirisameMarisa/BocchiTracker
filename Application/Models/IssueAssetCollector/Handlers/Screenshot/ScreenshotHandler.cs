@@ -11,11 +11,11 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 {
     public class ScreenshotHandler : IHandle
     {
-        public IFilenameGenerator _filename_generator { private set; get; }
+        public IFilenameGenerator _filenameGenerator { private set; get; }
 
         public ScreenshotHandler(IFilenameGenerator inFilenameGenerator)
         {
-            _filename_generator = inFilenameGenerator;
+            _filenameGenerator = inFilenameGenerator;
         }
 
         public virtual void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput) { }

@@ -21,29 +21,29 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
     public class CacheProvider : ICacheProvider
     {
-        private string _file_path;
-        private IFileSystem _file_system;
-        private readonly int _expiry_day;
+        private string _filePath;
+        private IFileSystem _fileSystem;
+        private readonly int _expiryDay;
         private readonly Dictionary<string, object> _cache;
 
         public CacheProvider(string inBaseDirectory, IFileSystem inFileSystem, int inExpiryDay = 30)
         {
-            _file_path      = Path.Combine(inBaseDirectory, "BocchiTracker", "{0}.Cache.yaml");
-            _file_system    = inFileSystem;
-            _expiry_day     = inExpiryDay;
+            _filePath      = Path.Combine(inBaseDirectory, "BocchiTracker", "{0}.Cache.yaml");
+            _fileSystem    = inFileSystem;
+            _expiryDay     = inExpiryDay;
             _cache          = new Dictionary<string, object>();
         }
 
         public bool IsExpired(string inLabel)
         {
-            string filename = string.Format(_file_path, inLabel);
-            if (!_file_system.File.Exists(filename))
+            string filename = string.Format(_filePath, inLabel);
+            if (!_fileSystem.File.Exists(filename))
             {
                 return true;
             }
 
-            DateTime lastModified = _file_system.File.GetLastWriteTime(filename);
-            return (DateTime.Now - lastModified).TotalDays > _expiry_day;
+            DateTime lastModified = _fileSystem.File.GetLastWriteTime(filename);
+            return (DateTime.Now - lastModified).TotalDays > _expiryDay;
         }
 
         public void Set<T>(string inLabel, T value)
@@ -51,7 +51,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if (value == null)
                 return;
 
-            string filename = string.Format(_file_path, inLabel);
+            string filename = string.Format(_filePath, inLabel);
             var dir = Path.GetDirectoryName(filename);
             if (string.IsNullOrEmpty(dir))
                 return;
@@ -60,8 +60,8 @@ namespace BocchiTracker.ServiceClientAdapters.Data
                 .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
 
-            _file_system.Directory.CreateDirectory(dir);
-            using var writer = _file_system.File.CreateText(filename);
+            _fileSystem.Directory.CreateDirectory(dir);
+            using var writer = _fileSystem.File.CreateText(filename);
             serializer.Serialize(writer, value);
 
             _cache[inLabel] = value;
@@ -74,8 +74,8 @@ namespace BocchiTracker.ServiceClientAdapters.Data
                 return (T)cachedValue;
             }
 
-            string filename = string.Format(_file_path, inLabel);
-            if (!_file_system.File.Exists(filename))
+            string filename = string.Format(_filePath, inLabel);
+            if (!_fileSystem.File.Exists(filename))
             {
                 throw new FileNotFoundException($"Cache file {filename} not found.");
             }
@@ -84,7 +84,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
                 .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
 
-            using var reader = _file_system.File.OpenText(filename);
+            using var reader = _fileSystem.File.OpenText(filename);
 
             try
             {
@@ -99,21 +99,21 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             }
         }
 
-        public bool TryGet<T>(string inLabel, out T? result)
+        public bool TryGet<T>(string inLabel, out T? outResult)
         {
             try
             {
-                result = Get<T>(inLabel);
+                outResult = Get<T>(inLabel);
                 return true;
             }
             catch (FileNotFoundException)
             {
-                result = default(T);
+                outResult = default(T);
                 return false;
             }
             catch (InvalidDataException)
             {
-                result = default(T);
+                outResult = default(T);
                 return false;
             }
         }

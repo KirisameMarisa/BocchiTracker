@@ -38,9 +38,9 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
         public List<T> GetUnifiedData()
         {
             List<T> result = new List<T>();
-            foreach(var cache_items in _data.Values)
+            foreach(var cacheItems in _data.Values)
             {
-                foreach(var item in cache_items)
+                foreach(var item in cacheItems)
                 {
                     T? found = result.Find(x => x != null && x.Equals(item));
                     if (found == null)
@@ -50,38 +50,38 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
             return result;
         }
 
-        protected abstract Task<List<T>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType);
+        protected abstract Task<List<T>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType);
     }
 
     public class TicketTypeListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
         {
-            return await dataRepository.GetTicketTypes(serviceType);
+            return await inDataRepository.GetTicketTypes(inServiceType);
         }
     }
 
     public class PriorityListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
         {
-            return await dataRepository.GetPriorities(serviceType);
+            return await inDataRepository.GetPriorities(inServiceType);
         }
     }
 
     public class LabelListService : MetaListService<IdentifierData>
     {
-        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
         {
-            return await dataRepository.GetLabels(serviceType);
+            return await inDataRepository.GetLabels(inServiceType);
         }
     }
 
     public class UserListService : MetaListService<UserData>
     {
-        protected override async Task<List<UserData>?> GetDataAsync(IDataRepository dataRepository, ServiceDefinitions serviceType)
+        protected override async Task<List<UserData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
         {
-            return await dataRepository.GetUsers(serviceType);
+            return await inDataRepository.GetUsers(inServiceType);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BocchiTracker.ServiceClientAdapters
 {
     public interface IAuthConfigRepositoryFactory
     {
-        AuthConfig? Load(ServiceDefinitions serviceType);
+        AuthConfig? Load(ServiceDefinitions inServiceType);
         void        Save(ServiceDefinitions inServiceType, AuthConfig inAuthConfig);
     }
 
@@ -23,12 +23,12 @@ namespace BocchiTracker.ServiceClientAdapters
 
         public AuthConfigRepositoryFactory(string inBaseDirectory)
         {
-            foreach (ServiceDefinitions service_type in Enum.GetValues(typeof(ServiceDefinitions)))
+            foreach (ServiceDefinitions serviceType in Enum.GetValues(typeof(ServiceDefinitions)))
             {
-                if (_caches.ContainsKey(service_type))
+                if (_caches.ContainsKey(serviceType))
                     continue;
-                string filepath = Path.Combine(inBaseDirectory, $"{service_type}.AuthConfig.yaml");
-                _caches.TryAdd(service_type, new ConfigRepository<AuthConfig>(filepath, new FileSystem()));
+                string filePath = Path.Combine(inBaseDirectory, $"{serviceType}.AuthConfig.yaml");
+                _caches.TryAdd(serviceType, new ConfigRepository<AuthConfig>(filePath, new FileSystem()));
             }
         }
 

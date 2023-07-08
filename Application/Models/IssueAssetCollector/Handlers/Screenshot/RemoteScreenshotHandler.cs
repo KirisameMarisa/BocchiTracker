@@ -38,7 +38,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 
         public override void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput)
         {
-            ReceiveScreenshotEventBusHandler.Output = Path.Combine(inOutput, _filename_generator.Generate() + ".png");
+            ReceiveScreenshotEventBusHandler.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
             _mediator.Send(new ModelEventBus.RequestQueryEvent(inClientID, QueryID.ScreenshotData));
         }
     }

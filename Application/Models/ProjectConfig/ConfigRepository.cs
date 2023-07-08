@@ -12,13 +12,13 @@ namespace BocchiTracker.Config
 {
     public class ConfigRepository<T>
     {
-        private string _file_path;
-        private IFileSystem _file_system;
+        private string _filePath;
+        private IFileSystem _fileSystem;
 
         public ConfigRepository(string filePath, IFileSystem inFileSystem)
         {
-            _file_path = filePath;
-            _file_system = inFileSystem;
+            _filePath = filePath;
+            _fileSystem = inFileSystem;
         }
 
         public bool TryLoad(out T? outConfig)
@@ -48,14 +48,14 @@ namespace BocchiTracker.Config
                     .WithNamingConvention(PascalCaseNamingConvention.Instance)
                     .Build();
 
-                using var reader = _file_system.File.OpenText(_file_path);
+                using var reader = _fileSystem.File.OpenText(_filePath);
                 var settings = deserializer.Deserialize<T>(reader);
 
                 return settings;
             }
             catch (Exception ex) 
             {
-                throw new InvalidDataException($"Failed to deserialize cache file {_file_path}.", ex);
+                throw new InvalidDataException($"Failed to deserialize cache file {_filePath}.", ex);
             }
         }
 
@@ -65,7 +65,7 @@ namespace BocchiTracker.Config
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .Build();
 
-            using var writer = _file_system.File.CreateText(_file_path);
+            using var writer = _fileSystem.File.CreateText(_filePath);
             serializer.Serialize(writer, settings);
         }
     }

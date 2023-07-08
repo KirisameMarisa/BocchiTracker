@@ -36,10 +36,10 @@ namespace BocchiTracker.Config
             return _cachedConfig;
         }
 
-        public void Save(T settings)
+        public void Save(T inSettings)
         {
-            _configRepository.Save(settings);
-            _cachedConfig = settings;
+            _configRepository.Save(inSettings);
+            _cachedConfig = inSettings;
             _isCacheValid = true;
         }
     }

@@ -23,7 +23,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             var data = _capture.CaptureWindow(inHandle);
 
             using var image = Image.LoadPixelData<Byte4>(data.ImageData, data.Width, data.Height);
-            image.SaveAsPng(Path.Combine(inOutput, _filename_generator.Generate() + ".png"));
+            image.SaveAsPng(Path.Combine(inOutput, _filenameGenerator.Generate() + ".png"));
         }
     }
 }

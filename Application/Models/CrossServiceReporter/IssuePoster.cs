@@ -18,24 +18,24 @@ namespace BocchiTracker.CrossServiceReporter
 
     public class IssuePoster : IIssuePoster
     {
-        private readonly IServiceClientFactory _client_factory;
-        private readonly ITicketDataFactory _ticket_factory;
+        private readonly IServiceClientFactory _clientFactory;
+        private readonly ITicketDataFactory _ticketFactory;
 
         public IssuePoster(IServiceClientFactory inClientFactory, ITicketDataFactory inTicketDataFactory) 
         {
-            _client_factory = inClientFactory;
-            _ticket_factory = inTicketDataFactory;
+            _clientFactory = inClientFactory;
+            _ticketFactory = inTicketDataFactory;
         }
 
         public void Post(IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig) 
         {
             foreach(var service in inIssueBundle.IssuePostServices) 
             {
-                var client = _client_factory.CreateIssueService(service);
+                var client = _clientFactory.CreateIssueService(service);
                 if (client == null)
                     continue;
 
-                var ticket = _ticket_factory.Create(service, inIssueBundle, inAppBundle, inConfig);
+                var ticket = _ticketFactory.Create(service, inIssueBundle, inAppBundle, inConfig);
                 if (ticket == null)
                     continue;
 

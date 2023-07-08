@@ -16,24 +16,24 @@ namespace BocchiTracker.ProcessLink
 {
     public class AppStatusQuery : IDisposable, IRequestHandler<RequestQueryEvent>
     {
-        private TcpClient _tcp_client;
-        private readonly int _client_id;
+        private TcpClient _tcpClient;
+        private readonly int _clientId;
         private readonly IMediator _mediator;
 
         public AppStatusQuery(IMediator inMediator, int inClientID, TcpClient inClient)
         {
-            _client_id = inClientID;
-            _tcp_client = inClient;
+            _clientId = inClientID;
+            _tcpClient = inClient;
             _mediator = inMediator;
         }
 
         public async Task QueryAsync()
         {
-            using (NetworkStream stream = _tcp_client.GetStream())
+            using (NetworkStream stream = _tcpClient.GetStream())
             {
-                var buffer_size = new byte[4];
-                await stream.ReadAsync(buffer_size, 0, 4);
-                int length = BitConverter.ToInt32(buffer_size, 0);
+                var bufferSize = new byte[4];
+                await stream.ReadAsync(bufferSize, 0, 4);
+                int length = BitConverter.ToInt32(bufferSize, 0);
                 if (length == 0)
                     return;
 
@@ -47,16 +47,16 @@ namespace BocchiTracker.ProcessLink
                 var flatBuffer = new ByteBuffer(buffer);
                 var root = Packet.GetRootAsPacket(flatBuffer);
 
-                var process_data_func = ProcessData.ProcessDataFactory.Create(root);
+                var processDataFunc = ProcessData.ProcessDataFactory.Create(root);
 
-                if (process_data_func is not null)
-                    await process_data_func.Process(_mediator, _client_id);
+                if (processDataFunc is not null)
+                    await processDataFunc.Process(_mediator, _clientId);
             }
         }
 
         public Task Handle(RequestQueryEvent request, CancellationToken cancellationToken)
         {
-            if (_client_id != request.ClientID)
+            if (_clientId != request.ClientID)
                 return Task.CompletedTask;
 
             var fbb = new FlatBufferBuilder(1024);
@@ -70,13 +70,13 @@ namespace BocchiTracker.ProcessLink
             var packet = Packet.EndPacket(fbb);
             Packet.FinishPacketBuffer(fbb, packet);
 
-            _tcp_client.Client.Send(fbb.SizedByteArray());
+            _tcpClient.Client.Send(fbb.SizedByteArray());
             return Task.CompletedTask;
         }
 
         public void Dispose()
         {
-            _mediator.Send(new ModelEventBus.AppDisconnectEvent{ ClientID = _client_id });
+            _mediator.Send(new ModelEventBus.AppDisconnectEvent{ ClientID = _clientId });
         }
     }
 }

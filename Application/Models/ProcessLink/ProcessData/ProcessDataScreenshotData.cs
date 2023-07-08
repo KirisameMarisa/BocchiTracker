@@ -19,11 +19,11 @@ namespace BocchiTracker.ProcessLink.ProcessData
 
         public async Task Process(IMediator inMediator, int inClientID)
         {
-            var screenshot_data = new ModelEventBus.ScreenshotData { Width = _data.Width, Height = _data.Height };
-            screenshot_data.ImageData = new byte[_data.Width * _data.Height * 4];
-            Array.Copy(_data.GetDataArray(), screenshot_data.ImageData, _data.DataLength);
+            var screenshotData = new ModelEventBus.ScreenshotData { Width = _data.Width, Height = _data.Height };
+            screenshotData.ImageData = new byte[_data.Width * _data.Height * 4];
+            Array.Copy(_data.GetDataArray(), screenshotData.ImageData, _data.DataLength);
             
-            await inMediator.Send(new ModelEventBus.ReceiveScreenshotEvent(screenshot_data));
+            await inMediator.Send(new ModelEventBus.ReceiveScreenshotEvent(screenshotData));
         }
     }
 }
