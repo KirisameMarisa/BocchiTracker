@@ -2,6 +2,13 @@
 
 namespace BocchiTracker.Config.Configs
 {
+    public class MonitoredDirectoryConfig
+    {
+        public string? Directory { get; set; }
+
+        public string Filter { get; set; } = string.Empty;
+    }
+
     public class ServiceConfig
     {
         public ServiceDefinitions               Service { get; set; }
@@ -29,7 +36,9 @@ namespace BocchiTracker.Config.Configs
 
         public List<string>? Classes { get; set; }
 
-        public List<string>? MonitoredDirectories { get; set; }
+        public List<MonitoredDirectoryConfig>? MonitoredDirectoryConfigs { get; set; }
+
+        public string? CacheDirectory { get; set; }
 
         public List<ServiceConfig>? ServiceConfigs { get; set; }
 

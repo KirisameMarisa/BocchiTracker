@@ -3,14 +3,16 @@ using System.IO;
 
 namespace BocchiTracker.IssueAssetCollector
 {
-    public class IssueAssetMonitor
+    public class IssueAssetMonitor : IDisposable
     {
-        private IssueAssetsBundle _bundle;
+        public Action<string>?          AddedAction      { get; set; }
+        public Action<string>?          DeletedAction    { get; set; }
+        public Action<string, string>?  RenamedAction    { get; set; }
+
         private FileSystemWatcher _watcher;
 
-        public IssueAssetMonitor(string inDirectory, string inExtension, IssueAssetsBundle inBundle)
+        public IssueAssetMonitor(string inDirectory, string inExtension)
         {
-            _bundle = inBundle;
             _watcher = new FileSystemWatcher
             {
                 Path = inDirectory,
@@ -27,17 +29,23 @@ namespace BocchiTracker.IssueAssetCollector
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
-            _bundle.Add(e.FullPath);
+            AddedAction?.Invoke(e.FullPath);
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            _bundle.Delete(e.FullPath);
+            DeletedAction?.Invoke(e.FullPath);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            _bundle.Rename(e.OldFullPath, e.FullPath);
+            RenamedAction?.Invoke(e.OldFullPath, e.FullPath);
+        }
+
+        public void Dispose()
+        {
+            _watcher.EnableRaisingEvents = false;
+            _watcher.Dispose();
         }
     }
 }

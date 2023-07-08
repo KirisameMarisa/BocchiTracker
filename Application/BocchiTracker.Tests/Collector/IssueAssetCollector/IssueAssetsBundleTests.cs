@@ -69,22 +69,5 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector
             // Assert
             Assert.DoesNotContain(TestFile1, bundle.Bundle);
         }
-
-        [Fact]
-        public void Rename_WhenOldFileInBundle_ShouldReplaceWithNewFileInBundle()
-        {
-            // Arrange
-            File.WriteAllText(TestFile1, "Test content");
-            File.WriteAllText(TestFile2, "Test content");
-            var bundle = new IssueAssetsBundle();
-            bundle.Add(TestFile1);
-
-            // Act
-            bundle.Rename(TestFile1, TestFile2);
-
-            // Assert
-            Assert.DoesNotContain(TestFile1, bundle.Bundle);
-            Assert.Contains(TestFile2, bundle.Bundle);
-        }
     }
 }

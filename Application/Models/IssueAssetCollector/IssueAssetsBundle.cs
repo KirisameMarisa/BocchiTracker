@@ -28,13 +28,5 @@ namespace BocchiTracker.IssueAssetCollector
         {  
             return Bundle.Remove(inAsset); 
         }
-
-        public void Rename(string inOldAsset, string inNewAsset)
-        {
-            if(Delete(inOldAsset))
-            {
-                Add(inNewAsset);
-            }
-        }
     }
 }

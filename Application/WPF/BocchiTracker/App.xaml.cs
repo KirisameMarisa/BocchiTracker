@@ -45,12 +45,11 @@ namespace BocchiTracker.Client
         {
             base.OnInitialized();
 
+            var userConfig                  = LoadUserConfig(Container);
             var projectConfig               = LoadProjectConfig(Container);
             //!< force exit?
             if (projectConfig == null)
                 return;
-
-            var userConfig                  = LoadUserConfig(Container);
 
             var dataRepository              = Container.Resolve<IDataRepository>();
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
@@ -71,8 +70,6 @@ namespace BocchiTracker.Client
             var eventAggregator = inContainer.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<IssueInfoLoadCompleteEvent>().Publish();
             eventAggregator.GetEvent<ConfigReloadEvent>().Publish();
-
-
         }
 
         private ProjectConfig LoadProjectConfig(IContainerProvider container)
@@ -108,34 +105,30 @@ namespace BocchiTracker.Client
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            var container = new UnityContainer();
-            container.AddExtension(new Diagnostic());
+            {
+                containerRegistry.RegisterInstance(new CachedConfigRepository<UserConfig>(
+                    new ConfigRepository<UserConfig>(GetUserConfigFilePath(), new FileSystem())));
+
+                containerRegistry.RegisterInstance(new CachedConfigRepository<ProjectConfig>(
+                    new ConfigRepository<ProjectConfig>(GetProjectConfigFilePath(), new FileSystem())));
+
+                containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(
+                    new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s")));
+            }
+            
+            var userConfig      = LoadUserConfig(Container);
+            var projectConfig   = LoadProjectConfig(Container);
+            if (projectConfig == null)
+                return;
+
+            containerRegistry.RegisterInstance<ICacheProvider>(
+                new CacheProvider(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory, new FileSystem()));
 
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
             containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
-
-            containerRegistry.RegisterInstance<ICacheProvider>(new CacheProvider (Path.GetTempPath(), new FileSystem()));
             containerRegistry.RegisterSingleton<IDataRepository, DataRepository>();
-
-            {
-                var name = Assembly.GetExecutingAssembly().GetName().Name;
-                containerRegistry.RegisterInstance(new CachedConfigRepository<UserConfig>(
-                    new ConfigRepository<UserConfig>(Path.Combine("Configs", nameof(UserConfig) + "s" , $"{name}.{nameof(UserConfig)}.yaml"), new FileSystem())));
-
-                name = string.IsNullOrEmpty(_projectConfigName)
-                    ? name
-                    : _projectConfigName;
-                containerRegistry.RegisterInstance(new CachedConfigRepository<ProjectConfig>(
-                    new ConfigRepository<ProjectConfig>(Path.Combine("Configs", nameof(ProjectConfig) + "s", $"{name}.{nameof(ProjectConfig)}.yaml"), new FileSystem())));
-            }
-
-            {
-                var auto_config_repo_factory = new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s"));
-                containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(auto_config_repo_factory);
-            }
-
             containerRegistry.RegisterSingleton<ITicketDataFactory, TicketDataFactory>();
             containerRegistry.RegisterSingleton<IIssuePoster, IssuePoster>();
             containerRegistry.RegisterSingleton(typeof(IssueInfoBundle));

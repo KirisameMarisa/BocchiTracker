@@ -1,4 +1,6 @@
 ﻿using BocchiTracker.Behaviors;
+using BocchiTracker.Config.Configs;
+using BocchiTracker.Config;
 using BocchiTracker.Event;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.IssueInfoCollector;
@@ -28,8 +30,12 @@ namespace BocchiTracker.ViewModels
 
     public class UploadFilesViewModel : BindableBase
     {
+        private IEventAggregator _eventAggregator;
+        private SubscriptionToken _subscriptionConfigReloadEventToken;
+
         private IssueAssetsBundle _issueAssetsBundle;
         private ObservableCollection<UploadFileItem> _bundle;
+        private List<IssueAssetMonitor> _issueAssetMonitors = new List<IssueAssetMonitor>();
 
         public ICommand OpenCommand { get; private set; }
 
@@ -49,18 +55,53 @@ namespace BocchiTracker.ViewModels
             DeleteCommand = new DelegateCommand<string>(OnDeleteFile);
             OpenCommand = new DelegateCommand<string>(OnOpenFile);
 
-            inEventAggregator
+            _eventAggregator = inEventAggregator;
+            _eventAggregator
                 .GetEvent<AssetDropedEvent>()
                 .Subscribe(OnAddDroppedFiles, ThreadOption.UIThread);
+
+            _subscriptionConfigReloadEventToken = _eventAggregator
+                .GetEvent<ConfigReloadEvent>()
+                .Subscribe(OnConfigReload, ThreadOption.UIThread);
+        }
+
+        private void OnConfigReload()
+        {
+            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
+            var config = cachedConfigRepository.Load();
+
+            foreach(var item in config.MonitoredDirectoryConfigs)
+            {
+                if (string.IsNullOrEmpty(item.Directory) || !Directory.Exists(item.Directory))
+                    continue;
+
+                var issueAssetMonitor           = new IssueAssetMonitor(item.Directory, item.Filter);
+                issueAssetMonitor.AddedAction   = OnAddFile;
+                issueAssetMonitor.DeletedAction = OnDeleteFile;
+                issueAssetMonitor.RenamedAction = OnRenameFile;
+                _issueAssetMonitors.Add(issueAssetMonitor);
+            }
+            
+            _eventAggregator
+                .GetEvent<IssueInfoLoadCompleteEvent>()
+                .Unsubscribe(_subscriptionConfigReloadEventToken);
         }
 
         public void OnAddDroppedFiles(AssetDropedEventParameter inParameter)
         {
             foreach(var file in inParameter.Files)
             {
-                _issueAssetsBundle.Add(file);
-                Bundle.Add(new UploadFileItem { FullName = file, Name = Path.GetFileName(file) });
+                OnAddFile(file);
             }
+        }
+
+        public void OnAddFile(string inFilePath)
+        {
+            _issueAssetsBundle.Add(inFilePath);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Bundle.Add(new UploadFileItem { FullName = inFilePath, Name = Path.GetFileName(inFilePath) });
+            });
         }
 
         public void OnDeleteFile(string inFilePath)
@@ -70,9 +111,18 @@ namespace BocchiTracker.ViewModels
                 var removeItem = Bundle.Where(x => x.FullName == inFilePath).FirstOrDefault() ?? null;
                 if (removeItem != null)
                 {
-                    Bundle.Remove(removeItem);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Bundle.Remove(removeItem);
+                    });
                 }
             }
+        }
+
+        public void OnRenameFile(string inOldPath, string inNewPath)
+        {
+            OnDeleteFile(inOldPath);
+            OnAddFile(inNewPath);
         }
 
         public void OnOpenFile(string inFilePath)
