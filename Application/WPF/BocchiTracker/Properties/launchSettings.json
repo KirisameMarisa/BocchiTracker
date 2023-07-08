@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BocchiTracker": {
+      "commandName": "Project",
+      "commandLineArgs": "Default"
+    }
+  }
+}

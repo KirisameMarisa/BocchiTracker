@@ -40,15 +40,6 @@
                 </Grid>
             </Button>
 
-            <!--<ComboBox 
-                x:Name="_combobox"
-                ItemsSource="{Binding PostServices}"
-                SelectedItem=""
-                Grid.Row="2" 
-                Margin="2" 
-                HorizontalContentAlignment="Center" 
-                Foreground="White" 
-                materialDesign:HintAssist.Hint="Select Post Service"/>-->
             <Expander Header="Select Post Service" 
                       Foreground="White"
                       Margin="3" 

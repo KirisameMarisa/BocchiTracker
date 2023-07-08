@@ -9,14 +9,21 @@
              d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.25*"/>
             <ColumnDefinition Width="0.8*"/>
         </Grid.ColumnDefinitions>
-        
-        <ComboBox Grid.Column="0" Margin="5,0,5,0" />
+
+        <ComboBox ItemsSource="{Binding TicketTypes}" 
+                  SelectedItem="{Binding SelectedTicketType}" 
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:HintAssist.Hint="Select TicketType"
+                  FontSize="14"
+                  Foreground="White"
+                  Grid.Column="0" Margin="5,0,5,0" />
         <TextBox Grid.Column="1"
-                materialDesign:HintAssist.Hint="Summary..."
-                Foreground="White"
-                Margin="5, 0, 5, 8.5" TextWrapping="NoWrap" FontSize="16" VerticalContentAlignment="Center" />
+                 Text="{Binding Summary}"
+                 materialDesign:HintAssist.Hint="Summary..."
+                 Foreground="White"
+                 Margin="10, 0, 5, 0" TextWrapping="NoWrap" FontSize="16" VerticalContentAlignment="Bottom" />
     </Grid>
 </UserControl>

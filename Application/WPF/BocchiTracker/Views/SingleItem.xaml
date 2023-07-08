@@ -21,7 +21,7 @@
                 StaysOpenOnEdit="True"
                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                 materialDesign:HintAssist.Hint="{Binding HintText}"
-                Margin="5, 0, 5, 8.5" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding ShowCommand}"/>
