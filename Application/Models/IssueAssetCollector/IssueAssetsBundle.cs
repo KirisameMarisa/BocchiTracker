@@ -11,7 +11,7 @@ namespace BocchiTracker.IssueAssetCollector
 {
     public class IssueAssetsBundle
     {
-        public List<string> Bundle { get; set; } = new List<string>();
+        public List<string> Bundle { get; private set; } = new List<string>();
 
         public void Add(string inAsset)
         {
@@ -20,7 +20,7 @@ namespace BocchiTracker.IssueAssetCollector
 
             if (Bundle.Contains(inAsset))
                 return;
-            
+
             Bundle.Add(inAsset);
         }
 

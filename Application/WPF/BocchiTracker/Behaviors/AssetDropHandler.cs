@@ -4,12 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using BocchiTracker.IssueAssetCollector;
 using Microsoft.Xaml.Behaviors;
+using Prism.Ioc;
+using Prism.Unity;
 
 namespace BocchiTracker.Behaviors
 {
-    internal class AssetDropHandler : Behavior<UIElement>
+    public class AssetDropHandler : Behavior<UIElement>
     {
+        public static readonly DependencyProperty FilesDroppedCommandProperty =
+            DependencyProperty.Register(nameof(FilesDroppedCommand), typeof(ICommand), typeof(AssetDropHandler));
+
+        public ICommand FilesDroppedCommand
+        {
+            get => (ICommand)GetValue(FilesDroppedCommandProperty);
+            set => SetValue(FilesDroppedCommandProperty, value);
+        }
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -35,7 +48,7 @@ namespace BocchiTracker.Behaviors
             if (ioEvent.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])ioEvent.Data.GetData(DataFormats.FileDrop);
-                //!< Event Hanlder?
+                FilesDroppedCommand?.Execute(files);
             }
         }
     }

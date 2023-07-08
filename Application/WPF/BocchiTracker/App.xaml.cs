@@ -71,6 +71,8 @@ namespace BocchiTracker.Client
             var eventAggregator = inContainer.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<IssueInfoLoadCompleteEvent>().Publish();
             eventAggregator.GetEvent<ConfigReloadEvent>().Publish();
+
+
         }
 
         private ProjectConfig LoadProjectConfig(IContainerProvider container)
@@ -110,6 +112,8 @@ namespace BocchiTracker.Client
             container.AddExtension(new Diagnostic());
 
             containerRegistry.Register<IFileSystem, FileSystem>();
+            containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
+            containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
 
             containerRegistry.RegisterInstance<ICacheProvider>(new CacheProvider (Path.GetTempPath(), new FileSystem()));
@@ -134,14 +138,9 @@ namespace BocchiTracker.Client
 
             containerRegistry.RegisterSingleton<ITicketDataFactory, TicketDataFactory>();
             containerRegistry.RegisterSingleton<IIssuePoster, IssuePoster>();
-            containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
-            containerRegistry.Register<IPasswordService, PasswordService>();
-            containerRegistry.RegisterSingleton(typeof(CachedConfigRepository<>));
-            containerRegistry.RegisterSingleton(typeof(ConfigRepository<>));
             containerRegistry.RegisterSingleton(typeof(IssueInfoBundle));
             containerRegistry.RegisterSingleton(typeof(TrackerApplication));
             containerRegistry.RegisterSingleton(typeof(IssueAssetsBundle));
-            containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
         }
     }
 }

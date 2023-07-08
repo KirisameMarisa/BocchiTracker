@@ -9,8 +9,12 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
+        AllowDrop="True"
         Title="MainWindow" Height="850" Width="800" MinWidth="400">
     <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">
+        <i:Interaction.Behaviors>
+            <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
+        </i:Interaction.Behaviors>
         <StackPanel Margin="10">
             <Grid Name="SettingAndSummary">
                 <Grid.ColumnDefinitions>

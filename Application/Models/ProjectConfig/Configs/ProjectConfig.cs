@@ -29,6 +29,8 @@ namespace BocchiTracker.Config.Configs
 
         public List<string>? Classes { get; set; }
 
+        public List<string>? MonitoredDirectories { get; set; }
+
         public List<ServiceConfig>? ServiceConfigs { get; set; }
 
         public ServiceConfig? GetServiceConfig(ServiceDefinitions inServiceDefinitions)
