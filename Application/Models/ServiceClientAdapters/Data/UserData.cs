@@ -15,13 +15,13 @@ namespace BocchiTracker.ServiceClientAdapters.Data
         {
             var x = obj as UserData;
             if (x == null) return false;
-            return x.Name == Name;
+            return x.Email == Email;
         }
 
         public override int GetHashCode()
         {
-            if (Name == null) return 0;
-            return Name.GetHashCode();
+            if (Email == null) return 0;
+            return Email.GetHashCode();
         }
     }
 }
