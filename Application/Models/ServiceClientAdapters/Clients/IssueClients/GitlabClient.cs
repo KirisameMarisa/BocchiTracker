@@ -15,6 +15,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             throw new NotImplementedException();
         }
 
+        public bool IsAuthenticated()
+        {
+            return false;
+        }
+
         public Task<List<IdentifierData>?> GetTicketTypes()
         {
             throw new NotImplementedException();

@@ -26,16 +26,12 @@ namespace BocchiTracker.IssueInfoCollector
 
         public TicketData                       TicketData              { get; set; } = new TicketData();
 
-        public bool                             IsInitializeed          { get; private set; } = false;
-
         public async Task Initialize(IDataRepository inRepository)
         {
             await LabelListService.Load(inRepository);
             await PriorityListService.Load(inRepository);
             await TicketTypeListService.Load(inRepository);
             await UserListService.Load(inRepository);
-
-            IsInitializeed = true;
         }
     }
 }

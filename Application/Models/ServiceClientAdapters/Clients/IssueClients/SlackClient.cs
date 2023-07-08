@@ -16,6 +16,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     {
         private SlackWebApiClient? _client;
         private string? _channel;
+        private bool _isAuthenticated;
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {
@@ -25,12 +26,18 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 var token = inAuthConfig.APIKey;
                 _client = new SlackWebApiClient(token);
                 var result = await _client.Auth.Test();
-                return result.OK;
+                _isAuthenticated = result.OK;
+                return _isAuthenticated;
             }
             catch
             {
                 return false;
             }
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _isAuthenticated;
         }
 
         public async Task<(bool, string?)> Post(TicketData inTicketData)

@@ -38,7 +38,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if (_cache_provider.IsExpired(cache_name) || !_cache_provider.TryGet(cache_name, out result))
             {
                 var client = _service_client_adapter_factory.CreateIssueService(inServiceType);
-                if (client == null)
+                if (client == null || !client.IsAuthenticated())
                 {
                     Trace.TraceError($"Cannt get {inServiceType}Client");
                     return null;
@@ -57,7 +57,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if (_cache_provider.IsExpired(cache_name) || !_cache_provider.TryGet(cache_name, out result))
             {
                 var client = _service_client_adapter_factory.CreateIssueService(inServiceType);
-                if (client == null)
+                if (client == null || !client.IsAuthenticated())
                 {
                     Trace.TraceError($"Cannt get {inServiceType}Client");
                     return null;
@@ -76,7 +76,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if (_cache_provider.IsExpired(cache_name) || !_cache_provider.TryGet(cache_name, out result))
             {
                 var client = _service_client_adapter_factory.CreateIssueService(inServiceType);
-                if (client == null)
+                if (client == null || !client.IsAuthenticated())
                 {
                     Trace.TraceError($"Cannt get {inServiceType}Client");
                     return null;
@@ -95,7 +95,7 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if(_cache_provider.IsExpired(cache_name) || !_cache_provider.TryGet(cache_name, out result))
             {
                 var client = _service_client_adapter_factory.CreateIssueService(inServiceType);
-                if (client == null)
+                if (client == null || !client.IsAuthenticated())
                 {
                     Trace.TraceError($"Cannt get {inServiceType}Client");
                     return null;

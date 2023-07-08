@@ -14,6 +14,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
             throw new NotImplementedException();
         }
 
+        public bool IsAuthenticated()
+        {
+            return true;
+        }
+
         public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
         {
             throw new NotImplementedException();

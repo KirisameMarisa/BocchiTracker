@@ -18,6 +18,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     {
         private Octokit.GitHubClient? _client;
         private long? _repo_id;
+        private bool _isAuthenticated;
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {
@@ -59,12 +60,18 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     return false;
 
                 _repo_id = repo.Id;
-                return true;
+                _isAuthenticated = true;
+                return _isAuthenticated;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _isAuthenticated;
         }
 
         public async Task<(bool, string?)> Post(TicketData inTicketData)

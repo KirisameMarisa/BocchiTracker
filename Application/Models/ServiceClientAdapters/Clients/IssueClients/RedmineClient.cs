@@ -25,6 +25,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private RedmineManager? _client;
         private int? _project_id;
         private string? _project_name;
+        private bool _isAuthenticated;
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
         {
@@ -62,14 +63,19 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             {
                 var projects = await _client.GetObjectsAsync<Project>(null);
                 _project_id = projects.Where(c => c.Identifier == _project_name).Select(c => c.Id).FirstOrDefault();
-
-                return _project_id != null;
+                _isAuthenticated = _project_id != null;
+                return _isAuthenticated;
             }
             catch
             {
                 Trace.TraceError($"{ServiceDefinitions.Redmine} Failed authenticate");
                 return false;
             }
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _isAuthenticated;
         }
 
         public async Task<(bool, string?)> Post(TicketData inTicketData)

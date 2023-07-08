@@ -18,6 +18,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
 #endif
         }
 
+        public bool IsAuthenticated()
+        {
+            return false;
+        }
+
         public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
         {
 #if WINDOWS

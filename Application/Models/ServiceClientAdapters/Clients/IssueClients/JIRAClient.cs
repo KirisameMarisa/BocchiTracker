@@ -36,6 +36,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
         }
 
+        public bool IsAuthenticated()
+        {
+            return false;
+        }
+
         public Task<(bool, string?)> Post(TicketData inTicketData)
         {
             throw new NotImplementedException();

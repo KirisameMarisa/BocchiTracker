@@ -8,6 +8,8 @@ namespace BocchiTracker.Config.Configs
 
         public string?                          URL { get; set; }
 
+        public string?                          ProxyURL { get; set; }
+
         public string?                          DescriptionFormat { get; set; }
 
         public Dictionary<string, string>?      PriorityMappings { get; set; }

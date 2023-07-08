@@ -51,11 +51,16 @@ namespace BocchiTracker.ServiceClientAdapters.Data
             if (value == null)
                 return;
 
+            string filename = string.Format(_file_path, inLabel);
+            var dir = Path.GetDirectoryName(filename);
+            if (string.IsNullOrEmpty(dir))
+                return;
+
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
 
-            string filename = string.Format(_file_path, inLabel);
+            _file_system.Directory.CreateDirectory(dir);
             using var writer = _file_system.File.CreateText(filename);
             serializer.Serialize(writer, value);
 

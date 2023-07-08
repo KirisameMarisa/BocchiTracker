@@ -10,5 +10,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
     public interface IService 
     {
         Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null);
+
+        bool IsAuthenticated();
     }
 }
