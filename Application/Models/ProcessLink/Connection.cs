@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ProcessLink
 {
-    internal class Connection
+    public class Connection
     {
         private TcpListener _listener;
         private ConcurrentDictionary<IPEndPoint, TcpClient> _clients = new ConcurrentDictionary<IPEndPoint, TcpClient>();
