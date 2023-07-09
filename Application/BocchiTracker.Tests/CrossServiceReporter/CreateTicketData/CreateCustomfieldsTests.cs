@@ -86,7 +86,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
                 QueryFieldMappings = new List<ValueMapping>
                 {
                    new ValueMapping { Definition = "Field1",    Name = "CustomField1" },
-                   new ValueMapping { Definition = "Field2",     Name = "CustomField2" }
+                   new ValueMapping { Definition = "Field2",    Name = "CustomField2" }
                 }
             };
 

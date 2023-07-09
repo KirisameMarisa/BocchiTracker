@@ -61,15 +61,15 @@ namespace BocchiTracker.Client
                 var serviceAuthenticator = new ServiceAuthenticator(serviceClientFactory, autoConfigRepositoryFactory);
                 await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
                 await issueInfoBundle.Initialize(dataRepository);
-                PublishEvents(Container);
+                PublishEvents(Container, projectConfig);
             });
         }
 
-        private void PublishEvents(IContainerProvider inContainer)
+        private void PublishEvents(IContainerProvider inContainer, ProjectConfig inProjectConfig)
         {
             var eventAggregator = inContainer.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<IssueInfoLoadCompleteEvent>().Publish();
-            eventAggregator.GetEvent<ConfigReloadEvent>().Publish();
+            eventAggregator.GetEvent<ConfigReloadEvent>().Publish(new ConfigReloadEventParameter(inProjectConfig));
         }
 
         private ProjectConfig LoadProjectConfig(IContainerProvider container)

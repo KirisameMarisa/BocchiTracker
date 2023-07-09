@@ -11,7 +11,7 @@
             MinHeight="250"
             materialDesign:HintAssist.Hint="Description..."
             Foreground="White"
-            Text="{Binding Description}"
+            Text="{Binding Description.Value}"
             Grid.Row="1" Margin="5" FontSize="16" AcceptsReturn="True" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow"/>
     </Grid>
 </UserControl>

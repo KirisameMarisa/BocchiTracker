@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
@@ -21,13 +22,12 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
                 return null;
 
             var watchers = new List<string>();
-            inBundle.TicketData.Watcheres.ForEach(x =>
+            foreach(var x in inBundle.TicketData.Watcheres)
             {
                 var foundUser = users.FirstOrDefault(u => u.Name == x)?.Id ?? null;
                 if (foundUser != null)
                     watchers.Add(foundUser);
-            });
-
+            }
             return watchers.Count == 0 ? null : watchers;
         }
     }

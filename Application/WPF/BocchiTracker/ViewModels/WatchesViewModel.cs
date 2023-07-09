@@ -1,10 +1,12 @@
 ﻿using BocchiTracker.Event;
+using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.IssueInfoCollector;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +16,23 @@ namespace BocchiTracker.ViewModels
 {
     public class WatchesViewModel : MultipleItemsViewModel
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
+        private IssueInfoBundle _issueInfoBundle;
 
-        public WatchesViewModel(IEventAggregator inEventAggregator)
+        public WatchesViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
-            HintText = "Watches";
+            HintText.Value = "Watches";
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            _issueInfoBundle = inIssueInfoBundle;
+
+            inEventAggregator
                 .GetEvent<IssueInfoLoadCompleteEvent>()
                 .Subscribe(OnIssueInfoLoadComplete, ThreadOption.UIThread);
+        }
+
+        protected override void OnUpdateRegisteredItems()
+        {
+            var registeredItems = new ObservableCollection<string>(RegisteredItems);
+            _issueInfoBundle.TicketData.Watcheres = registeredItems.ToList();
         }
 
         private void OnIssueInfoLoadComplete()
@@ -34,10 +42,6 @@ namespace BocchiTracker.ViewModels
             {
                 base.Items.Add(user.Name);
             }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

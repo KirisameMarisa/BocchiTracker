@@ -5,7 +5,9 @@ using Prism.Ioc;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,17 +16,23 @@ namespace BocchiTracker.ViewModels
 {
     public class LabelsViewModel : MultipleItemsViewModel
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
+        private IssueInfoBundle _issueInfoBundle;
 
-        public LabelsViewModel(IEventAggregator inEventAggregator) 
+        public LabelsViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle) 
         {
-            HintText = "Labels";
+            HintText.Value = "Labels";
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            _issueInfoBundle = inIssueInfoBundle;
+
+            inEventAggregator
                 .GetEvent<IssueInfoLoadCompleteEvent>()
                 .Subscribe(OnIssueInfoLoadComplete, ThreadOption.UIThread);
+        }
+
+        protected override void OnUpdateRegisteredItems()
+        {
+            var registeredItems = new ObservableCollection<string>(RegisteredItems);
+            _issueInfoBundle.TicketData.Lables = registeredItems.ToList();
         }
 
         private void OnIssueInfoLoadComplete()
@@ -34,10 +42,6 @@ namespace BocchiTracker.ViewModels
             {
                 base.Items.Add(label.Name);
             }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

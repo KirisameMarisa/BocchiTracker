@@ -14,17 +14,22 @@ namespace BocchiTracker.ViewModels
 {
     public class AssigneViewModel : SingleItemViewModel
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
+        private IssueInfoBundle _issueInfoBundle;
 
-        public AssigneViewModel(IEventAggregator inEventAggregator)
+        public AssigneViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
-            HintText = "Assigne";
+            HintText.Value = "Assigne";
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            _issueInfoBundle = inIssueInfoBundle;
+
+            inEventAggregator
                 .GetEvent<IssueInfoLoadCompleteEvent>()
                 .Subscribe(OnIssueInfoLoadComplete, ThreadOption.UIThread);
+        }
+
+        protected override void OnSetSelectedItem(string inItem)
+        {
+            _issueInfoBundle.TicketData.Assignee = inItem;
         }
 
         private void OnIssueInfoLoadComplete()
@@ -34,10 +39,6 @@ namespace BocchiTracker.ViewModels
             {
                 base.Items.Add(user.Name);
             }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

@@ -11,22 +11,27 @@ namespace BocchiTracker.IssueAssetCollector
 {
     public class IssueAssetsBundle
     {
-        public List<string> Bundle { get; private set; } = new List<string>();
+        public ObservableCollection<AssetData> Bundle = new ObservableCollection<AssetData>();
 
         public void Add(string inAsset)
         {
             if (!File.Exists(inAsset))
                 return;
 
-            if (Bundle.Contains(inAsset))
+            var find = Bundle.Where(x => x.FullName == inAsset).FirstOrDefault() ?? null;
+            if (find != null)
                 return;
 
-            Bundle.Add(inAsset);
+            Bundle.Add(new AssetData (inAsset));
         }
 
         public bool Delete(string inAsset) 
-        {  
-            return Bundle.Remove(inAsset); 
+        {
+            var find = Bundle.Where(x => x.FullName == inAsset).FirstOrDefault() ?? null;
+            if (find == null)
+                return false;
+
+            return Bundle.Remove(find); 
         }
     }
 }

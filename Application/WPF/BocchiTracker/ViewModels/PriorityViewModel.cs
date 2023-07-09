@@ -17,32 +17,30 @@ namespace BocchiTracker.ViewModels
 {
     public class PriorityViewModel : SingleItemViewModel
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
+        private IssueInfoBundle _issueInfoBundle;
 
-        public PriorityViewModel(IEventAggregator inEventAggregator)
+        public PriorityViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
-            HintText = "Priority";
+            HintText.Value = "Priority";
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            _issueInfoBundle = inIssueInfoBundle;
+
+            inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
         }
 
-        private void OnConfigReload()
+        protected override void OnSetSelectedItem(string inItem)
         {
-            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var config = cachedConfigRepository.Load();
+            _issueInfoBundle.TicketData.Priority = inItem;
+        }
 
-            foreach (var item in config.Priorities)
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
+        {
+            foreach (var item in inParam.ProjectConfig.Priorities)
             {
                 base.Items.Add(item);
             }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

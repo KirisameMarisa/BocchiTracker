@@ -1,4 +1,6 @@
-﻿using Prism.Mvvm;
+﻿using BocchiTracker.IssueInfoCollector;
+using Prism.Mvvm;
+using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,12 @@ namespace BocchiTracker.ViewModels
 {
     public class DescriptionViewModel : BindableBase
     {
-        private string _description;
-        public string Description
+        public ReactiveProperty<string> Description { get; }
+
+        public DescriptionViewModel(IssueInfoBundle inIssueInfoBundle)
         {
-            get => _description;
-            set { SetProperty(ref _description, value); }
+            Description = new ReactiveProperty<string>(inIssueInfoBundle.TicketData.Description);
+            Description.Subscribe(value => inIssueInfoBundle.TicketData.Description = value);
         }
     }
 }

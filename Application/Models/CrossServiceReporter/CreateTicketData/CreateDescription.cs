@@ -11,7 +11,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
     public class CreateDescription : ICreateUnifiedTicketData<string>
     {
-        public string Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public string? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             if (string.IsNullOrEmpty(inConfig.DescriptionFormat))
                 return inBundle.TicketData.Description;
@@ -28,13 +28,13 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             if (!string.IsNullOrEmpty(inBundle.TicketData.Assignee))
                 variables.Add(nameof(inBundle.TicketData.Assignee), inBundle.TicketData.Assignee);
 
-            if (inBundle.TicketData.Lables != null)
+            if (inBundle.TicketData.Lables != null && inBundle.TicketData.Lables.Count != 0)
                 variables.Add(nameof(inBundle.TicketData.Lables), string.Join(", ", inBundle.TicketData.Lables));
 
             if (!string.IsNullOrEmpty(inBundle.TicketData.Priority))
                 variables.Add(nameof(inBundle.TicketData.Priority), inBundle.TicketData.Priority);
 
-            if (inBundle.TicketData.CustomFields != null)
+            if (inBundle.TicketData.CustomFields != null && inBundle.TicketData.CustomFields.Count != 0)
             {
                 foreach (var (key, value) in inBundle.TicketData.CustomFields)
                 {

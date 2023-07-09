@@ -11,4 +11,8 @@
     <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\ProjectConfig\Config.csproj" />
+  </ItemGroup>
+
 </Project>

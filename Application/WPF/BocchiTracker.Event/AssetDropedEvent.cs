@@ -17,8 +17,5 @@ namespace BocchiTracker.Event
         }
     }
 
-    public class AssetDropedEvent : PubSubEvent<AssetDropedEventParameter>
-    {
-
-    }
+    public class AssetDropedEvent : PubSubEvent<AssetDropedEventParameter> {}
 }

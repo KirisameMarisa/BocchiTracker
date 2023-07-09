@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 using Prism.Ioc;
+using Reactive.Bindings;
+using BocchiTracker.IssueInfoCollector;
 
 namespace BocchiTracker.ViewModels
 {
@@ -27,48 +29,30 @@ namespace BocchiTracker.ViewModels
 
     public class UtilityViewModel : BindableBase
     {
-        private IEventAggregator _eventAggregator;
-
-        private SubscriptionToken _subscriptionToken;
-
         public ICommand TakeScreenshotCommand { get; private set; }
 
         public ICommand CaptureCoredumpCommand { get; private set; }
 
         public ICommand PostIssueCommand { get; private set; }
 
-        private ObservableCollection<PostServiceItem> _postServices = new ObservableCollection<PostServiceItem>();
-        public ObservableCollection<PostServiceItem> PostServices
-        {
-            get => _postServices;
-            set { SetProperty(ref _postServices, value); }
-        }
+        public ReactiveCollection<PostServiceItem> PostServices { get; }
 
-        public UtilityViewModel(IEventAggregator inEventAggregator)
+        public UtilityViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
             TakeScreenshotCommand   = new DelegateCommand(OnTakeScreenshot);
             CaptureCoredumpCommand  = new DelegateCommand(OnCaptureCoredump);
             PostIssueCommand        = new DelegateCommand(OnPostIssue);
+            PostServices            = new ReactiveCollection<PostServiceItem>();
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
         }
 
-        private void OnConfigReload()
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var config = cachedConfigRepository.Load();
-
-            foreach (var item in config.ServiceConfigs)
-            {
+            foreach (var item in inParam.ProjectConfig.ServiceConfigs)
                 PostServices.Add(new PostServiceItem { Name = item.Service.ToString() });
-            }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
 
         public void OnPostIssue()

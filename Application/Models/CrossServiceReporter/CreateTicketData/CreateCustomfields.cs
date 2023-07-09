@@ -13,7 +13,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
     {
         public Dictionary<string, List<string>>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            if (inConfig.QueryFieldMappings == null || inBundle.TicketData.CustomFields == null)
+            if (inConfig.QueryFieldMappings == null || inBundle.TicketData.CustomFields == null || inBundle.TicketData.CustomFields.Count == 0)
                 return null;
 
             Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();

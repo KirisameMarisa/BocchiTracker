@@ -12,63 +12,38 @@ using System.Windows;
 using Prism.Ioc;
 using BocchiTracker.Event;
 using Prism.Events;
+using BocchiTracker.IssueInfoCollector;
+using Reactive.Bindings;
+using YamlDotNet.Core.Tokens;
+using Unity.Injection;
 
 namespace BocchiTracker.ViewModels
 {
     public class SummaryViewModel : BindableBase
     {
-        private string _ticketType;
-        public string TicketType
-        {
-            get => _ticketType;
-            set { SetProperty(ref _ticketType, value); }
-        }
+        public ReactiveProperty<string>     Summary { get; }
+        public ReactiveProperty<string>     SelectedTicketType { get; }
+        public ReactiveCollection<string>   TicketTypes { get; }
 
-        private string _summary;
-        public string Summary
+        public SummaryViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
-            get => _summary;
-            set { SetProperty(ref _summary, value); }
-        }
+            Summary = new ReactiveProperty<string>(inIssueInfoBundle.TicketData.Summary);
+            Summary.Subscribe(value => inIssueInfoBundle.TicketData.Summary = value);
 
-        private string _selected_ticket_type;
-        public string SelectedTicketType
-        {
-            get => _selected_ticket_type;
-            set { SetProperty(ref _selected_ticket_type, value); }
-        }
+            SelectedTicketType = new ReactiveProperty<string>();
+            SelectedTicketType.Subscribe(value => inIssueInfoBundle.TicketData.TicketType = value);
 
-        private ObservableCollection<string> _ticketTypes = new ObservableCollection<string>();
-        public ObservableCollection<string> TicketTypes
-        {
-            get => _ticketTypes;
-            set { SetProperty(ref _ticketTypes, value); }
-        }
+            TicketTypes = new ReactiveCollection<string>();
 
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
-
-        public SummaryViewModel(IEventAggregator inEventAggregator)
-        {
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
         }
 
-        private void OnConfigReload()
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var config = cachedConfigRepository.Load();
-
-            foreach (var item in config.TicketTypes)
-            {
+            foreach (var item in inParam.ProjectConfig.TicketTypes)
                 TicketTypes.Add(item);
-            }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

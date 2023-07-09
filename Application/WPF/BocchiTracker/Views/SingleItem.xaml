@@ -12,15 +12,15 @@
         <ComboBox 
                 x:Name="_comboBox"
                 ItemsSource="{Binding FilteredItems}"
-                SelectedItem="{Binding SelectedItem}"
-                Text="{Binding EditText}"
+                SelectedItem="{Binding SelectedItem.Value}"
+                Text="{Binding EditText.Value}"
                 Foreground="White"
-                IsDropDownOpen="{Binding IsOpen}"
+                IsDropDownOpen="{Binding IsOpen.Value}"
                 IsTextSearchEnabled="False"
                 IsEditable="True"
                 StaysOpenOnEdit="True"
                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                materialDesign:HintAssist.Hint="{Binding HintText}"
+                materialDesign:HintAssist.Hint="{Binding HintText.Value}"
                 FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">

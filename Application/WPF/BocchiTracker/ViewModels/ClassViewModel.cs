@@ -17,32 +17,30 @@ namespace BocchiTracker.ViewModels
 {
     public class ClassViewModel : SingleItemViewModel
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionToken;
+        private IssueInfoBundle _issueInfoBundle;
 
-        public ClassViewModel(IEventAggregator inEventAggregator)
+        public ClassViewModel(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle)
         {
-            HintText = "Class";
+            HintText.Value = "Class";
 
-            _eventAggregator = inEventAggregator;
-            _subscriptionToken = _eventAggregator
+            _issueInfoBundle = inIssueInfoBundle;
+
+            inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
         }
 
-        private void OnConfigReload()
+        protected override void OnSetSelectedItem(string inItem)
         {
-            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var config = cachedConfigRepository.Load();
+            _issueInfoBundle.TicketData.Class = inItem;
+        }
 
-            foreach (var item in config.Classes)
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
+        {
+            foreach (var item in inParam.ProjectConfig.Classes)
             {
                 base.Items.Add(item);
             }
-
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionToken);
         }
     }
 }

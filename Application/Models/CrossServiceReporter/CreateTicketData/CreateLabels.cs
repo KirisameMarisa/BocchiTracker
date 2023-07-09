@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
@@ -13,7 +14,9 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
     {
         public List<string>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            return inBundle.TicketData?.Lables;
+            if(inBundle.TicketData?.Lables != null && inBundle.TicketData.Lables.Count != 0)
+                return inBundle.TicketData.Lables;
+            return null;
         }
     }
 }

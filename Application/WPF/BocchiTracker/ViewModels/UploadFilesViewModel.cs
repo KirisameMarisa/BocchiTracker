@@ -18,59 +18,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Reactive.Bindings;
+using System.Reflection.Metadata;
 
 namespace BocchiTracker.ViewModels
 {
-    public class UploadFileItem
-    {
-        public string Name { get; set; }
-
-        public string FullName { get; set; }
-    }
-
     public class UploadFilesViewModel : BindableBase
     {
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _subscriptionConfigReloadEventToken;
-
-        private IssueAssetsBundle _issueAssetsBundle;
-        private ObservableCollection<UploadFileItem> _bundle;
         private List<IssueAssetMonitor> _issueAssetMonitors = new List<IssueAssetMonitor>();
 
         public ICommand OpenCommand { get; private set; }
-
         public ICommand DeleteCommand { get; private set; }
 
-        public ObservableCollection<UploadFileItem> Bundle
-        {
-            get => _bundle;
-            set => SetProperty(ref _bundle, value);
-        }
+        public ReactiveCollection<AssetData> Bundle { get; }
 
-        public UploadFilesViewModel(IEventAggregator inEventAggregator)
+        public UploadFilesViewModel(IEventAggregator inEventAggregator, IssueAssetsBundle inIssueAssetBundle)
         {
-            _issueAssetsBundle = (Application.Current as PrismApplication).Container.Resolve<IssueAssetsBundle>();
-            Bundle = new ObservableCollection<UploadFileItem>();
-
+            Bundle = new ReactiveCollection<AssetData>();
             DeleteCommand = new DelegateCommand<string>(OnDeleteFile);
             OpenCommand = new DelegateCommand<string>(OnOpenFile);
 
-            _eventAggregator = inEventAggregator;
-            _eventAggregator
+            inEventAggregator
                 .GetEvent<AssetDropedEvent>()
                 .Subscribe(OnAddDroppedFiles, ThreadOption.UIThread);
 
-            _subscriptionConfigReloadEventToken = _eventAggregator
+            inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
         }
 
-        private void OnConfigReload()
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            var cachedConfigRepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var config = cachedConfigRepository.Load();
-
-            foreach(var item in config.MonitoredDirectoryConfigs)
+            foreach(var item in inParam.ProjectConfig.MonitoredDirectoryConfigs)
             {
                 if (string.IsNullOrEmpty(item.Directory) || !Directory.Exists(item.Directory))
                     continue;
@@ -81,10 +60,6 @@ namespace BocchiTracker.ViewModels
                 issueAssetMonitor.RenamedAction = OnRenameFile;
                 _issueAssetMonitors.Add(issueAssetMonitor);
             }
-            
-            _eventAggregator
-                .GetEvent<IssueInfoLoadCompleteEvent>()
-                .Unsubscribe(_subscriptionConfigReloadEventToken);
         }
 
         public void OnAddDroppedFiles(AssetDropedEventParameter inParameter)
@@ -97,25 +72,15 @@ namespace BocchiTracker.ViewModels
 
         public void OnAddFile(string inFilePath)
         {
-            _issueAssetsBundle.Add(inFilePath);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Bundle.Add(new UploadFileItem { FullName = inFilePath, Name = Path.GetFileName(inFilePath) });
-            });
+            Bundle.AddOnScheduler(new AssetData(inFilePath));
         }
 
         public void OnDeleteFile(string inFilePath)
         {
-            if (_issueAssetsBundle.Delete(inFilePath))
+            var removeItem = Bundle.Where(x => x.FullName == inFilePath).FirstOrDefault() ?? null;
+            if (removeItem != null)
             {
-                var removeItem = Bundle.Where(x => x.FullName == inFilePath).FirstOrDefault() ?? null;
-                if (removeItem != null)
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Bundle.Remove(removeItem);
-                    });
-                }
+                Bundle.RemoveOnScheduler(removeItem);
             }
         }
 

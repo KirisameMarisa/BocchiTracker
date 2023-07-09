@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using BocchiTracker.ServiceClientAdapters.Clients;
+using System.Collections.ObjectModel;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
