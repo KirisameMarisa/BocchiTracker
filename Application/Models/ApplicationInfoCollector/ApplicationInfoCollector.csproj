@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModelEventBusDef\ModelEventBus.csproj" />
-    <ProjectReference Include="..\QueryTypeLibrary\ProcessLinkQuery.csproj" />
+    <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
 
 </Project>

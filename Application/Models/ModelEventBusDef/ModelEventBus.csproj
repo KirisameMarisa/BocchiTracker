@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QueryTypeLibrary\ProcessLinkQuery.csproj" />
+    <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
 
 </Project>
