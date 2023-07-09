@@ -22,12 +22,12 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { TicketType = "Bug" };
 
             var inConfig = new ServiceConfig();
-            inConfig.TicketTypeMappings = new Dictionary<string, string>
+            inConfig.TicketTypeMappings = new List<ValueMapping>
             {
-                { "Bug", "Defect" },
-                { "Feature", "Enhancement" }
+                new ValueMapping { Definition = "Bug",      Name = "Defect" },
+                new ValueMapping { Definition = "Feature",  Name = "Enhancement" }
             };
-
+     
             var createTicketType = new CreateTicketType();
 
             // Act
@@ -46,10 +46,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { TicketType = "Task" };
 
             var inConfig = new ServiceConfig();
-            inConfig.TicketTypeMappings = new Dictionary<string, string>
+            inConfig.TicketTypeMappings = new List<ValueMapping>
             {
-                { "Bug", "Defect" },
-                { "Feature", "Enhancement" }
+                new ValueMapping { Definition = "Bug",      Name = "Defect" },
+                new ValueMapping { Definition = "Feature",  Name = "Enhancement" }
             };
 
             var createTicketType = new CreateTicketType();
@@ -70,10 +70,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { TicketType = null };
 
             var inConfig = new ServiceConfig();
-            inConfig.TicketTypeMappings = new Dictionary<string, string>
+            inConfig.TicketTypeMappings = new List<ValueMapping>
             {
-                { "Bug", "Defect" },
-                { "Feature", "Enhancement" }
+                new ValueMapping { Definition = "Bug",      Name = "Defect" },
+                new ValueMapping { Definition = "Feature",  Name = "Enhancement" }
             };
 
             var createTicketType = new CreateTicketType();

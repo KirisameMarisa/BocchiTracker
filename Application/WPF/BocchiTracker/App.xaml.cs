@@ -105,16 +105,14 @@ namespace BocchiTracker.Client
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            {
-                containerRegistry.RegisterInstance(new CachedConfigRepository<UserConfig>(
-                    new ConfigRepository<UserConfig>(GetUserConfigFilePath(), new FileSystem())));
+            containerRegistry.RegisterInstance(new CachedConfigRepository<UserConfig>(
+                new ConfigRepository<UserConfig>(GetUserConfigFilePath(), new FileSystem())));
 
-                containerRegistry.RegisterInstance(new CachedConfigRepository<ProjectConfig>(
-                    new ConfigRepository<ProjectConfig>(GetProjectConfigFilePath(), new FileSystem())));
+            containerRegistry.RegisterInstance(new CachedConfigRepository<ProjectConfig>(
+                new ConfigRepository<ProjectConfig>(GetProjectConfigFilePath(), new FileSystem())));
 
-                containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(
-                    new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s")));
-            }
+            containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(
+                new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s")));
             
             var userConfig      = LoadUserConfig(Container);
             var projectConfig   = LoadProjectConfig(Container);

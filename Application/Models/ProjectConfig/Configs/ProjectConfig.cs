@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BocchiTracker.Config.Configs
 {
@@ -7,6 +9,13 @@ namespace BocchiTracker.Config.Configs
         public string? Directory { get; set; }
 
         public string Filter { get; set; } = string.Empty;
+    }
+
+    public class ValueMapping
+    {
+        public string Definition { get; set; } = string.Empty;
+
+        public string Name { get; set; } = string.Empty;
     }
 
     public class ServiceConfig
@@ -19,13 +28,13 @@ namespace BocchiTracker.Config.Configs
 
         public string?                          DescriptionFormat { get; set; }
 
-        public Dictionary<string, string>?      PriorityMappings { get; set; }
+        public List<ValueMapping>?              PriorityMappings { get; set; }
 
-        public Dictionary<string, string>?      TicketTypeMappings { get; set; }
+        public List<ValueMapping>?              TicketTypeMappings { get; set; }
 
-        public Dictionary<string, string>?      QueryFieldMappings { get; set; }
+        public List<ValueMapping>?              QueryFieldMappings { get; set; }
 
-        public Dictionary<string, string>?      DefaultValue { get; set;}
+        public List<ValueMapping>?              DefaultValue { get; set;}
     }
 
     public class ProjectConfig

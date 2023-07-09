@@ -74,6 +74,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
             file_system
                 .Setup(x => x.File.CreateText(file_path))
                 .Returns(writer);
+            file_system
+                .Setup(x => x.Directory.CreateDirectory(Path.GetDirectoryName(file_path)));
 
             // Act
             cache_provider.Set(label, data);

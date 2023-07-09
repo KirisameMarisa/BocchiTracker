@@ -22,13 +22,13 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { Priority = "High" };
 
             var inConfig = new ServiceConfig();
-            inConfig.PriorityMappings = new Dictionary<string, string>
+            inConfig.PriorityMappings = new List<ValueMapping>
             {
-                { "High", "P1" },
-                { "Medium", "P2" },
-                { "Low", "P3" }
+                new ValueMapping { Definition =  "High",    Name = "P1" },
+                new ValueMapping { Definition =  "Medium",  Name = "P2" },
+                new ValueMapping { Definition =  "Low",     Name = "P3" }
             };
-
+  
             var createPriority = new CreatePriority();
 
             // Act
@@ -47,11 +47,11 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { Priority = "Urgent" };
 
             var inConfig = new ServiceConfig();
-            inConfig.PriorityMappings = new Dictionary<string, string>
+            inConfig.PriorityMappings = new List<ValueMapping>
             {
-                { "High", "P1" },
-                { "Medium", "P2" },
-                { "Low", "P3" }
+                new ValueMapping { Definition = "High",     Name = "P1" },
+                new ValueMapping { Definition = "Medium",   Name = "P2" },
+                new ValueMapping { Definition = "Low",      Name = "P3" }
             };
 
             var createPriority = new CreatePriority();
@@ -72,11 +72,11 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { Priority = null };
 
             var inConfig = new ServiceConfig();
-            inConfig.PriorityMappings = new Dictionary<string, string>
+            inConfig.PriorityMappings = new List<ValueMapping>
             {
-                { "High", "P1" },
-                { "Medium", "P2" },
-                { "Low", "P3" }
+                new ValueMapping { Definition = "High",     Name = "P1" },
+                new ValueMapping { Definition = "Medium",   Name = "P2" },
+                new ValueMapping { Definition = "Low",      Name = "P3" }
             };
 
             var createPriority = new CreatePriority();

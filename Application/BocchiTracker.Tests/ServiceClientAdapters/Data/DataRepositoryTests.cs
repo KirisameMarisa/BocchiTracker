@@ -41,7 +41,13 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateIssueService(serviceType))
-                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetLabels() == Task.FromResult(expectedLabels)));
+                .Returns(() =>
+                {
+                    var mockClient = new Mock<IServiceIssueClient>();
+                    mockClient.Setup(c => c.IsAuthenticated()).Returns(true);
+                    mockClient.Setup(c => c.GetLabels()).ReturnsAsync(expectedLabels);
+                    return mockClient.Object;
+                });
 
             // Act
             var result = await _dataRepository.GetLabels(serviceType);
@@ -67,7 +73,13 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateIssueService(serviceType))
-                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetPriorities() == Task.FromResult(expectedLabels)));
+                .Returns(() =>
+                {
+                    var mockClient = new Mock<IServiceIssueClient>();
+                    mockClient.Setup(c => c.IsAuthenticated()).Returns(true);
+                    mockClient.Setup(c => c.GetPriorities()).ReturnsAsync(expectedLabels);
+                    return mockClient.Object;
+                });
 
             // Act
             var result = await _dataRepository.GetPriorities(serviceType);
@@ -92,8 +104,13 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateIssueService(serviceType))
-                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetTicketTypes() == Task.FromResult(expectedLabels)));
-
+                .Returns(() =>
+                {
+                    var mockClient = new Mock<IServiceIssueClient>();
+                    mockClient.Setup(c => c.IsAuthenticated()).Returns(true);
+                    mockClient.Setup(c => c.GetTicketTypes()).ReturnsAsync(expectedLabels);
+                    return mockClient.Object;
+                });
             // Act
             var result = await _dataRepository.GetTicketTypes(serviceType);
 
@@ -117,8 +134,13 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
                 .Returns(true);
             _serviceClientAdapterFactoryMock
                 .Setup(x => x.CreateIssueService(serviceType))
-                .Returns(Mock.Of<IServiceIssueClient>(c => c.GetUsers() == Task.FromResult(expectedLabels)));
-
+                .Returns(() =>
+                {
+                    var mockClient = new Mock<IServiceIssueClient>();
+                    mockClient.Setup(c => c.IsAuthenticated()).Returns(true);
+                    mockClient.Setup(c => c.GetUsers()).ReturnsAsync(expectedLabels);
+                    return mockClient.Object;
+                });
             // Act
             var result = await _dataRepository.GetUsers(serviceType);
 

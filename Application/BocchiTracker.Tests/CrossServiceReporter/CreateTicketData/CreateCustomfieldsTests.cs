@@ -29,10 +29,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inConfig = new ServiceConfig
             {
-                QueryFieldMappings = new Dictionary<string, string>
+                QueryFieldMappings = new List<ValueMapping>
                 {
-                    { "Field1", "CustomField1" },
-                    { "Field2", "CustomField2" }
+                   new ValueMapping { Definition = "Field1",    Name = "CustomField1" },
+                   new ValueMapping { Definition = "Field2",     Name = "CustomField2" }
                 }
             };
 
@@ -83,10 +83,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inBundle = new IssueInfoBundle();
             var inConfig = new ServiceConfig
             {
-                QueryFieldMappings = new Dictionary<string, string>
+                QueryFieldMappings = new List<ValueMapping>
                 {
-                    { "Field1", "CustomField1" },
-                    { "Field2", "CustomField2" }
+                   new ValueMapping { Definition = "Field1",    Name = "CustomField1" },
+                   new ValueMapping { Definition = "Field2",     Name = "CustomField2" }
                 }
             };
 

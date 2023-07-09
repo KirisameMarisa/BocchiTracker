@@ -16,10 +16,11 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             if (inConfig.TicketTypeMappings == null || inBundle.TicketData.TicketType == null)
                 return null;
 
-            if (!inConfig.TicketTypeMappings.ContainsKey(inBundle.TicketData.TicketType))
+            var find = inConfig.TicketTypeMappings.Find(x => x.Definition == inBundle.TicketData.TicketType);
+            if (find == null)
                 return null;
 
-            return inConfig.TicketTypeMappings[inBundle.TicketData.TicketType];
+            return find.Name;
         }
     }
 }
