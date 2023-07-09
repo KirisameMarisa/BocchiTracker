@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\BocchiTracker.Common.props" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <NoWarn>1701;1702;8602;8604</NoWarn>
+    <Configurations>Debug WPF;Release WPF;</Configurations>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="6.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\ModelEventBusDef\ModelEventBus.csproj" />
+    <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
+    <ProjectReference Include="..\..\Models\ProcessLinkQuery\ProcessLinkQuery.csproj" />
+  </ItemGroup>
+
+</Project>
