@@ -1,11 +1,14 @@
-﻿using MediatR;
+﻿using BocchiTracker.ProcessLink.ProcessData;
+using MediatR;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BocchiTracker.ProcessLink
@@ -15,29 +18,33 @@ namespace BocchiTracker.ProcessLink
         private TcpListener _listener;
         private ConcurrentDictionary<IPEndPoint, TcpClient> _clients = new ConcurrentDictionary<IPEndPoint, TcpClient>();
         private readonly IMediator _mediator;
+        private IServiceProcessData _serviceProcessData;
+        private CancellationTokenSource _cancellationTokenSource;
 
-        public Connection(int inPort, IMediator inMediator)
+        public Connection(int inPort, IMediator inMediator, IServiceProcessData inServiceProcessData)
         {
             _listener = new TcpListener(IPAddress.Any, inPort);
             _mediator = inMediator;
+            _serviceProcessData = inServiceProcessData;
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public async Task StartAsync()
         {
             _listener.Start();
-
-            while (true)
+            
+            while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
                 try
                 {
-                    var client = await _listener.AcceptTcpClientAsync();
+                    var client = await _listener.AcceptTcpClientAsync(_cancellationTokenSource.Token);
                     var endPoint = client.Client?.RemoteEndPoint;
 
                     if (endPoint is not null)
                     {
                         if (_clients.TryAdd((IPEndPoint)endPoint, client))
                         {
-                            _ = HandleClientAsync((IPEndPoint)endPoint, client); // Fire and forget, intentionally not awaited
+                            _ = HandleClientAsync((IPEndPoint)endPoint, client);
                         }
                     }
                 }
@@ -48,11 +55,43 @@ namespace BocchiTracker.ProcessLink
             }
         }
 
+        public void Stop()
+        {
+            _cancellationTokenSource?.Cancel();
+            _listener.Stop();
+
+            // Close all client connections
+            foreach (var client in _clients.Values)
+            {
+                client.Close();
+            }
+            _clients.Clear();
+        }
+
+        private bool IsConnected(TcpClient tcpClient)
+        {
+            if (!tcpClient.Connected)
+            {
+                return false;
+            }
+
+            if (tcpClient.Client.Poll(0, SelectMode.SelectRead))
+            {
+                byte[] buffer = new byte[1];
+                if (tcpClient.Client.Receive(buffer, SocketFlags.Peek) == 0)
+                {
+                    // ソケットが閉じられている
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private async Task HandleClientAsync(IPEndPoint inIP, TcpClient ioClient)
         {
             Console.WriteLine($"Client connected: {inIP}");
-            AppStatusQuery appStatusQuery = new AppStatusQuery(_mediator, inIP.GetHashCode(), ioClient);
-            while (ioClient.Connected)
+            AppStatusQuery appStatusQuery = new AppStatusQuery(_mediator, _serviceProcessData, inIP.GetHashCode(), ioClient);
+            while (IsConnected(ioClient))
             {
                 try
                 {
@@ -61,12 +100,12 @@ namespace BocchiTracker.ProcessLink
                 catch (Exception ex)
                 {
                     Console.WriteLine($"An error occurred with client {inIP}: {ex.Message}");
-                    ioClient.Close();
-                    _clients.TryRemove(inIP, out _);
-                    Console.WriteLine($"Client disconnected: {inIP}");
                     break;
                 }
             }
+            ioClient.Close();
+            _clients.TryRemove(inIP, out _);
+            Console.WriteLine($"Client disconnected: {inIP}");
         }
     }
 }

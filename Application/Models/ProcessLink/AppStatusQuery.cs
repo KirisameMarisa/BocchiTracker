@@ -1,4 +1,5 @@
 ﻿using BocchiTracker.ModelEventBus;
+using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
 using MediatR;
@@ -16,20 +17,22 @@ namespace BocchiTracker.ProcessLink
 {
     public class AppStatusQuery : IDisposable, IRequestHandler<RequestQueryEvent>
     {
-        private TcpClient _tcpClient;
+        private readonly TcpClient _tcpClient;
         private readonly int _clientId;
         private readonly IMediator _mediator;
+        private readonly IServiceProcessData _serviceProcessData;
 
-        public AppStatusQuery(IMediator inMediator, int inClientID, TcpClient inClient)
+        public AppStatusQuery(IMediator inMediator, IServiceProcessData inServiceProcessData, int inClientID, TcpClient inClient)
         {
             _clientId = inClientID;
             _tcpClient = inClient;
             _mediator = inMediator;
+            _serviceProcessData = inServiceProcessData;
         }
 
         public async Task QueryAsync()
         {
-            using (NetworkStream stream = _tcpClient.GetStream())
+            NetworkStream stream = _tcpClient.GetStream();
             {
                 var bufferSize = new byte[4];
                 await stream.ReadAsync(bufferSize, 0, 4);
@@ -47,10 +50,7 @@ namespace BocchiTracker.ProcessLink
                 var flatBuffer = new ByteBuffer(buffer);
                 var root = Packet.GetRootAsPacket(flatBuffer);
 
-                var processDataFunc = ProcessData.ProcessDataFactory.Create(root);
-
-                if (processDataFunc is not null)
-                    await processDataFunc.Process(_mediator, _clientId);
+                await _serviceProcessData.Process(_mediator, _clientId, root);
             }
         }
 

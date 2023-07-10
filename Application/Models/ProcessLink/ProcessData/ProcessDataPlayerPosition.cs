@@ -11,20 +11,14 @@ namespace BocchiTracker.ProcessLink.ProcessData
 {
     public class ProcessDataPlayerPosition : IProcessData
     {
-        private readonly PlayerPosition _data;
-
-        public ProcessDataPlayerPosition(PlayerPosition inData)
+        public async Task Process(IMediator inMediator, int inClientID, Packet inPacket)
         {
-            _data = inData;
-        }
-
-        public async Task Process(IMediator inMediator, int inClientID)
-        {
+            var data = inPacket.QueryIdAsPlayerPosition();
             var status = new Dictionary<string, string>();
-            status["X"] = _data.X.ToString();
-            status["Y"] = _data.Y.ToString();
-            status["Z"] = _data.Z.ToString();
-            status["Stage"] = _data.Stage;
+            status["X"] = data.X.ToString();
+            status["Y"] = data.Y.ToString();
+            status["Z"] = data.Z.ToString();
+            status["Stage"] = data.Stage;
 
             await inMediator.Send(new ModelEventBus.AppStatusQueryEvent(new ModelEventBus.AppStatus
             {

@@ -8,20 +8,14 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ProcessLink.ProcessData
 {
-    internal class ProcessDataScreenshotData : IProcessData
+    public class ProcessDataScreenshotData : IProcessData
     {
-        private readonly ScreenshotData _data;
-
-        public ProcessDataScreenshotData(ScreenshotData inData)
+        public async Task Process(IMediator inMediator, int inClientID, Packet inPacket)
         {
-            _data = inData;
-        }
-
-        public async Task Process(IMediator inMediator, int inClientID)
-        {
-            var screenshotData = new ModelEventBus.ScreenshotData { Width = _data.Width, Height = _data.Height };
-            screenshotData.ImageData = new byte[_data.Width * _data.Height * 4];
-            Array.Copy(_data.GetDataArray(), screenshotData.ImageData, _data.DataLength);
+            var data = inPacket.QueryIdAsScreenshotData();
+            var screenshotData = new ModelEventBus.ScreenshotData { Width = data.Width, Height = data.Height };
+            screenshotData.ImageData = new byte[data.Width * data.Height * 4];
+            Array.Copy(data.GetDataArray(), screenshotData.ImageData, data.DataLength);
             
             await inMediator.Send(new ModelEventBus.ReceiveScreenshotEvent(screenshotData));
         }

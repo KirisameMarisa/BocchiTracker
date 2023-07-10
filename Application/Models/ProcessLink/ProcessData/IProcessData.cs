@@ -1,4 +1,5 @@
-﻿using Google.FlatBuffers;
+﻿using BocchiTracker.ProcessLinkQuery.Queries;
+using Google.FlatBuffers;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace BocchiTracker.ProcessLink.ProcessData
 {
     public interface IProcessData
     {
-        Task Process(IMediator inMediator, int inClientID);
+        Task Process(IMediator inMediator, int inClientID, Packet inPacket);
     }
 }
