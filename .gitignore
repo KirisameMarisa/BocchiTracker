@@ -2,4 +2,6 @@
 bin/
 obj/
 flatc.exe
+Plugins/*/Query_generated.h
+Plugins/*/BocchiTracker
 *.yaml
