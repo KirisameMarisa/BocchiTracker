@@ -4,7 +4,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\IssueAssetCollector\IssueAssetCollector.csproj" />
-    <ProjectReference Include="..\ProjectConfig\Config.csproj" />
+    <ProjectReference Include="..\Config\Config.csproj" />
     <ProjectReference Include="..\ServiceClientAdapters\ServiceClientAdapters.csproj" />
   </ItemGroup>
   
