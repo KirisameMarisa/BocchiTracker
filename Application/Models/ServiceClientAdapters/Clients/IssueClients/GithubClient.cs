@@ -179,17 +179,22 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             try
             {
-                var users = await _client.Repository.Collaborator.GetAll(_repoId.Value);
-
                 var result = new List<UserData>();
-                foreach (var user in users)
+                var issues = await _client.Issue.GetAllForRepository(_repoId.Value);
+                foreach (var issue in issues)
                 {
+                    if (issue.Assignee == null)
+                        continue;
+
+                    if (result.Contains(new UserData { Email = issue.Assignee.Email }))
+                        continue;
+
                     result.Add(new UserData
                     {
-                        Email = user.Email,
-                        Id = user.Id.ToString(),
-                        Name = user.Login,
-                        IconURL = user.AvatarUrl
+                        Email = issue.Assignee.Email,
+                        Id = issue.Assignee.Id.ToString(),
+                        Name = issue.Assignee.Login,
+                        IconURL = issue.Assignee.AvatarUrl
                     });
                 }
                 return result;
