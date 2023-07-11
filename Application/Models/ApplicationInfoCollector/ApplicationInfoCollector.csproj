@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ModelEventBusDef\ModelEventBus.csproj" />
+    <ProjectReference Include="..\ModelEvent\ModelEvent.csproj" />
     <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
 

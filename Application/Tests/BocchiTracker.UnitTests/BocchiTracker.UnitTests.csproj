@@ -29,7 +29,7 @@
     <ProjectReference Include="..\..\Models\CrossServiceUploader\CrossServiceUploader.csproj" />
     <ProjectReference Include="..\..\Models\IssueAssetCollector\IssueAssetCollector.csproj" />
     <ProjectReference Include="..\..\Models\IssueInfoCollector\IssueInfoCollector.csproj" />
-    <ProjectReference Include="..\..\Models\ModelEventBusDef\ModelEventBus.csproj" />
+    <ProjectReference Include="..\..\Models\ModelEvent\ModelEvent.csproj" />
     <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
     <ProjectReference Include="..\..\Models\ProjectConfig\Config.csproj" />
     <ProjectReference Include="..\..\Models\ProcessLinkQuery\ProcessLinkQuery.csproj" />
