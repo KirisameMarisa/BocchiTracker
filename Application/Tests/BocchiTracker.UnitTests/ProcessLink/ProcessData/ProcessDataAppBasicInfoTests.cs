@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Prism.Events;
-using BocchiTracker.ModelEventBus;
+using BocchiTracker.ModelEvent;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
 
 namespace BocchiTracker.Tests.ProcessLink.ProcessData

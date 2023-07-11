@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.ModelEventBus
+namespace BocchiTracker.ModelEvent
 {
     public class AppDisconnectEventParameter
     {

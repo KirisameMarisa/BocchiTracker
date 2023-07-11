@@ -1,6 +1,6 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
-using BocchiTracker.ModelEventBus;
+using BocchiTracker.ModelEvent;
 using Moq;
 using Prism.Events;
 using System;

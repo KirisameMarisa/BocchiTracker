@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
-using BocchiTracker.ModelEventBus;
+using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Prism.Events;
 using SixLabors;

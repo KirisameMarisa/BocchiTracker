@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.IssueAssetCollector.Utils;
 using BocchiTracker.IssueAssetCollector;
-using BocchiTracker.ModelEventBus;
+using BocchiTracker.ModelEvent;
 using System.IO;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers

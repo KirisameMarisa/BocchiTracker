@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ModelEventBus;
+﻿using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;

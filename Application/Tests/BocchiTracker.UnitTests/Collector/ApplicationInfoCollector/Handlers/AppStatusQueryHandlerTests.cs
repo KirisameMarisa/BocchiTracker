@@ -3,7 +3,7 @@ using Moq;
 using System.Collections.Generic;
 using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
-using BocchiTracker.ModelEventBus;
+using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using System.Threading.Tasks;
 using Prism.Events;

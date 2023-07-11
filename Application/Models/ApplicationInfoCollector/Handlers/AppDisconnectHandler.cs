@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ModelEventBus;
+﻿using BocchiTracker.ModelEvent;
 using Prism.Events;
 using System;
 using System.Collections.Generic;

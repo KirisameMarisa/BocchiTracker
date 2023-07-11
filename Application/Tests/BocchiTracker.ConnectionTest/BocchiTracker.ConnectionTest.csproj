@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\ModelEventBusDef\ModelEvent.csproj" />
+    <ProjectReference Include="..\..\Models\ModelEvent\ModelEvent.csproj" />
     <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
     <ProjectReference Include="..\..\Models\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
