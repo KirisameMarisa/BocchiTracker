@@ -1,8 +1,12 @@
-﻿using BocchiTracker.ProcessLink.ProcessData;
+﻿using BocchiTracker.ModelEventBus;
+using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
-using MediatR;
 using Moq;
+using Prism.Events;
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +15,7 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
     public class ProcessDataScreenshotDataTests
     {
         [Fact]
-        public async Task Test_Handle()
+        public void Test_Handle()
         {
             const int cClientID = 9999;
             const int cWidth = 4;
@@ -32,7 +36,14 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
                 255, 255, 255,  255,
             };
 
-            var mediatorMock = new Mock<IMediator>();
+            var mockedEvent = new Mock<ReceiveScreenshotEvent>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock
+                .Setup(x => x.GetEvent<ReceiveScreenshotEvent>())
+                .Returns(mockedEvent.Object);
+
+            var serviceProcessData = new ServiceProcessData();
+            serviceProcessData.Register(QueryID.ScreenshotData, new ProcessDataScreenshotData());
 
             var fbb = new FlatBufferBuilder(1);
             var offset_image_data = ScreenshotData.CreateDataVector(fbb, cResource);
@@ -50,28 +61,14 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             Packet.FinishPacketBuffer(fbb, packet);
             
             var buffer = fbb.DataBuffer;
+            serviceProcessData.Process(eventAggregatorMock.Object, cClientID, Packet.GetRootAsPacket(buffer));
 
-            ModelEventBus.ReceiveScreenshotEvent? captured = null;
-            mediatorMock
-                 .Setup(x => x.Send(
-                     It.IsAny<ModelEventBus.ReceiveScreenshotEvent>(),
-                     It.IsAny<CancellationToken>()))
-                 .Callback<ModelEventBus.ReceiveScreenshotEvent, CancellationToken>((data, token) =>
-                 {
-                     captured = data;
-                 }
-            );
-
-            var process_data_screenshot = ProcessDataFactory.Create(Packet.GetRootAsPacket(buffer));
-            Assert.NotNull(process_data_screenshot);
-            await process_data_screenshot.Process(mediatorMock.Object, cClientID);
-
-            Assert.NotNull(captured);
-            Assert.NotNull(captured.ScreenshotData);
-
-            Assert.Equal(cWidth, captured.ScreenshotData.Width);
-            Assert.Equal(cHeight, captured.ScreenshotData.Height);
-            Assert.Equal(cResource, captured.ScreenshotData.ImageData);
+            // Assert
+            mockedEvent.Verify(x => x.Publish(It.Is<ReceiveScreenshotEventParameter>(
+                   m => m.Width == cWidth
+                && m.Height == cHeight
+                && m.ImageData.SequenceEqual(cResource)
+            )));
         }
     }
 }

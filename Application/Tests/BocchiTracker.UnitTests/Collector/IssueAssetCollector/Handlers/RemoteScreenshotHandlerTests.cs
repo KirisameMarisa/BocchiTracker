@@ -1,6 +1,5 @@
 ﻿using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using BocchiTracker.IssueAssetCollector;
-using MediatR;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,8 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using System.IO;
 using System.Threading;
+using Prism.Events;
+using BocchiTracker.ProcessLinkQuery.Queries;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 {
@@ -21,30 +22,37 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
         public void Test_Handle_RequestQueryEventBus()
         {
             // Arrange
-            var mockMediator = new Mock<IMediator>();
             var mockFilenameGenerator = new Mock<IFilenameGenerator>();
 
             mockFilenameGenerator.Setup(f => f.Generate()).Returns("test");
+            
+            var mockedEvent = new Mock<RequestQueryEvent>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock
+              .Setup(x => x.GetEvent<RequestQueryEvent>())
+              .Returns(mockedEvent.Object);
 
-            var handler = new RemoteScreenshotHandler(mockMediator.Object, mockFilenameGenerator.Object);
+            var handler = new RemoteScreenshotHandler(eventAggregatorMock.Object, mockFilenameGenerator.Object);
 
             // Act
             handler.Handle(1, 1, IntPtr.Zero, "output");
 
             // Assert
-            mockMediator.Verify(m => m.Send(It.IsAny<RequestQueryEvent>(), default), Times.Once);
+            mockedEvent.Verify(x => x.Publish(It.Is<RequestQueryEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotData)));
         }
 
         [Fact]
-        public async Task Test_Handle_RemoteScreenshot()
+        public void Test_Handle_RemoteScreenshot()
         {
             // Arrange
-            var dummyScreenshotData = new ModelEventBus.ScreenshotData
-            {
-                Width = 4,
-                Height = 3,
-                ImageData = new byte[4 * 3 * 4]
-                {
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<ReceiveScreenshotEvent>())
+                .Returns(new ReceiveScreenshotEvent());
+            var dummyScreenshotData = new ReceiveScreenshotEventParameter(
+                4, //!< Width
+                3, //!< Height
+                new byte[4 * 3 * 4] {
                       0,   0,   0,   0,
                       0,   0,   0,   0,
                     255, 255, 255, 255,
@@ -57,18 +65,16 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
                     255,   0,   0,   0,
                       0, 255,   0, 255,
                     255, 255, 255,  255,
-                }
-            };
-            var dummyRequest = new ReceiveScreenshotEvent(dummyScreenshotData);
-            var dummyCancellationToken = new CancellationToken();
-            ReceiveScreenshotEventBusHandler.Output = "output\\test.png";
+                });
+            
+            RemoteScreenshotSaveProcess.Output = "output\\test.png";
             Directory.CreateDirectory("output");
 
             // Instantiate the handler with the mocked dependencies
-            var handler = new ReceiveScreenshotEventBusHandler();
+            var handler = new RemoteScreenshotSaveProcess(mockEvent.Object);
 
             // Act
-            await handler.Handle(dummyRequest, dummyCancellationToken);
+            handler.Handle(dummyScreenshotData);
 
             // Assert
             Assert.True(File.Exists("output\\test.png")); // Check if the file is written to the output path

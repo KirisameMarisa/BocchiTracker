@@ -1,6 +1,6 @@
 ﻿using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
-using MediatR;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace BocchiTracker.ProcessLink.ProcessData
 {
     public interface IProcessData
     {
-        Task Process(IMediator inMediator, int inClientID, Packet inPacket);
+        void Process(IEventAggregator inEventAggregator, int inClientID, Packet inPacket);
     }
 }

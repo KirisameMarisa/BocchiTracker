@@ -1,6 +1,8 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
 using BocchiTracker.ModelEventBus;
+using Moq;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +14,29 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
     public class AppDisconnectHandlerTests
     {
         private AppStatusBundles _bundles;
-        private AppDisconnectHandler _handler;
 
         public AppDisconnectHandlerTests()
         {
             _bundles = new AppStatusBundles();
-            _handler = new AppDisconnectHandler(_bundles);
         }
 
         [Fact]
-        public async Task Test_RemoveElemFromAppStatusBundles_UsingHandler()
+        public void Test_RemoveElemFromAppStatusBundles_UsingHandler()
         {
             // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<AppDisconnectEvent>())
+                .Returns(new AppDisconnectEvent());
+            
+            var handler = new AppDisconnectHandler(mockEvent.Object, _bundles);
             const int cClientID = 2;
 
             _bundles.Add(cClientID);
-            var request = new AppDisconnectEvent { ClientID = cClientID };
+            var request = new AppDisconnectEventParameter(cClientID);
 
             // Act
-            await _handler.Handle(request, default);
+            handler.Handle(request);
 
             // Assert
             Assert.False(_bundles.Bundles.ContainsKey(2));

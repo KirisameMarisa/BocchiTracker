@@ -1,6 +1,7 @@
-﻿using BocchiTracker.ProcessLinkQuery.Queries;
+﻿using BocchiTracker.ModelEventBus;
+using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
-using MediatR;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BocchiTracker.ProcessLink.ProcessData
 {
     public class ProcessDataAppBasicInfo : IProcessData
     {
-        public async Task Process(IMediator inMediator, int inClientID, Packet inPacket)
+        public void Process(IEventAggregator inEventAggregator, int inClientID, Packet inPacket)
         {
             var data = inPacket.QueryIdAsAppBasicInfo();
             var status = new Dictionary<string, string>();
@@ -20,12 +21,14 @@ namespace BocchiTracker.ProcessLink.ProcessData
             status["Args"] = data.Args;
             status["Platform"] = data.Platform;
 
-            await inMediator.Send(new ModelEventBus.AppStatusQueryEvent(new ModelEventBus.AppStatus 
-            {
-                QueryID = (int)QueryID.AppBasicInfo,
-                ClientID = inClientID,
-                Status = status
-            }));
+            inEventAggregator
+                .GetEvent<AppStatusQueryEvent>()
+                .Publish(new AppStatusQueryEventParameter(new AppStatus 
+                {
+                    QueryID = (int)QueryID.AppBasicInfo,
+                    ClientID = inClientID,
+                    Status = status
+                }));
         }
     }
 }

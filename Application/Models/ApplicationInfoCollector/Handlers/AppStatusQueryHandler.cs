@@ -1,5 +1,4 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,29 +6,33 @@ using System.Threading.Tasks;
 using BocchiTracker.ModelEventBus;
 using System.Threading;
 using BocchiTracker.ProcessLinkQuery.Queries;
+using Prism.Events;
 
 namespace BocchiTracker.ApplicationInfoCollector.Handlers
 {
-    public class AppStatusQueryHandler : IRequestHandler<AppStatusQueryEvent>
+    public class AppStatusQueryHandler
     {
         private AppStatusBundles _bundles;
 
-        public AppStatusQueryHandler(AppStatusBundles inBundles)
+        public AppStatusQueryHandler(IEventAggregator inEventAggregator, AppStatusBundles inBundles)
         {
             _bundles = inBundles;
+
+            inEventAggregator
+                .GetEvent<AppStatusQueryEvent>()
+                .Subscribe(Handle, ThreadOption.BackgroundThread);
         }
 
-        public Task Handle(AppStatusQueryEvent request, CancellationToken cancellationToken)
+        public void Handle(AppStatusQueryEventParameter inParameter)
         {
-            switch (request.AppStatus.QueryID)
+            switch (inParameter.AppStatus.QueryID)
             {
                 case (byte)QueryID.AppBasicInfo: //!< AppBaicInfo Magic number...
-                    ProcessAppBasicInfo(request.AppStatus.ClientID, request.AppStatus.Status); break;
+                    ProcessAppBasicInfo(inParameter.AppStatus.ClientID, inParameter.AppStatus.Status); break;
 
                 default:
-                    ProcessAppStatusDynamic(request.AppStatus.ClientID, request.AppStatus.Status); break;
+                    ProcessAppStatusDynamic(inParameter.AppStatus.ClientID, inParameter.AppStatus.Status); break;
             }
-            return Task.CompletedTask;
         }
 
         private void ProcessAppBasicInfo(int inClientID, Dictionary<string, string>? inData)

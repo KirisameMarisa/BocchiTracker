@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ModelEventBus;
-using MediatR;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +9,22 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ApplicationInfoCollector.Handlers
 {
-    public class AppDisconnectHandler : IRequestHandler<AppDisconnectEvent>
+    public class AppDisconnectHandler
     {
         private AppStatusBundles _bundles;
 
-        public AppDisconnectHandler(AppStatusBundles inBundles)
+        public AppDisconnectHandler(IEventAggregator inEventAggregator, AppStatusBundles inBundles)
         {
             _bundles = inBundles;
+
+            inEventAggregator
+                .GetEvent<AppDisconnectEvent>()
+                .Subscribe(Handle, ThreadOption.BackgroundThread);
         }
 
-        public Task Handle(AppDisconnectEvent request, CancellationToken cancellationToken)
+        public void Handle(AppDisconnectEventParameter inParameter)
         {
-            _bundles.Remove(request.ClientID);
-            return Task.CompletedTask;
+            _bundles.Remove(inParameter.ClientID);
         }
     }
 }

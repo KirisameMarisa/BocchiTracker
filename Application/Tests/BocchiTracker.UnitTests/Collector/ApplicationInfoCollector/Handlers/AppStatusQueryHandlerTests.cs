@@ -6,25 +6,29 @@ using BocchiTracker.ApplicationInfoCollector.Handlers;
 using BocchiTracker.ModelEventBus;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using System.Threading.Tasks;
+using Prism.Events;
 
 namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
 {
     public class AppStatusQueryHandlerTests
     {
         private AppStatusBundles _bundles;
-        private AppStatusQueryHandler _handler;
 
         public AppStatusQueryHandlerTests()
         {
             _bundles = new AppStatusBundles();
-            _handler = new AppStatusQueryHandler(_bundles);
         }
 
         [Fact]
-        public async Task Test_Handle_ShouldCallProcessAppBasicInfo_WhenQueryIdIs0()
+        public void Test_Handle_ShouldCallProcessAppBasicInfo_WhenQueryIdIs0()
         {
             // Arrange
-            var request = new AppStatusQueryEvent(new AppStatus
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<AppStatusQueryEvent>())
+                .Returns(new AppStatusQueryEvent());
+            var handler = new AppStatusQueryHandler(mockEvent.Object, _bundles);
+            var request = new AppStatusQueryEventParameter(new AppStatus
             {
                 ClientID = 1,
                 QueryID = (byte)QueryID.AppBasicInfo,
@@ -38,7 +42,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             });
 
             // Act
-            await _handler.Handle(request, default);
+            handler.Handle(request);
 
             // Assert
             var asset_bundle = _bundles.GetBundlesByClientID(1);
@@ -51,10 +55,16 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
         }
 
         [Fact]
-        public async Task Test_Handle_ShouldCallProcessAppStatusDynamic_WhenQueryIdIsNot0()
+        public void Test_Handle_ShouldCallProcessAppStatusDynamic_WhenQueryIdIsNot0()
         {
             // Arrange
-            var request = new AppStatusQueryEvent(new AppStatus
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<AppStatusQueryEvent>())
+                .Returns(new AppStatusQueryEvent());
+            var handler = new AppStatusQueryHandler(mockEvent.Object, _bundles);
+
+            var request = new AppStatusQueryEventParameter(new AppStatus
             {
                 ClientID = 2,
                 QueryID = 0,
@@ -66,7 +76,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             });
 
             // Act
-            await _handler.Handle(request, default);
+            handler.Handle(request);
 
             // Assert
             var asset_bundle = _bundles.GetBundlesByClientID(2);

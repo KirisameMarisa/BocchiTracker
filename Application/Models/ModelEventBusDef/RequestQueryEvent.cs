@@ -1,5 +1,5 @@
-﻿using MediatR;
-using BocchiTracker.ProcessLinkQuery.Queries;
+﻿using BocchiTracker.ProcessLinkQuery.Queries;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ModelEventBus
 {
-    public class RequestQueryEvent : IRequest
+    public class RequestQueryEventParameter
     {
         public int ClientID { get; set; }
 
         public QueryID QueryID { get; set; }
 
-        public RequestQueryEvent(int inClientID, QueryID inQueryID)
+        public RequestQueryEventParameter(int inClientID, QueryID inQueryID)
         {
             ClientID = inClientID;
             QueryID = inQueryID;
         }
     }
+
+    public class RequestQueryEvent : PubSubEvent<RequestQueryEventParameter> {}
 }

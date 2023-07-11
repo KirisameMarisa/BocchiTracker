@@ -1,9 +1,11 @@
-﻿using BocchiTracker.ProcessLink.ProcessData;
+﻿using BocchiTracker.ModelEventBus;
+using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
-using MediatR;
 using Moq;
+using Prism.Events;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,11 +14,18 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
     public class ProcessDataPlayerPositionTests
     {
         [Fact]
-        public async Task Test_Handle()
+        public void Test_Handle()
         {
             const int cClientID = 9999;
 
-            var mediatorMock = new Mock<IMediator>();
+            var mockedEvent = new Mock<AppStatusQueryEvent>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock
+                .Setup(x => x.GetEvent<AppStatusQueryEvent>())
+                .Returns(mockedEvent.Object);
+
+            var serviceProcessData = new ServiceProcessData();
+            serviceProcessData.Register(QueryID.PlayerPosition, new ProcessDataPlayerPosition());
 
             var fbb = new FlatBufferBuilder(1024);
             const string cStage = "xUnitTest Stage";
@@ -39,33 +48,17 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             Packet.FinishPacketBuffer(fbb, packet);
 
             var buffer = fbb.DataBuffer;
+            serviceProcessData.Process(eventAggregatorMock.Object, cClientID, Packet.GetRootAsPacket(buffer));
 
-            ModelEventBus.AppStatus? captured = null;
-            mediatorMock
-                 .Setup(x => x.Send(
-                     It.IsAny<ModelEventBus.AppStatusQueryEvent>(),
-                     It.IsAny<CancellationToken>()))
-                 .Callback<ModelEventBus.AppStatusQueryEvent, CancellationToken>((appStatus, token) =>
-                 {
-                     captured = appStatus.AppStatus;
-                 }
-            );
-
-            var appStatusQuery = ProcessDataFactory.Create(Packet.GetRootAsPacket(buffer));
-            Assert.NotNull(appStatusQuery);
-            await appStatusQuery.Process(mediatorMock.Object, cClientID);
-
-            Assert.NotNull(captured);
-            Assert.Equal((byte)QueryID.PlayerPosition, captured?.QueryID);
-            Assert.Equal(cClientID, captured?.ClientID);
-
-            var status = captured?.Status as Dictionary<string, string>;
-            Assert.NotNull(status);
-
-            Assert.Equal(cStage, (string)status["Stage"]);
-            Assert.Equal(PosX.ToString(), status["X"]);
-            Assert.Equal(PosY.ToString(), status["Y"]);
-            Assert.Equal(PosZ.ToString(), status["Z"]);
+            // Assert
+            mockedEvent.Verify(x => x.Publish(It.Is<AppStatusQueryEventParameter>(
+                   m => m.AppStatus.ClientID == cClientID
+                && m.AppStatus.QueryID == (byte)QueryID.AppBasicInfo
+                && m.AppStatus.Status["X"] == PosX.ToString()
+                && m.AppStatus.Status["Y"] == PosY.ToString()
+                && m.AppStatus.Status["Z"] == PosZ.ToString()
+                && m.AppStatus.Status["Stage"] == cStage
+            )));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿#if WINDOWS
 using BocchiTracker.ApplicationInfoCollector;
-using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

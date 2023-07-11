@@ -1,5 +1,6 @@
-﻿using BocchiTracker.ProcessLinkQuery.Queries;
-using MediatR;
+﻿using BocchiTracker.ModelEventBus;
+using BocchiTracker.ProcessLinkQuery.Queries;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,15 @@ namespace BocchiTracker.ProcessLink.ProcessData
 {
     public class ProcessDataScreenshotData : IProcessData
     {
-        public async Task Process(IMediator inMediator, int inClientID, Packet inPacket)
+        public void Process(IEventAggregator inEventAggregator, int inClientID, Packet inPacket)
         {
             var data = inPacket.QueryIdAsScreenshotData();
-            var screenshotData = new ModelEventBus.ScreenshotData { Width = data.Width, Height = data.Height };
-            screenshotData.ImageData = new byte[data.Width * data.Height * 4];
-            Array.Copy(data.GetDataArray(), screenshotData.ImageData, data.DataLength);
+            var imageData = new byte[data.Width * data.Height * 4];
+            Array.Copy(data.GetDataArray(), imageData, data.DataLength);
             
-            await inMediator.Send(new ModelEventBus.ReceiveScreenshotEvent(screenshotData));
+            inEventAggregator
+                .GetEvent<ReceiveScreenshotEvent>()
+                .Publish(new ReceiveScreenshotEventParameter(data.Width, data.Height, imageData));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +7,21 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ModelEventBus
 {
-    public class ScreenshotData
+    public class ReceiveScreenshotEventParameter
     {
         public int Width { get; set; }
 
         public int Height { get; set; }
 
         public byte[]? ImageData { get; set; }
-    }
 
-    public class ReceiveScreenshotEvent : IRequest
-    {
-        public ScreenshotData ScreenshotData { get; set; }
-
-        public ReceiveScreenshotEvent(ScreenshotData inData)
+        public ReceiveScreenshotEventParameter(int inWidth, int inHeight, byte[]? inImageData)
         {
-            ScreenshotData = inData;
+            Width = inWidth;
+            Height = inHeight;
+            ImageData = inImageData;
         }
     }
+
+    public class ReceiveScreenshotEvent : PubSubEvent<ReceiveScreenshotEventParameter> {}
 }

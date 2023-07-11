@@ -1,6 +1,4 @@
 ﻿using DryIoc;
-using MediatR;
-using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
@@ -14,15 +12,16 @@ using DryIoc.Microsoft.DependencyInjection;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using System.Data.Common;
+using Prism.Events;
 
 namespace BocchiTracker.ProcessLink.Test
 {
     public class ProcessDataConnectionTest : IProcessData
     {
-        public Task Process(IMediator inMediator, int inClientID, Packet inPacket)
+        public void Process(IEventAggregator inEventAggregator, int inClientID, Packet inPacket)
         {
             if (inPacket.QueryIdType != QueryID.PlayerPosition)
-                return Task.CompletedTask;
+                return;
 
             var data = inPacket.QueryIdAsPlayerPosition();
             var status = new Dictionary<string, string>();
@@ -32,7 +31,6 @@ namespace BocchiTracker.ProcessLink.Test
             status["Stage"] = data.Stage;
 
             System.Console.WriteLine($"Position({status["X"]}, {status["Y"]}, {status["Z"]}), Stage({status["Stage"]})");
-            return Task.CompletedTask;
         }
     }
 
@@ -43,7 +41,7 @@ namespace BocchiTracker.ProcessLink.Test
             var services = new ServiceCollection();
 
             int port = 12345;
-            var mediator = BuildMediator();
+            var mediator = new EventAggregator();
             var serviceProcessData = BuildServiceProcessData();
 
             var connection = new Connection(port, mediator, serviceProcessData);
@@ -77,22 +75,6 @@ namespace BocchiTracker.ProcessLink.Test
             var service = new ServiceProcessData();
             service.Register(QueryID.PlayerPosition, new ProcessDataConnectionTest());
             return service;
-        }
-
-        private static IMediator BuildMediator()
-        {
-            var container = new Container();
- 
-            container.Use<TextWriter>(Console.Out);
-
-            container.RegisterMany(new[] { typeof(IMediator).GetAssembly(), typeof(Ping).GetAssembly() }, Registrator.Interfaces);
-            container.Register<IMediator, Mediator>(made: Made.Of(() => new Mediator(Arg.Of<IServiceProvider>())));
-
-            var services = new ServiceCollection();
-
-            var adapterContainer = container.WithDependencyInjectionAdapter(services);
-
-            return adapterContainer.GetRequiredService<IMediator>();
         }
     }
 }

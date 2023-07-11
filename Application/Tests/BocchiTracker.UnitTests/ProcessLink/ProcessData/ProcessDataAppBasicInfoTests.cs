@@ -1,6 +1,5 @@
 ﻿using BocchiTracker.ProcessLink.ProcessData;
 using Google.FlatBuffers;
-using MediatR;
 using Moq;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using System;
@@ -9,17 +8,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Prism.Events;
+using BocchiTracker.ModelEventBus;
+using BocchiTracker.ApplicationInfoCollector.Handlers;
 
 namespace BocchiTracker.Tests.ProcessLink.ProcessData
 {
     public class ProcessDataAppBasicInfoTests
     {
         [Fact]
-        public async Task Test_Handle()
+        public void Test_Handle()
         {
             const int cClientID = 9999;
 
-            var mediatorMock = new Mock<IMediator> { CallBase = true };
+            var mockedEvent = new Mock<AppStatusQueryEvent>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock
+                .Setup(x => x.GetEvent<AppStatusQueryEvent>())
+                .Returns(mockedEvent.Object);
+
+            var serviceProcessData = new ServiceProcessData();
+            serviceProcessData.Register(QueryID.AppBasicInfo, new ProcessDataAppBasicInfo());
 
             var fbb = new FlatBufferBuilder(1024);
             var app_pid = 10009;
@@ -44,32 +53,17 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             Packet.FinishPacketBuffer(fbb, packet);
 
             var buffer = fbb.DataBuffer;
+            serviceProcessData.Process(eventAggregatorMock.Object, cClientID, Packet.GetRootAsPacket(buffer));
 
-            ModelEventBus.AppStatus? captured = null;
-            mediatorMock
-                 .Setup(x => x.Send(
-                     It.IsAny<ModelEventBus.AppStatusQueryEvent>(),
-                     It.IsAny<CancellationToken>()))
-                 .Callback<ModelEventBus.AppStatusQueryEvent, CancellationToken>((appStatus, token) =>
-                 {
-                     captured = appStatus.AppStatus;
-                 }
-            );
-
-            var appStatusQuery = ProcessDataFactory.Create(Packet.GetRootAsPacket(buffer));
-            Assert.NotNull(appStatusQuery);
-            await appStatusQuery.Process(mediatorMock.Object, cClientID);
-
-            Assert.Equal((byte)QueryID.AppBasicInfo, captured?.QueryID);
-            Assert.Equal(cClientID, captured?.ClientID);
-
-            var status = captured?.Status as Dictionary<string, string>;
-            Assert.NotNull(status);
-
-            Assert.Equal(app_pid.ToString(), status["Pid"]);
-            Assert.Equal(cAppName, (string)status["AppName"]);
-            Assert.Equal(cArgs, (string)status["Args"]);
-            Assert.Equal(cPlatform, (string)status["Platform"]);
+            // Assert
+            mockedEvent.Verify(x => x.Publish(It.Is<AppStatusQueryEventParameter>(
+                   m => m.AppStatus.ClientID == cClientID
+                && m.AppStatus.QueryID == (byte)QueryID.AppBasicInfo
+                && m.AppStatus.Status["Pid"] == app_pid.ToString()
+                && m.AppStatus.Status["AppName"] == cAppName
+                && m.AppStatus.Status["Args"] == cArgs
+                && m.AppStatus.Status["Platform"] == cPlatform
+            )));
         }
     }
 }

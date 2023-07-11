@@ -1,7 +1,7 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ModelEventBus;
 using BocchiTracker.ProcessLinkQuery.Queries;
-using MediatR;
+using Prism.Events;
 using SixLabors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -12,34 +12,46 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 {
-    public class ReceiveScreenshotEventBusHandler : IRequestHandler<ReceiveScreenshotEvent>
+    public class RemoteScreenshotSaveProcess
     {
         public static string Output { get; set; } = string.Empty;
 
-        public Task Handle(ReceiveScreenshotEvent request, CancellationToken cancellationToken)
+        private IEventAggregator _mediator;
+
+        public RemoteScreenshotSaveProcess(IEventAggregator inMediator) 
         {
-            var data = request.ScreenshotData;
+            _mediator = inMediator;
+            _mediator
+                .GetEvent<ReceiveScreenshotEvent>()
+                .Subscribe(Handle, ThreadOption.BackgroundThread);
+        }
+
+        public void Handle(ReceiveScreenshotEventParameter inRrequest)
+        {
+            var data = inRrequest;
             using var image = Image.LoadPixelData<Byte4>(data.ImageData, data.Width, data.Height);
             
             image.SaveAsPng(Output);
-            return Task.CompletedTask;
         }
     }
 
     public class RemoteScreenshotHandler : ScreenshotHandler
     {
-        private IMediator _mediator;
+        private IEventAggregator _eventAggregator;
 
-        public RemoteScreenshotHandler(IMediator inMediator, IFilenameGenerator inFilenameGenerator)
+        public RemoteScreenshotHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator)
             : base(inFilenameGenerator)
         {
-            this._mediator = inMediator;
+            this._eventAggregator = inEventAggregator;
         }
 
         public override void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput)
         {
-            ReceiveScreenshotEventBusHandler.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
-            _mediator.Send(new ModelEventBus.RequestQueryEvent(inClientID, QueryID.ScreenshotData));
+            RemoteScreenshotSaveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
+
+            _eventAggregator
+                .GetEvent<RequestQueryEvent>()
+                .Publish(new RequestQueryEventParameter(inClientID, QueryID.ScreenshotData));
         }
     }
 }

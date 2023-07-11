@@ -3,7 +3,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.IO;
-using MediatR;
 using BocchiTracker.IssueAssetCollector.Utils;
 
 namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot

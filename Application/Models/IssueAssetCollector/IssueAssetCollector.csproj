@@ -3,6 +3,7 @@
   <Import Project="..\..\BocchiTracker.Common.props" />
 
   <ItemGroup>
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
 

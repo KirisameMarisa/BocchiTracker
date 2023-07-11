@@ -1,6 +1,6 @@
 ﻿using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
-using MediatR;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +13,20 @@ namespace BocchiTracker.ProcessLink.ProcessData
     {
         void Register(QueryID inQueryID, IProcessData inProcessData);
 
-        Task Process(IMediator inMediator, int inClientID, Packet inPacket);
+        void Process(IEventAggregator inMediator, int inClientID, Packet inPacket);
     }
 
     public class ServiceProcessData : IServiceProcessData
     {
         private Dictionary<QueryID, List<IProcessData>> _processDataMap = new Dictionary<QueryID, List<IProcessData>>();
 
-        public async Task Process(IMediator inMediator, int inClientID, Packet inPacket)
+        public void Process(IEventAggregator inEventAggregator, int inClientID, Packet inPacket)
         {
             if(_processDataMap.ContainsKey(inPacket.QueryIdType))
             {
                 foreach(var proc in _processDataMap[inPacket.QueryIdType]) 
                 {
-                    await proc.Process(inMediator, inClientID, inPacket);
+                    proc.Process(inEventAggregator, inClientID, inPacket);
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +16,15 @@ namespace BocchiTracker.ModelEventBus
         public Dictionary<string, string> Status { get; set; } = new Dictionary<string, string>();
     }
 
-    public class AppStatusQueryEvent : IRequest 
+    public class AppStatusQueryEventParameter
     {
         public AppStatus AppStatus { get; private set; }
 
-        public AppStatusQueryEvent(AppStatus inAppStatus)
+        public AppStatusQueryEventParameter(AppStatus inAppStatus) 
         {
             AppStatus = inAppStatus;
         }
     }
+
+    public class AppStatusQueryEvent : PubSubEvent<AppStatusQueryEventParameter> { } 
 }

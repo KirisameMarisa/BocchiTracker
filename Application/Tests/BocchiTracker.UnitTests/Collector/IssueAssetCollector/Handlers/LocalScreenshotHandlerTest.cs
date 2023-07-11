@@ -1,5 +1,4 @@
 ﻿using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
-using MediatR;
 using Moq;
 using System;
 using System.Collections.Generic;
