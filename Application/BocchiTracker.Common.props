@@ -3,16 +3,16 @@
     <Nullable>enable</Nullable>
     <AssemblyName>BocchiTracker.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>BocchiTracker.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <Configurations>Debug WPF;Release WPF;Debug Blazor;Release Blazor</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug WPF' OR '$(Configuration)' == 'Release WPF'">
+  <PropertyGroup Condition="'$(SolutionName)' == 'BocchiTracker.WPF'">
     <TargetFramework>net7.0-windows</TargetFramework>
     <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug Blazor' OR '$(Configuration)' == 'Release Blazor'">
+  <PropertyGroup Condition="'$(SolutionName)' == 'BocchiTracker.Blazor'">
     <TargetFramework>net7.0</TargetFramework>
     <UseWPF>false</UseWPF>
     <UseMaui>false</UseMaui>
