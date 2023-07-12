@@ -3,9 +3,39 @@ import flatbuffers
 from BocchiTracker.ProcessLinkQuery.Queries import Packet
 from BocchiTracker.ProcessLinkQuery.Queries import QueryID
 from BocchiTracker.ProcessLinkQuery.Queries import PlayerPosition
+from BocchiTracker.ProcessLinkQuery.Queries import AppBasicInfo
 
 
-def create_player_position_packet(x, y, z, stage):
+def CreateAppBasicInfoPacket(inPid, inApplicationName, inArgs, inPlatform):
+    builder = flatbuffers.Builder(0)
+    appName = builder.CreateString(inApplicationName)
+    args = builder.CreateString(inArgs)
+    platform = builder.CreateString(inPlatform)
+
+    # Create PlayerPosition object
+    AppBasicInfo.AppBasicInfoStart(builder)
+    AppBasicInfo.AddPid(builder, inPid)
+    AppBasicInfo.AddAppName(builder, appName)
+    AppBasicInfo.AddArgs(builder, args)
+    AppBasicInfo.AddPlatform(builder, platform)
+    table = AppBasicInfo.AppBasicInfoEnd(builder)
+
+    # Create Packet object
+    Packet.PacketStart(builder)
+    Packet.PacketAddQueryIdType(builder, QueryID.QueryID.AppBasicInfo)
+    Packet.PacketAddQueryId(builder, table)
+    packet = Packet.PacketEnd(builder)
+
+    builder.Finish(packet)
+
+    # パケットのサイズを先頭に追加
+    packet_bin = builder.Output() 
+    packet_size = len(packet_bin)
+    size_data = packet_size.to_bytes(4, 'little')
+
+    return size_data + packet_bin
+
+def CreatePlayerPositionPacket(x, y, z, stage):
     builder = flatbuffers.Builder(0)
     stage = builder.CreateString(stage)
 
@@ -34,22 +64,18 @@ def create_player_position_packet(x, y, z, stage):
 
 def main():
     host = 'localhost'  # 接続先のホスト名またはIPアドレス
-    port = 12345  # 接続先のポート番号
+    port = 8888  # 接続先のポート番号
 
     # サーバーに接続
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host, port))
 
     try:
-        # PlayerPositionパケットを作成
-        player_position_packet = create_player_position_packet(10.0, 5.0, 3.0, "Stage 1")
+        app_basic_info = CreateAppBasicInfoPacket(10009, "Python", "", "Windows")
+        client_socket.sendall(app_basic_info)
 
-        # パケットをサーバーに送信
+        player_position_packet = CreatePlayerPositionPacket(10.0, 5.0, 3.0, "Stage 1")
         client_socket.sendall(player_position_packet)
-
-        # サーバーからのレスポンスの受信
-        data = client_socket.recv(1024)
-        print(f'Received from server: {data.decode()}')
 
     finally:
         # 接続を閉じる
