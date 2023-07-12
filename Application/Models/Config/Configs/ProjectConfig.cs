@@ -39,6 +39,8 @@ namespace BocchiTracker.Config.Configs
 
     public class ProjectConfig
     {
+        public int Port { get; set; } = 8888;
+
         public List<string>? TicketTypes { get; set; }
 
         public List<string>? Priorities { get; set; }

@@ -33,7 +33,13 @@ namespace BocchiTracker.ApplicationInfoCollector
 
     public class AppStatusBundles 
     {
+        public Action<AppStatusBundle>? AppConnected { get; set; }
+
+        public Action<AppStatusBundle>? AppDisconnected { get; set; }
+
         public Dictionary<int, AppStatusBundle> Bundles { get; set; } = new Dictionary<int, AppStatusBundle>();
+
+        public AppStatusBundle? TrackerApplication;
 
         public IEnumerable<AppStatusBundle> GetBundlesByAppName(string appName)
         {
@@ -50,13 +56,21 @@ namespace BocchiTracker.ApplicationInfoCollector
         public void Add(int inClientID)
         {
             if (!Bundles.ContainsKey(inClientID))
-                Bundles.Add(inClientID, new AppStatusBundle(inClientID));
+            {
+                var item = new AppStatusBundle(inClientID);
+                Bundles.Add(inClientID, item);
+                AppConnected?.Invoke(item);
+            }
         }
 
         public void Remove(int inClientID)
         {
             if (Bundles.ContainsKey(inClientID))
+            {
+                var item = Bundles[inClientID];
+                AppDisconnected?.Invoke(item);
                 Bundles.Remove(inClientID);
+            }
         }
 
         public AppStatusBundle this[int inClientID]

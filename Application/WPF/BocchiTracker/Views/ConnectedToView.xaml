@@ -4,8 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BocchiTracker.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              mc:Ignorable="d">
     <Grid>
-        <local:SingleItem></local:SingleItem>
+        <ComboBox 
+                x:Name="_comboBox"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding Selected}"
+                Foreground="White"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                materialDesign:HintAssist.Hint="Connected To..."
+                FontSize="16"  HorizontalContentAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <TextBlock Text="{Binding AppBasicInfo.AppName}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 </UserControl>

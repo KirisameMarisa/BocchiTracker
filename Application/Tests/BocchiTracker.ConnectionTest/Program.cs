@@ -44,9 +44,9 @@ namespace BocchiTracker.ProcessLink.Test
             var mediator = new EventAggregator();
             var serviceProcessData = BuildServiceProcessData();
 
-            var connection = new Connection(port, mediator, serviceProcessData);
+            var connection = new Connection(mediator, serviceProcessData);
 
-            var connectionTask = connection.StartAsync();
+            var connectionTask = connection.StartAsync(port);
 
             await WiatForExit(connection);
 

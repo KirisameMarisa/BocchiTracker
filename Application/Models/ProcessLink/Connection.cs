@@ -15,22 +15,22 @@ namespace BocchiTracker.ProcessLink
 {
     public class Connection
     {
-        private TcpListener _listener;
+        private TcpListener _listener = default!;
         private ConcurrentDictionary<IPEndPoint, TcpClient> _clients = new ConcurrentDictionary<IPEndPoint, TcpClient>();
         private readonly IEventAggregator _eventAggregator;
         private IServiceProcessData _serviceProcessData;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public Connection(int inPort, IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData)
+        public Connection(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData)
         {
-            _listener = new TcpListener(IPAddress.Any, inPort);
             _eventAggregator = inEventAggregator;
             _serviceProcessData = inServiceProcessData;
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public async Task StartAsync()
+        public async Task StartAsync(int inPort)
         {
+            _listener = new TcpListener(IPAddress.Any, inPort);
             _listener.Start();
             
             while (!_cancellationTokenSource.Token.IsCancellationRequested)

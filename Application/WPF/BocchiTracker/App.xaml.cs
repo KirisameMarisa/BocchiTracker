@@ -25,6 +25,9 @@ using System;
 using Prism.Events;
 using BocchiTracker.Event;
 using Unity.Resolution;
+using BocchiTracker.ProcessLink.ProcessData;
+using BocchiTracker.ProcessLink;
+using BocchiTracker.ApplicationInfoCollector.Handlers;
 
 namespace BocchiTracker.Client
 {
@@ -34,11 +37,20 @@ namespace BocchiTracker.Client
     public partial class App : PrismApplication
     {
         private string _projectConfigName;
-
-        private void PrismApplication_Startup(object sender, StartupEventArgs e)
+ 
+        protected override void OnStartup(StartupEventArgs e)
         {
-            if(e.Args.Length <= 1) 
+            if (e.Args.Length <= 1)
                 _projectConfigName = e.Args[0];
+            base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            var connection = Container.Resolve<Connection>();
+            connection.Stop();
+
+            base.OnExit(e);
         }
 
         protected override void OnInitialized()
@@ -55,6 +67,12 @@ namespace BocchiTracker.Client
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
             var autoConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+            var connection                  = Container.Resolve<Connection>();
+
+            RegisterProcessData(Container);
+
+            //!< Start connection
+            _ = connection.StartAsync(projectConfig.Port);
 
             Task.Run(async () =>
             {
@@ -82,6 +100,17 @@ namespace BocchiTracker.Client
         {
             var configRepo = container.Resolve<CachedConfigRepository<UserConfig>>();
             return configRepo.Load();
+        }
+
+        private void RegisterProcessData(IContainerProvider container)
+        {
+            var serviceProcessData = container.Resolve<IServiceProcessData>();
+            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.AppBasicInfo, new ProcessDataAppBasicInfo());
+            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.PlayerPosition, new ProcessDataPlayerPosition());
+            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.ScreenshotData, new ProcessDataScreenshotData());
+
+            container.Resolve<AppStatusQueryHandler>();
+            container.Resolve<AppDisconnectHandler>();
         }
 
         private string GetProjectConfigFilePath()
@@ -124,14 +153,20 @@ namespace BocchiTracker.Client
 
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
+            containerRegistry.RegisterSingleton<IServiceProcessData, ServiceProcessData>();
             containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
             containerRegistry.RegisterSingleton<IDataRepository, DataRepository>();
             containerRegistry.RegisterSingleton<ITicketDataFactory, TicketDataFactory>();
             containerRegistry.RegisterSingleton<IIssuePoster, IssuePoster>();
+            containerRegistry.RegisterSingleton(typeof(Connection));
             containerRegistry.RegisterSingleton(typeof(IssueInfoBundle));
-            containerRegistry.RegisterSingleton(typeof(TrackerApplication));
             containerRegistry.RegisterSingleton(typeof(IssueAssetsBundle));
+
+            var appStatusBundles = new AppStatusBundles();
+            containerRegistry.RegisterInstance(appStatusBundles);
+            containerRegistry.RegisterSingleton(typeof(AppStatusQueryHandler));
+            containerRegistry.RegisterSingleton(typeof(AppDisconnectHandler));
         }
     }
 }
