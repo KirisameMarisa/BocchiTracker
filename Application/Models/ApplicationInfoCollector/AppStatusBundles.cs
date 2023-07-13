@@ -41,11 +41,6 @@ namespace BocchiTracker.ApplicationInfoCollector
 
         public AppStatusBundle? TrackerApplication;
 
-        public IEnumerable<AppStatusBundle> GetBundlesByAppName(string appName)
-        {
-            return Bundles.Values.Where(b => b.AppBasicInfo.AppName == appName);
-        }
-
         public AppStatusBundle? GetBundlesByClientID(int inClientID)
         {
             if (Bundles.ContainsKey(inClientID))
