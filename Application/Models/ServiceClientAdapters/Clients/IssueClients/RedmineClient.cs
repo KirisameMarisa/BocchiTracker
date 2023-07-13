@@ -121,7 +121,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 }
             }
 
-            if (inTicketData.CustomFields != null)
+            if (inTicketData.CustomFields != null && inTicketData.CustomFields.Count != 0)
             {
                 foreach (var (key, values) in inTicketData.CustomFields)
                 {
@@ -137,7 +137,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 }
             }
 
-            if (inTicketData.Lables != null)
+            if (inTicketData.Lables != null && inTicketData.Lables.Count != 0)
             {
                 string? category = inTicketData.Lables.First() ?? null;
                 if(category != null)

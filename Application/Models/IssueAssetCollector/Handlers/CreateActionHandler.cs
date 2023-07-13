@@ -36,7 +36,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
 #if WINDOWS
             if (inType == typeof(LocalScreenshotHandler))
             {
-                var handler = new LocalScreenshotHandler(new Utils.Win32.WindowsClientCapture(), _filenameGenerator);
+                var handler = new LocalScreenshotHandler(new Utils.Win32.WindowsClientCapture(), new Utils.Win32.GetWindowHandleFromPid(), _filenameGenerator);
                 _cacheHandles.Add(inType, handler);
             }
             else

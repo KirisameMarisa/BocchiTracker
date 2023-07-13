@@ -5,32 +5,26 @@ using System;
 using System.IO;
 using BocchiTracker.IssueAssetCollector.Utils;
 using System.Diagnostics;
+using BocchiTracker.IssueAssetCollector.Utils.Win32;
 
 namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 {
     public class LocalScreenshotHandler : ScreenshotHandler
     {
         IClientCapture _capture;
+        IGetWindowHandleFromPid _getWindowHandleFromPid;
 
-        public LocalScreenshotHandler(IClientCapture inCapture, IFilenameGenerator inFilenameGenerator)
+        public LocalScreenshotHandler(IClientCapture inCapture, IGetWindowHandleFromPid inGetWindowHandleFromPid, IFilenameGenerator inFilenameGenerator)
             : base(inFilenameGenerator)
         {
             this._capture = inCapture;
+            this._getWindowHandleFromPid = inGetWindowHandleFromPid;
         }
 
         public override void Handle(int inClientID, int inPID, string inOutput)
         {
-            IntPtr handle = IntPtr.Zero;
-            try
-            {
-                var process = Process.GetProcessById(inPID);
-                if (process == null)
-                    return;
-                handle = process.MainWindowHandle;
-            }
-            catch { return; }
-
-            if(handle == IntPtr.Zero) 
+            var handle = _getWindowHandleFromPid.Get(inPID);
+            if (handle == IntPtr.Zero) 
                 return;
 
             var data = _capture.CaptureWindow(handle);

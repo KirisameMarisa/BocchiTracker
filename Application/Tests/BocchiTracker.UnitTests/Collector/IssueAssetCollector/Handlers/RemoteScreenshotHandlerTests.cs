@@ -35,7 +35,7 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
             var handler = new RemoteScreenshotHandler(eventAggregatorMock.Object, mockFilenameGenerator.Object);
 
             // Act
-            handler.Handle(1, 1, IntPtr.Zero, "output");
+            handler.Handle(1, 1, "output");
 
             // Assert
             mockedEvent.Verify(x => x.Publish(It.Is<RequestQueryEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotData)));

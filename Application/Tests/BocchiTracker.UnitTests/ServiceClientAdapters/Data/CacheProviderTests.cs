@@ -17,7 +17,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void IsExpired_FileDoesNotExist_ReturnsTrue()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider("", file_system.Object);
+            var cache_provider = new CacheProvider(file_system.Object);
+            cache_provider.SetCacheDirectory("");
 
             // Arrange
             string label = "testLabel";
@@ -38,7 +39,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void IsExpired_FileExistsAndNotExpired_ReturnsFalse()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider("",file_system.Object);
+            var cache_provider = new CacheProvider(file_system.Object);
+            cache_provider.SetCacheDirectory("");
 
             // Arrange
             string label = "testLabel";
@@ -63,7 +65,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void Set_ValidData_CreatesCacheFile()
         {
             var file_system = new Mock<IFileSystem>();
-            var cache_provider = new CacheProvider("", file_system.Object);
+            var cache_provider = new CacheProvider(file_system.Object);
+            cache_provider.SetCacheDirectory("");
 
             // Arrange
             string label = "testLabel";
@@ -88,7 +91,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Data
         public void Get_ValidData_ReturnsCachedValue()
         {
             var file_system     = new Mock<IFileSystem>();
-            var cache_provider  = new CacheProvider("", file_system.Object);
+            var cache_provider  = new CacheProvider(file_system.Object);
+            cache_provider.SetCacheDirectory("");
 
             // Arrange
             string label = "testLabel";
