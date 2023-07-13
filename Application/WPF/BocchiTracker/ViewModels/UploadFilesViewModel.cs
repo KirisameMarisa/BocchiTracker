@@ -32,7 +32,7 @@ namespace BocchiTracker.ViewModels
 
         public ReactiveCollection<AssetData> Bundle { get; }
 
-        public UploadFilesViewModel(IEventAggregator inEventAggregator, IssueAssetsBundle inIssueAssetBundle)
+        public UploadFilesViewModel(IEventAggregator inEventAggregator)
         {
             Bundle = new ReactiveCollection<AssetData>();
             DeleteCommand = new DelegateCommand<string>(OnDeleteFile);

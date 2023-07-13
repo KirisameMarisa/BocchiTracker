@@ -34,6 +34,7 @@
             <ContentControl Margin="3" prism:RegionManager.RegionName="ClassRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="LabelsRegion"/>
             <ContentControl Margin="3" prism:RegionManager.RegionName="WatchesRegion"/>
+
             <Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>

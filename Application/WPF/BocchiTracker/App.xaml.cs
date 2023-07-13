@@ -28,6 +28,9 @@ using Unity.Resolution;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLink;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
+using BocchiTracker.IssueAssetCollector.Handlers;
+using Prism.Modularity;
+using BocchiTracker.Modules;
 
 namespace BocchiTracker.Client
 {
@@ -36,13 +39,9 @@ namespace BocchiTracker.Client
     /// </summary>
     public partial class App : PrismApplication
     {
-        private string _projectConfigName;
- 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            if (e.Args.Length <= 1)
-                _projectConfigName = e.Args[0];
-            base.OnStartup(e);
+        protected override Window CreateShell() 
+        { 
+            return Container.Resolve<MainWindow>(); 
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -57,7 +56,18 @@ namespace BocchiTracker.Client
         {
             base.OnInitialized();
 
-            var userConfig                  = LoadUserConfig(Container);
+            var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
+            regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
+            regionManager.RegisterViewWithRegion("SummaryRegion", typeof(SummaryView));
+            regionManager.RegisterViewWithRegion("DescriptionRegion", typeof(DescriptionView));
+            regionManager.RegisterViewWithRegion("WatchesRegion", typeof(WatchesView));
+            regionManager.RegisterViewWithRegion("LabelsRegion", typeof(LabelsView));
+            regionManager.RegisterViewWithRegion("AssigneRegion", typeof(AssigneView));
+            regionManager.RegisterViewWithRegion("ClassRegion", typeof(ClassView));
+            regionManager.RegisterViewWithRegion("ConnectedToRegion", typeof(ConnectedToView));
+            regionManager.RegisterViewWithRegion("PriorityRegion", typeof(PriorityView));
+
             var projectConfig               = LoadProjectConfig(Container);
             //!< force exit?
             if (projectConfig == null)
@@ -67,12 +77,6 @@ namespace BocchiTracker.Client
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
             var autoConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
-            var connection                  = Container.Resolve<Connection>();
-
-            RegisterProcessData(Container);
-
-            //!< Start connection
-            _ = connection.StartAsync(projectConfig.Port);
 
             Task.Run(async () =>
             {
@@ -96,77 +100,41 @@ namespace BocchiTracker.Client
             return configRepo.Load();
         }
 
-        private UserConfig LoadUserConfig(IContainerProvider container)
-        {
-            var configRepo = container.Resolve<CachedConfigRepository<UserConfig>>();
-            return configRepo.Load();
-        }
-
-        private void RegisterProcessData(IContainerProvider container)
-        {
-            var serviceProcessData = container.Resolve<IServiceProcessData>();
-            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.AppBasicInfo, new ProcessDataAppBasicInfo());
-            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.PlayerPosition, new ProcessDataPlayerPosition());
-            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.ScreenshotData, new ProcessDataScreenshotData());
-
-            container.Resolve<AppStatusQueryHandler>();
-            container.Resolve<AppDisconnectHandler>();
-        }
-
-        private string GetProjectConfigFilePath()
-        {
-            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            var configFileName = $"{_projectConfigName ?? assemblyName}.{nameof(ProjectConfig)}.yaml";
-            return Path.Combine("Configs", nameof(ProjectConfig) + "s", configFileName);
-        }
-
-        private string GetUserConfigFilePath()
-        {
-            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            var configFileName = $"{assemblyName}.{nameof(UserConfig)}.yaml";
-            return Path.Combine("Configs", nameof(UserConfig) + "s", configFileName);
-        }
-
-        protected override Window CreateShell()
-        {
-            return Container.Resolve<MainWindow>();
-        }
-
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterInstance(new CachedConfigRepository<UserConfig>(
-                new ConfigRepository<UserConfig>(GetUserConfigFilePath(), new FileSystem())));
-
-            containerRegistry.RegisterInstance(new CachedConfigRepository<ProjectConfig>(
-                new ConfigRepository<ProjectConfig>(GetProjectConfigFilePath(), new FileSystem())));
-
-            containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(
-                new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s")));
-            
-            var userConfig      = LoadUserConfig(Container);
-            var projectConfig   = LoadProjectConfig(Container);
-            if (projectConfig == null)
-                return;
-
-            containerRegistry.RegisterInstance<ICacheProvider>(
-                new CacheProvider(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory, new FileSystem()));
-
             containerRegistry.Register<IFileSystem, FileSystem>();
-            containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
-            containerRegistry.RegisterSingleton<IServiceProcessData, ServiceProcessData>();
-            containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
-            containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
-            containerRegistry.RegisterSingleton<IDataRepository, DataRepository>();
-            containerRegistry.RegisterSingleton<ITicketDataFactory, TicketDataFactory>();
-            containerRegistry.RegisterSingleton<IIssuePoster, IssuePoster>();
-            containerRegistry.RegisterSingleton(typeof(Connection));
-            containerRegistry.RegisterSingleton(typeof(IssueInfoBundle));
-            containerRegistry.RegisterSingleton(typeof(IssueAssetsBundle));
+        }
 
-            var appStatusBundles = new AppStatusBundles();
-            containerRegistry.RegisterInstance(appStatusBundles);
-            containerRegistry.RegisterSingleton(typeof(AppStatusQueryHandler));
-            containerRegistry.RegisterSingleton(typeof(AppDisconnectHandler));
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            moduleCatalog.AddModule<ConfigModule>();
+            moduleCatalog.AddModule<ApplicationInfoCollectorModule>();
+            moduleCatalog.AddModule<ProcessLinkModule>();
+            moduleCatalog.AddModule<ServiceClientAdaptersModule>(
+                dependsOn: new string[]
+                {
+                    typeof(ConfigModule).Name
+                });
+            moduleCatalog.AddModule<IssueAssetCollectorModule>(
+                dependsOn: new string[]
+                {
+                    typeof(ConfigModule).Name,
+                    typeof(ApplicationInfoCollectorModule).Name
+                });
+            moduleCatalog.AddModule<IssueInfoCollectorModule>(
+                dependsOn: new string[]
+                {
+                    typeof(ApplicationInfoCollectorModule).Name,
+                    typeof(ServiceClientAdaptersModule).Name
+                });
+            moduleCatalog.AddModule<CrossServiceReporterModule>(
+                dependsOn: new string[]
+                {
+                    typeof(ApplicationInfoCollectorModule).Name,
+                    typeof(IssueInfoCollectorModule).Name,
+                    typeof(IssueAssetCollectorModule).Name,
+                    typeof(ServiceClientAdaptersModule).Name,
+                });
         }
     }
 }
