@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.IssueAssetCollector.Handlers
 {
-    internal interface IHandle
+    public interface IHandle
     {
-        void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput);
+        void Handle(int inClientID, int inPID, string inOutput);
     }
 }

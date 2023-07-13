@@ -186,12 +186,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     if (issue.Assignee == null)
                         continue;
 
-                    if (result.Contains(new UserData { Email = issue.Assignee.Email }))
+                    var userData = await _client.User.Get(issue.Assignee.Login);
+                    if (result.Contains(new UserData { Email = userData.Email }))
                         continue;
 
                     result.Add(new UserData
                     {
-                        Email = issue.Assignee.Email,
+                        Email = userData.Email,
                         Id = issue.Assignee.Id.ToString(),
                         Name = issue.Assignee.Login,
                         IconURL = issue.Assignee.AvatarUrl

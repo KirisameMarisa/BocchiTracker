@@ -32,7 +32,8 @@ namespace BocchiTracker.CrossServiceReporter
             if (config == null)
                 return null;
 
-            inIssueBundle.TicketData.CustomFields = _converter.Convert(inAppBundle);
+            if (inAppBundle != null)
+                inIssueBundle.TicketData.CustomFields = _converter.Convert(inAppBundle);
 
             return new CreateTicketData.CreateTicketData().Create(inService, inIssueBundle, config);
         }

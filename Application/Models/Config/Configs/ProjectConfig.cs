@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace BocchiTracker.Config.Configs
 {
@@ -37,6 +39,11 @@ namespace BocchiTracker.Config.Configs
         public List<ValueMapping>?              DefaultValue { get; set;}
     }
 
+    public class ExternalToolsPath
+    {
+        public string? ProcDumpPath { get; set; }
+    }
+
     public class ProjectConfig
     {
         public int Port { get; set; } = 8888;
@@ -47,9 +54,13 @@ namespace BocchiTracker.Config.Configs
 
         public List<string>? Classes { get; set; }
 
+        public string FileSaveDirectory { get; set; } = Path.Combine(Environment.CurrentDirectory, "FileSave");
+
         public List<MonitoredDirectoryConfig>? MonitoredDirectoryConfigs { get; set; }
 
         public string? CacheDirectory { get; set; }
+
+        public ExternalToolsPath ExternalToolsPath { get; set; } = new ExternalToolsPath();
 
         public List<ServiceConfig>? ServiceConfigs { get; set; }
 

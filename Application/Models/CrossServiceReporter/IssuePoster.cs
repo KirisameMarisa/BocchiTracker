@@ -13,7 +13,7 @@ namespace BocchiTracker.CrossServiceReporter
 {
     public interface IIssuePoster
     {
-        void Post(IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig);
+        Task<string?> Post(ServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig);
     }
 
     public class IssuePoster : IIssuePoster
@@ -27,20 +27,21 @@ namespace BocchiTracker.CrossServiceReporter
             _ticketFactory = inTicketDataFactory;
         }
 
-        public void Post(IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig) 
+        public async Task<string?> Post(ServiceDefinitions inService, IssueInfoBundle inIssueBundle, AppStatusBundle inAppBundle, ProjectConfig inConfig) 
         {
-            foreach(var service in inIssueBundle.IssuePostServices) 
-            {
-                var client = _clientFactory.CreateIssueService(service);
-                if (client == null)
-                    continue;
+            var client = _clientFactory.CreateIssueService(inService);
+            if (client == null)
+                return null;
 
-                var ticket = _ticketFactory.Create(service, inIssueBundle, inAppBundle, inConfig);
-                if (ticket == null)
-                    continue;
+            var ticket = _ticketFactory.Create(inService, inIssueBundle, inAppBundle, inConfig);
+            if (ticket == null)
+                return null;
 
-                client.Post(ticket);
-            }
+            var postResult = await client.Post(ticket);
+            if (postResult.Item1 || postResult.Item2 == null)
+                return null;
+
+            return postResult.Item2;
         }
     }
 }

@@ -12,15 +12,15 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Coredump
 {
     public class WindowsCoredumpHandler : CoredumpHandler
     {
-        private string _procDumpApp;
+        private readonly string? _procDumpApp;
 
-        public WindowsCoredumpHandler(IFilenameGenerator inFilenameGenerator, string inProcDumpPath)
+        public WindowsCoredumpHandler(IFilenameGenerator inFilenameGenerator, string? inProcDumpPath)
             : base(inFilenameGenerator)
         {
             _procDumpApp = inProcDumpPath;
         }
 
-        public override void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput)
+        public override void Handle(int inClientID, int inPID, string inOutput)
         {
             if(!File.Exists(_procDumpApp))
             {

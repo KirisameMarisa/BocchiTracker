@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationInfoCollector\ApplicationInfoCollector.csproj" />
+    <ProjectReference Include="..\Config\Config.csproj" />
     <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
 

@@ -45,7 +45,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             this._eventAggregator = inEventAggregator;
         }
 
-        public override void Handle(int inClientID, int inPID, IntPtr inHandle, string inOutput)
+        public override void Handle(int inClientID, int inPID, string inOutput)
         {
             RemoteScreenshotSaveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
 

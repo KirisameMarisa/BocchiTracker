@@ -10,6 +10,8 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 {
     public interface ICacheProvider
     {
+        void    SetCacheDirectory(string inDirectory);
+
         bool    IsExpired(string inLabel);
 
         bool    TryGet<T>(string inLabel, out T? outResult);
@@ -21,17 +23,21 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
     public class CacheProvider : ICacheProvider
     {
-        private string _filePath;
+        private string _filePath = default!;
         private IFileSystem _fileSystem;
         private readonly int _expiryDay;
         private readonly Dictionary<string, object> _cache;
 
-        public CacheProvider(string inBaseDirectory, IFileSystem inFileSystem, int inExpiryDay = 30)
+        public CacheProvider(IFileSystem inFileSystem, int inExpiryDay = 30)
         {
-            _filePath      = Path.Combine(inBaseDirectory, "BocchiTracker", "{0}.Cache.yaml");
             _fileSystem    = inFileSystem;
             _expiryDay     = inExpiryDay;
             _cache          = new Dictionary<string, object>();
+        }
+
+        public void SetCacheDirectory(string inDirectory)
+        {
+            _filePath = Path.Combine(inDirectory, "BocchiTracker", "{0}.Cache.yaml");
         }
 
         public bool IsExpired(string inLabel)

@@ -16,7 +16,7 @@ namespace BocchiTracker.ProcessLink
     public class Connection
     {
         private TcpListener _listener = default!;
-        private ConcurrentDictionary<IPEndPoint, TcpClient> _clients = new ConcurrentDictionary<IPEndPoint, TcpClient>();
+        private ConcurrentDictionary<IPAddress, TcpClient> _clients = new ConcurrentDictionary<IPAddress, TcpClient>();
         private readonly IEventAggregator _eventAggregator;
         private IServiceProcessData _serviceProcessData;
         private CancellationTokenSource _cancellationTokenSource;
@@ -38,13 +38,20 @@ namespace BocchiTracker.ProcessLink
                 try
                 {
                     var client = await _listener.AcceptTcpClientAsync(_cancellationTokenSource.Token);
-                    var endPoint = client.Client?.RemoteEndPoint;
+                    var endPoint = client.Client?.RemoteEndPoint as IPEndPoint;
 
                     if (endPoint is not null)
                     {
-                        if (_clients.TryAdd((IPEndPoint)endPoint, client))
+                        if(_clients.ContainsKey(endPoint.Address))
                         {
-                            _ = HandleClientAsync((IPEndPoint)endPoint, client);
+                            var removeClient = _clients[endPoint.Address];
+                            removeClient.Close();
+                            _clients.TryRemove(endPoint.Address, out _);
+                        }
+
+                        if (_clients.TryAdd(endPoint.Address, client))
+                        {
+                            _ = HandleClientAsync(endPoint.Address, client);
                         }
                     }
                 }
@@ -87,7 +94,7 @@ namespace BocchiTracker.ProcessLink
             return true;
         }
 
-        private async Task HandleClientAsync(IPEndPoint inIP, TcpClient ioClient)
+        private async Task HandleClientAsync(IPAddress inIP, TcpClient ioClient)
         {
             Console.WriteLine($"Client connected: {inIP}");
             AppStatusQuery appStatusQuery = new AppStatusQuery(_eventAggregator, _serviceProcessData, inIP.GetHashCode(), ioClient);
