@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using System.Collections.ObjectModel;
+using Redmine.Net.Api.Types;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {
@@ -22,15 +23,19 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
-                new UserData { Id = "1", Name = "John" },
-                new UserData { Id = "2", Name = "Jane" }
+                new UserData { Id = "1", Email = "John@exampl.com" },
+                new UserData { Id = "2", Email = "Jane@exampl.com" }
             };
             var mockDataRepository = new Mock<IDataRepository>();
             mockDataRepository.Setup(repo => repo.GetUsers(inService)).ReturnsAsync(users);
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Watchers = new List<string> { "John", "Jane" } };
+            inBundle.TicketData = new TicketData { Watchers = new List<UserData> { 
+                    new UserData { Name = "John", Email = "John@exampl.com" }, 
+                    new UserData { Name = "Jane", Email = "Jane@exampl.com" } 
+                } 
+            };
 
             var inConfig = new ServiceConfig();
 
@@ -42,8 +47,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
-            Assert.Contains("1", result);
-            Assert.Contains("2", result);
+            Assert.Contains("1", result[0].Id);
+            Assert.Contains("2", result[1].Id);
         }
 
         [Fact]
@@ -53,8 +58,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
-                new UserData { Id = "1", Name = "John" },
-                new UserData { Id = "2", Name = "Jane" }
+                new UserData { Id = "1", Name = "John", Email = "John@exampl.com" },
+                new UserData { Id = "2", Name = "Jane", Email = "Jane@exampl.com" }
             };
 
             var mockDataRepository = new Mock<IDataRepository>();
@@ -62,8 +67,12 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Watchers = new List<string> { "Erecto", "Tom" } };
-
+            inBundle.TicketData = new TicketData {
+                Watchers = new List<UserData> {
+                    new UserData { Name = "Erecto", Email = "Erecto@exampl.com" },
+                    new UserData { Name = "Tom",    Email = "Tom@exampl.com" }
+                }
+            };
             var inConfig = new ServiceConfig();
 
             var createWatchUser = new CreateWatchUser();
@@ -82,7 +91,12 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
 
             var inBundle = new IssueInfoBundle();
-            inBundle.TicketData = new TicketData { Watchers = new List<string> { "John", "Jane" } };
+            inBundle.TicketData = new TicketData {
+                Watchers = new List<UserData> {
+                    new UserData { Name = "John", Email = "John@exampl.com" },
+                    new UserData { Name = "Jane", Email = "Jane@exampl.com" }
+                }
+            };
 
             var inConfig = new ServiceConfig();
 

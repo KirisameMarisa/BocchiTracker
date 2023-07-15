@@ -22,8 +22,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
-                new UserData { Id = "1", Name = "John" },
-                new UserData { Id = "2", Name = "Jane" }
+                new UserData { Id = "1", Name = "John", Email = "John@exampl.com" },
+                new UserData { Id = "2", Name = "Jane", Email = "Jane@exampl.com" }
             };
 
             var mockDataRepository = new Mock<IDataRepository>();
@@ -31,7 +31,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assign = "John" };
+            inBundle.TicketData = new TicketData { Assign = new UserData { Name = "John", Email = "John@exampl.com" } };
 
             var createAssignUser = new CreateAssignUser();
 
@@ -39,7 +39,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var result = createAssignUser.Create(inService, inBundle, new ServiceConfig());
 
             // Assert
-            Assert.Equal("1", result);
+            Assert.Equal("1", result.Id);
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
-                new UserData { Id = "1", Name = "Jane" },
-                new UserData { Id = "2", Name = "Alice" }
+                new UserData { Id = "1", Name = "Jane",     Email = "Jane@exampl.com" },
+                new UserData { Id = "2", Name = "Alice",    Email = "Alice@exampl.com" }
             };
 
             var mockDataRepository = new Mock<IDataRepository>();
@@ -58,7 +58,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assign = "John" };
+            inBundle.TicketData = new TicketData { Assign = new UserData { Name = "John", Email = "John@exampl.com" } };
 
             var createAssignUser = new CreateAssignUser();
 
@@ -78,7 +78,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assign = "John" };
+            inBundle.TicketData = new TicketData { Assign = new UserData { Name = "John" } };
 
             var createAssignUser = new CreateAssignUser();
 

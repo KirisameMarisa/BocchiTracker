@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace BocchiTracker.ServiceClientAdapters.Data
 {
     public class UserData

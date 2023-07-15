@@ -25,7 +25,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             var watchers = new List<UserData>();
             foreach(var x in inBundle.TicketData.Watchers)
             {
-                var foundUser = users.FirstOrDefault(u => u == x) ?? null;
+                var foundUser = users.FirstOrDefault(u => u.Equals(x)) ?? null;
                 if (foundUser != null)
                     watchers.Add(foundUser);
             }

@@ -24,7 +24,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             {
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
-                Assign = "John",
+                Assign = new UserData { Name = "John" },
                 Lables = new List<string> { "Label1", "Label2" },
                 Priority = "High",
                 CustomFields = new Dictionary<string, List<string>>
@@ -36,7 +36,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inConfig = new ServiceConfig
             {
-                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\nAssignee: {Assignee}\nLabels: {Lables}\nPriority: {Priority}\nField1: {Field1}\nField2: {Field2}"
+                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\nAssign: {Assign}\nLabels: {Lables}\nPriority: {Priority}\nField1: {Field1}\nField2: {Field2}"
             };
 
             var createDescription = new CreateDescription();
@@ -48,7 +48,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             Assert.NotNull(result);
             Assert.Contains("Summary: Ticket Summary", result);
             Assert.Contains("Description: Ticket Description", result);
-            Assert.Contains("Assignee: John", result);
+            Assert.Contains("Assign: John", result);
             Assert.Contains("Labels: Label1, Label2", result);
             Assert.Contains("Priority: High", result);
             Assert.Contains("Field1: Value1, Value2", result);
@@ -65,7 +65,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             {
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
-                Assign = "John",
+                Assign = new UserData { Name = "John" },
                 Lables = new List<string> { "Label1", "Label2" },
                 Priority = "High",
                 CustomFields = new Dictionary<string, List<string>>
