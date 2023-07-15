@@ -21,12 +21,17 @@ namespace BocchiTracker.CrossServiceUploader
             _clientFactory = inClientFactory;
         }
 
-        public Task Upload(ServiceDefinitions inService, string inIssueKey, IssueAssetsBundle inBundle, ProjectConfig inConfig)
+        public async Task Upload(ServiceDefinitions inService, string inIssueKey, IssueAssetsBundle inBundle, ProjectConfig inConfig)
         {
             var client = _clientFactory.CreateUploadService(inService);
+            if (client == null)
+                return;
 
+            var files = inBundle.GetFiles();
+            if(files.Count == 0) 
+                return;
 
-            throw new NotImplementedException();
+            await client.UploadFiles(inIssueKey, files);
         }
     }
 }

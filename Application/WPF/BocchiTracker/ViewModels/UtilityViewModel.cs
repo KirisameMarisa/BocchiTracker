@@ -26,6 +26,7 @@ using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using BocchiTracker.CrossServiceReporter;
 using System.ComponentModel.DataAnnotations;
 using Reactive.Bindings.Extensions;
+using BocchiTracker.CrossServiceUploader;
 
 namespace BocchiTracker.ViewModels
 {
@@ -52,13 +53,17 @@ namespace BocchiTracker.ViewModels
         private readonly IssueAssetsBundle _issueAssetsBundle;
         private readonly AppStatusBundles _appStatusBundles;
         private readonly IIssuePoster _issuePoster;
+        private readonly IIssueAssetUploader _issueAssetUploader;
         private ProjectConfig _projectConfig;
 
-        public UtilityViewModel(IEventAggregator inEventAggregator, IIssuePoster inIssuePoster, ICreateActionHandler inCreateActionHandler, IssueInfoBundle inIssueInfoBundle, IssueAssetsBundle inIssueAssetsBundle, AppStatusBundles inAppStatusBundles)
+        public UtilityViewModel(IEventAggregator inEventAggregator, IIssuePoster inIssuePoster, IIssueAssetUploader inIssueAssetUploader, ICreateActionHandler inCreateActionHandler, IssueInfoBundle inIssueInfoBundle, IssueAssetsBundle inIssueAssetsBundle, AppStatusBundles inAppStatusBundles)
         {
             TakeScreenshotCommand   = new DelegateCommand(OnTakeScreenshot);
             CaptureCoredumpCommand  = new DelegateCommand(OnCaptureCoredump);
-            PostIssueCommand        = new DelegateCommand(OnPostIssue);
+            PostIssueCommand        = new DelegateCommand(async () =>
+            {
+                await OnPostIssue();
+            });
             PostServices            = new ReactiveCollection<PostServiceItem>();
 
             inEventAggregator
@@ -71,6 +76,7 @@ namespace BocchiTracker.ViewModels
             _issueAssetsBundle = inIssueAssetsBundle;
             _appStatusBundles = inAppStatusBundles;
             _issuePoster = inIssuePoster;
+            _issueAssetUploader = inIssueAssetUploader;
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -80,15 +86,20 @@ namespace BocchiTracker.ViewModels
                 PostServices.Add(new PostServiceItem { Name = item.Service.ToString() });
         }
 
-        public void OnPostIssue()
+        public async Task OnPostIssue()
         {
             foreach(var service in PostServices) 
             {
                 if(service.IsSelected)
                 {
                     ServiceDefinitions serviceEnum = Enum.Parse<ServiceDefinitions>(service.Name);
-                    _issuePoster.Post(serviceEnum, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
-                    Trace.TraceInformation($"{service.Name}, {service.IsSelected}");
+                    string key = await _issuePoster.Post(serviceEnum, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
+                    Trace.TraceInformation($"{service.Name}, {key}");
+
+                    if (key == null)
+                        continue;
+
+                    //!< Upload Files...
                 }
             }
         }

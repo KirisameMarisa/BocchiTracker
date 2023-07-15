@@ -60,8 +60,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 Channel = _channel,
                 Text    = text
             });
-            
-            return (response.OK, "success");
+            return (response.OK, response.Timestamp.RawValue);
         }
 
         public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)

@@ -33,5 +33,10 @@ namespace BocchiTracker.IssueAssetCollector
 
             return Bundle.Remove(find); 
         }
+
+        public List<string> GetFiles()
+        {
+            return Bundle.Select(x => x.FullName).ToList();
+        }
     }
 }

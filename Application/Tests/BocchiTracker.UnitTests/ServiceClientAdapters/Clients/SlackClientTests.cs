@@ -63,9 +63,9 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
                 Description = "Test Description",
             };
             var post_result = await _client.Post(ticket);
+
             Assert.True(post_result.Item1);
             Assert.NotNull(post_result.Item2);
-            Assert.Equal("success", post_result.Item2);
         }
 
         [Fact]

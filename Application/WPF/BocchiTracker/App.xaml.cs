@@ -131,6 +131,13 @@ namespace BocchiTracker.Client
                     typeof(IssueAssetCollectorModule).Name,
                     typeof(ServiceClientAdaptersModule).Name,
                 });
+            moduleCatalog.AddModule<CrossServiceUploaderModule>(
+                dependsOn: new string[]
+                {
+                    typeof(ConfigModule).Name,
+                    typeof(IssueAssetCollectorModule).Name,
+                    typeof(ServiceClientAdaptersModule).Name,
+                });
         }
     }
 }
