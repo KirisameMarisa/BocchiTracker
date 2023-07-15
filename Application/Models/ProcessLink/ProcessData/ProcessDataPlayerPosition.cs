@@ -25,7 +25,7 @@ namespace BocchiTracker.ProcessLink.ProcessData
                 .GetEvent<AppStatusQueryEvent>()
                 .Publish(new AppStatusQueryEventParameter(new AppStatus
                 {
-                    QueryID = (int)QueryID.AppBasicInfo,
+                    QueryID = (int)QueryID.PlayerPosition,
                     ClientID = inClientID,
                     Status = status
                 }));

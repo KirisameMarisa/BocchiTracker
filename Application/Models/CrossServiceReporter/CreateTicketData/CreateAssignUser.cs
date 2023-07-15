@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using BocchiTracker.ServiceClientAdapters.Data;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
-    public class CreateAssignUser : ICreateUnifiedTicketData<string>
+    public class CreateAssignUser : ICreateUnifiedTicketData<UserData>
     {
-        public string? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public UserData? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             var users = inBundle.UserListService.GetData(inService);
             if (users == null)
@@ -21,13 +22,13 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
                 return null;
             }
 
-            if (string.IsNullOrEmpty(inBundle.TicketData.Assignee))
+            if (inBundle.TicketData.Assign == null)
             {
                 Trace.TraceError("assignee null");
                 return null;
             }
 
-            return users.FirstOrDefault(x => x.Name == inBundle.TicketData.Assignee)?.Id ?? null;
+            return users.FirstOrDefault(x => x.Equals(inBundle.TicketData.Assign)) ?? null;
         }
     }
 }

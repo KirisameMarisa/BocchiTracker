@@ -50,9 +50,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             var text = string.Empty;
             text += $"{inTicketData.Summary}\n{inTicketData.Description}";
-            if(!string.IsNullOrEmpty(inTicketData.Assignee))
+            if(!string.IsNullOrEmpty(inTicketData.Assign?.Id))
             {
-                text += $"\n\n <@{inTicketData.Assignee}>";
+                text += $"\n\n <@{inTicketData.Assign?.Id}>";
             }
 
             var response = await _client.Chat.Post(new PostMessageRequest

@@ -101,7 +101,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 newIssue.Tracker = IdentifiableName.Create<IdentifiableName>(id);
             }
 
-            if(inTicketData.Assignee != null && int.TryParse(inTicketData.Assignee, out id))
+            if(inTicketData.Assign != null && int.TryParse(inTicketData.Assign?.Id, out id))
             {
                 newIssue.AssignedTo = IdentifiableName.Create<IdentifiableName>(id);
             }
@@ -111,12 +111,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 newIssue.Priority = IdentifiableName.Create<IdentifiableName>(id);
             }
 
-            if (inTicketData.Watcheres != null)
+            if (inTicketData.Watchers != null)
             {
-                var t = Watcher.Create<Watcher>(0);
-                foreach (var name in inTicketData.Watcheres)
+                foreach (var userData in inTicketData.Watchers)
                 {
-                    if(int.TryParse(name, out id))
+                    if(int.TryParse(userData.Id, out id))
                         newIssue.Watchers.Add(IdentifiableName.Create<Watcher>(id));
                 }
             }

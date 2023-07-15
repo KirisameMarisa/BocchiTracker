@@ -13,11 +13,11 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
         public string? Description { get; set; } = string.Empty;
 
-        public string? Assignee { get; set; } = string.Empty;
+        public UserData? Assign { get; set; } = new UserData();
 
         public string? Class { get; set; } = string.Empty;
 
-        public List<string>? Watcheres { get; set; } = new List<string>();
+        public List<UserData>? Watchers { get; set; } = new List<UserData>();
 
         public string? TicketType { get; set; } = string.Empty;
 

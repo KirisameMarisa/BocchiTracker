@@ -29,6 +29,8 @@ namespace BocchiTracker.ApplicationInfoCollector
         public Dictionary<string, dynamic> AppStatusDynamics { get; set; } = new Dictionary<string, dynamic>();
 
         public AppStatusBundle(int inClientID) { AppBasicInfo.ClientID = inClientID; }
+
+        public override string ToString() { return $"{AppBasicInfo.AppName} Ver:{AppBasicInfo.AppVersion} Platform:{AppBasicInfo.Platform}"; }
     }
 
     public class AppStatusBundles 

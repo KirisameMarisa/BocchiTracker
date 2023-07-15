@@ -93,8 +93,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 Body = inTicketData.Description,
             };
 
-            if(!string.IsNullOrEmpty(inTicketData.Assignee)) 
-                createIssue.Assignees.Add(inTicketData.Assignee);
+            if(!string.IsNullOrEmpty(inTicketData.Assign?.Name)) 
+                createIssue.Assignees.Add(inTicketData.Assign?.Name);
 
             if (inTicketData.Lables != null)
             {

@@ -11,6 +11,11 @@ namespace BocchiTracker.ServiceClientAdapters.Data
 
         public string? IconURL { get; set; }
 
+        public override string ToString()
+        {
+            return Name ?? string.Empty;
+        }
+
         public override bool Equals(object? obj)
         {
             var x = obj as UserData;

@@ -16,24 +16,8 @@
             <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
         </i:Interaction.Behaviors>
         <StackPanel Margin="10">
-            <Grid Name="SettingAndSummary">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <Button Grid.Column="0" Margin="15,5,15,5" ToolTip="Show Setting" >
-                    <materialDesign:PackIcon Kind="CogOutline" Width="18" Height="18" Foreground="White"/>
-                </Button>
-                <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="SummaryRegion"/>
-            </Grid>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="DescriptionRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="ConnectedToRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="AssigneRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="PriorityRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="ClassRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="LabelsRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="WatchesRegion"/>
+            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion"/>
+            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion"/>
 
             <Grid>
                 <Grid>

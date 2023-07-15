@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Views
+namespace BocchiTracker.Config
 {
     /// <summary>
-    /// ClassView.xaml の相互作用ロジック
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class ClassView : UserControl
+    public partial class MainWindow : Window
     {
-        public ClassView()
+        public MainWindow()
         {
             InitializeComponent();
         }

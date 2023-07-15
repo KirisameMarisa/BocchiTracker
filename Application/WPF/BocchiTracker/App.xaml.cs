@@ -31,6 +31,7 @@ using BocchiTracker.ApplicationInfoCollector.Handlers;
 using BocchiTracker.IssueAssetCollector.Handlers;
 using Prism.Modularity;
 using BocchiTracker.Modules;
+using BocchiTracker.Data;
 
 namespace BocchiTracker.Client
 {
@@ -57,16 +58,10 @@ namespace BocchiTracker.Client
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion("TicketBasicRegion", typeof(TicketBasicView));
+            regionManager.RegisterViewWithRegion("TicketDetailsRegion", typeof(TicketDetailsView));
             regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
-            regionManager.RegisterViewWithRegion("SummaryRegion", typeof(SummaryView));
-            regionManager.RegisterViewWithRegion("DescriptionRegion", typeof(DescriptionView));
-            regionManager.RegisterViewWithRegion("WatchesRegion", typeof(WatchesView));
-            regionManager.RegisterViewWithRegion("LabelsRegion", typeof(LabelsView));
-            regionManager.RegisterViewWithRegion("AssigneRegion", typeof(AssigneView));
-            regionManager.RegisterViewWithRegion("ClassRegion", typeof(ClassView));
-            regionManager.RegisterViewWithRegion("ConnectedToRegion", typeof(ConnectedToView));
-            regionManager.RegisterViewWithRegion("PriorityRegion", typeof(PriorityView));
 
             var projectConfig               = LoadProjectConfig(Container);
             //!< force exit?
@@ -102,6 +97,7 @@ namespace BocchiTracker.Client
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
         }
 

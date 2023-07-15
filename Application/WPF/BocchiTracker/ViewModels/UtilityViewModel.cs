@@ -24,6 +24,8 @@ using BocchiTracker.IssueAssetCollector.Handlers.Coredump;
 using System.Net;
 using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using BocchiTracker.CrossServiceReporter;
+using System.ComponentModel.DataAnnotations;
+using Reactive.Bindings.Extensions;
 
 namespace BocchiTracker.ViewModels
 {
@@ -42,6 +44,7 @@ namespace BocchiTracker.ViewModels
 
         public ICommand PostIssueCommand { get; private set; }
 
+        [Required(ErrorMessage = "Required")]
         public ReactiveCollection<PostServiceItem> PostServices { get; }
 
         private readonly ICreateActionHandler _createActionHandler;

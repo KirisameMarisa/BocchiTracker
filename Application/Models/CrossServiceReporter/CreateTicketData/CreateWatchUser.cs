@@ -7,24 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using BocchiTracker.ServiceClientAdapters.Data;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
-    public class CreateWatchUser : ICreateUnifiedTicketData<List<string>>
+    public class CreateWatchUser : ICreateUnifiedTicketData<List<UserData>>
     {
-        public List<string>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public List<UserData>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
             var users = inBundle.UserListService.GetData(inService);
             if (users == null)
                 return null;
 
-            if (inBundle.TicketData.Watcheres == null)
+            if (inBundle.TicketData.Watchers == null)
                 return null;
 
-            var watchers = new List<string>();
-            foreach(var x in inBundle.TicketData.Watcheres)
+            var watchers = new List<UserData>();
+            foreach(var x in inBundle.TicketData.Watchers)
             {
-                var foundUser = users.FirstOrDefault(u => u.Name == x)?.Id ?? null;
+                var foundUser = users.FirstOrDefault(u => u == x) ?? null;
                 if (foundUser != null)
                     watchers.Add(foundUser);
             }

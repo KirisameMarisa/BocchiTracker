@@ -25,8 +25,8 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             if (!string.IsNullOrEmpty(inBundle.TicketData.Description))
                 variables.Add(nameof(inBundle.TicketData.Description), inBundle.TicketData.Description);
 
-            if (!string.IsNullOrEmpty(inBundle.TicketData.Assignee))
-                variables.Add(nameof(inBundle.TicketData.Assignee), inBundle.TicketData.Assignee);
+            if (inBundle.TicketData.Assign != null && !string.IsNullOrEmpty(inBundle.TicketData.Assign.Name))
+                variables.Add(nameof(inBundle.TicketData.Assign), inBundle.TicketData.Assign.Name);
 
             if (inBundle.TicketData.Lables != null && inBundle.TicketData.Lables.Count != 0)
                 variables.Add(nameof(inBundle.TicketData.Lables), string.Join(", ", inBundle.TicketData.Lables));

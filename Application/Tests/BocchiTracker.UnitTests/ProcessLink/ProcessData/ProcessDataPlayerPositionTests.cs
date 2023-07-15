@@ -53,7 +53,7 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             // Assert
             mockedEvent.Verify(x => x.Publish(It.Is<AppStatusQueryEventParameter>(
                    m => m.AppStatus.ClientID == cClientID
-                && m.AppStatus.QueryID == (byte)QueryID.AppBasicInfo
+                && m.AppStatus.QueryID == (byte)QueryID.PlayerPosition
                 && m.AppStatus.Status["X"] == PosX.ToString()
                 && m.AppStatus.Status["Y"] == PosY.ToString()
                 && m.AppStatus.Status["Z"] == PosZ.ToString()

@@ -24,7 +24,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             {
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
-                Assignee = "John",
+                Assign = "John",
                 Lables = new List<string> { "Label1", "Label2" },
                 Priority = "High",
                 CustomFields = new Dictionary<string, List<string>>
@@ -65,7 +65,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             {
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
-                Assignee = "John",
+                Assign = "John",
                 Lables = new List<string> { "Label1", "Label2" },
                 Priority = "High",
                 CustomFields = new Dictionary<string, List<string>>

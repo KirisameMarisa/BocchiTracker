@@ -7,34 +7,19 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\AssigneView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ClassView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ConnectedToView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\DescriptionView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\LabelsView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\MultipleItems.xaml.cs">
+    <Compile Update="CustomControl\MultipleChoice.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\PriorityView.xaml.cs">
+    <Compile Update="CustomControl\OneChoice.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\SingleItem.xaml.cs">
+    <Compile Update="Views\TicketBasicView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\SummaryView.xaml.cs">
+    <Compile Update="Views\TicketDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\UploadFilesView.xaml.cs">
@@ -43,48 +28,27 @@
     <Compile Update="Views\UtilityView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\WatchesView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\AssigneView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ClassView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ConnectedToView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\DescriptionView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\LabelsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\MultipleItems.xaml">
+    <Page Update="CustomControl\MultipleChoice.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\PriorityView.xaml">
+    <Page Update="CustomControl\OneChoice.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\SingleItem.xaml">
+    <Page Update="Views\TicketBasicView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\SummaryView.xaml">
+    <Page Update="Views\TicketDetailsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UploadFilesView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UtilityView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\WatchesView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

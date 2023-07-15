@@ -31,7 +31,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assignee = "John" };
+            inBundle.TicketData = new TicketData { Assign = "John" };
 
             var createAssignUser = new CreateAssignUser();
 
@@ -58,7 +58,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assignee = "John" };
+            inBundle.TicketData = new TicketData { Assign = "John" };
 
             var createAssignUser = new CreateAssignUser();
 
@@ -78,7 +78,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Assignee = "John" };
+            inBundle.TicketData = new TicketData { Assign = "John" };
 
             var createAssignUser = new CreateAssignUser();
 

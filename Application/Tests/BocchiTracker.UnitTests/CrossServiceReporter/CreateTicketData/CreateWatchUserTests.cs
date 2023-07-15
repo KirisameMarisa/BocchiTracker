@@ -30,7 +30,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Watcheres = new List<string> { "John", "Jane" } };
+            inBundle.TicketData = new TicketData { Watchers = new List<string> { "John", "Jane" } };
 
             var inConfig = new ServiceConfig();
 
@@ -62,7 +62,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Watcheres = new List<string> { "Erecto", "Tom" } };
+            inBundle.TicketData = new TicketData { Watchers = new List<string> { "Erecto", "Tom" } };
 
             var inConfig = new ServiceConfig();
 
@@ -82,7 +82,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inService = ServiceDefinitions.Redmine;
 
             var inBundle = new IssueInfoBundle();
-            inBundle.TicketData = new TicketData { Watcheres = new List<string> { "John", "Jane" } };
+            inBundle.TicketData = new TicketData { Watchers = new List<string> { "John", "Jane" } };
 
             var inConfig = new ServiceConfig();
 
@@ -111,7 +111,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             var inBundle = new IssueInfoBundle();
             await inBundle.Initialize(mockDataRepository.Object);
-            inBundle.TicketData = new TicketData { Watcheres = null };
+            inBundle.TicketData = new TicketData { Watchers = null };
 
             var inConfig = new ServiceConfig();
 
