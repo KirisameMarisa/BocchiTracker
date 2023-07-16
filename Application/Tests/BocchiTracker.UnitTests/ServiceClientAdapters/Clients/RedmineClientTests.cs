@@ -125,5 +125,25 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             var users = await _client.GetUsers();
             Assert.NotNull(users);
         }
+
+        [Fact]
+        public async Task Test_UploadFile()
+        {
+            List<string> filenames = new List<string>()
+            {
+                Path.Combine("Resources", "UploadFiles", "TestPic.png"),
+                Path.Combine("Resources", "UploadFiles", "log.txt"),
+            };
+
+            Assert.NotNull(_project_url);
+            Assert.NotNull(_auth_config);
+            Assert.NotNull(_client);
+
+            bool result = await _client.Authenticate(_auth_config, _project_url);
+            Assert.True(result);
+
+            result = await _client.UploadFiles("29", filenames);
+            Assert.True(result);
+        }
     }
 }

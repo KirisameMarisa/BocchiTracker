@@ -9,6 +9,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
 {
     public interface IServiceUploadClient : IService
     {
+        bool IsAvailableFileUpload();
+
         Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames);
     }
 }

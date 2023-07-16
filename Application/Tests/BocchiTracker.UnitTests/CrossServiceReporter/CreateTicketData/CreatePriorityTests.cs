@@ -8,17 +8,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {
     public class CreatePriorityTests
     {
         [Fact]
-        public void Create_ShouldReturnPriority_WhenMappingExists()
+        public async Task Create_ShouldReturnPriority_WhenMappingExists()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
+            var users = new List<IdentifierData>
+            {
+                new IdentifierData { Id = "1", Name = "P1"  },
+                new IdentifierData { Id = "2", Name = "P2"  },
+                new IdentifierData { Id = "3", Name = "P3"  },
+            };
+            var mockDataRepository = new Mock<IDataRepository>();
+            mockDataRepository.Setup(repo => repo.GetPriorities(inService)).ReturnsAsync(users);
+            
             var inBundle = new IssueInfoBundle();
+            await inBundle.Initialize(mockDataRepository.Object);
             inBundle.TicketData = new TicketData { Priority = "High" };
 
             var inConfig = new ServiceConfig();
@@ -35,7 +46,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var result = createPriority.Create(inService, inBundle, inConfig);
 
             // Assert
-            Assert.Equal("P1", result);
+            Assert.Equal("1", result);
         }
 
         [Fact]

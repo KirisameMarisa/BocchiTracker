@@ -32,9 +32,14 @@ namespace BocchiTracker.ViewModels
 
         public ReactiveCollection<AssetData> Bundle { get; }
 
-        public UploadFilesViewModel(IEventAggregator inEventAggregator)
+        private IssueAssetsBundle _issueAssetsBundle;
+
+        public UploadFilesViewModel(IEventAggregator inEventAggregator, IssueAssetsBundle inIssueAssetsBundle)
         {
+            _issueAssetsBundle = inIssueAssetsBundle;
+
             Bundle = new ReactiveCollection<AssetData>();
+            Bundle.CollectionChanged += (_, __) => OnUpdateCollection();
             DeleteCommand = new DelegateCommand<string>(OnDeleteFile);
             OpenCommand = new DelegateCommand<string>(OnOpenFile);
 
@@ -93,6 +98,11 @@ namespace BocchiTracker.ViewModels
         public void OnOpenFile(string inFilePath)
         {
             //!< TODO::
+        }
+
+        public void OnUpdateCollection()
+        {
+            _issueAssetsBundle.Bundle = Bundle.ToList();
         }
     }
 }

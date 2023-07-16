@@ -113,9 +113,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
         }
 
-        public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        public async Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(false);
+        }
+
+        public bool IsAvailableFileUpload()
+        {
+            return false;
         }
 
 #pragma warning disable CS1998

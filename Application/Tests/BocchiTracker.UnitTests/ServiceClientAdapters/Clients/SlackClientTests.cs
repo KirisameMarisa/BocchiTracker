@@ -119,5 +119,34 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             var users = await _client.GetUsers();
             Assert.NotNull(users);
         }
+
+        [Fact]
+        public async Task Test_UploadFile()
+        {
+            List<string> filenames = new List<string>()
+            {
+                Path.Combine("Resources", "UploadFiles", "TestPic.png"),
+                Path.Combine("Resources", "UploadFiles", "log.txt"),
+            };
+
+            Assert.NotNull(_auth_config);
+            Assert.NotNull(_client);
+
+            bool result = await _client.Authenticate(_auth_config, _channel);
+            Assert.True(result);
+
+            var ticket = new TicketData
+            {
+                Summary = "ファイルアップロードテスト",
+                Description = "TestPic.png, log.txtがスレッドにアップロードされます",
+            };
+            var post_result = await _client.Post(ticket);
+
+            Assert.True(post_result.Item1);
+            Assert.NotNull(post_result.Item2);
+
+            bool upload_result = await _client.UploadFiles(post_result.Item2, filenames);
+            Assert.True(upload_result);
+        }
     }
 }

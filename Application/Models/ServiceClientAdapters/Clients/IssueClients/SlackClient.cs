@@ -1,6 +1,7 @@
 ﻿using Slack.NetStandard;
 using Slack.NetStandard.WebApi.Chat;
 using Slack.NetStandard.Socket;
+using Slack.NetStandard.WebApi.Files;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
+using System.Threading;
+using System.IO.Abstractions;
+using System.Diagnostics;
+using System.IO;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -63,9 +68,41 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             return (response.OK, response.Timestamp.RawValue);
         }
 
-        public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        public bool IsAvailableFileUpload()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        public async Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        {
+            if (_client == null)
+                return false;
+
+            if (_channel == null)
+                return false;
+
+            bool has_error = false;
+            Timestamp timestamp = inIssueKey;
+            foreach(var file in inFilenames)
+            {
+                using (FileStream fileStream = new FileStream(file, FileMode.Open))
+                {
+                    string fullPath = Path.GetFullPath(file);
+                    var responce = await _client.Files.Upload(new FileUploadRequest
+                    {
+                        Filename = Path.GetFileName(fullPath),
+                        Channels = _channel,
+                        ThreadTimestamp = timestamp,
+                        File = new MultipartFile (fileStream, fullPath),
+                    });
+                    if (!responce.OK)
+                    {
+                        Trace.TraceError(responce.Error);
+                        has_error = true;
+                    }
+                }
+            }
+            return has_error != true;
         }
 
 #pragma warning disable CS1998
@@ -102,6 +139,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             var result = new List<UserData>();
             foreach (var user in response.Members)
             {
+                if (string.IsNullOrEmpty(user.Profile.Email))
+                    continue;
+
                 result.Add(new UserData
                 {
                     Email = user.Profile.Email,

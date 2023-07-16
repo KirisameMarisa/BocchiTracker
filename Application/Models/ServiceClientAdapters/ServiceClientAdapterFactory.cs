@@ -39,7 +39,10 @@ namespace BocchiTracker.ServiceClientAdapters
 
         public IServiceUploadClient? CreateUploadService(ServiceDefinitions serviceType)
         {
-            return _services[serviceType] as IServiceUploadClient;
+            var service = _services[serviceType] as IServiceUploadClient;
+            return service != null && service.IsAvailableFileUpload() 
+                ? service
+                : null;
         }
     }
 }

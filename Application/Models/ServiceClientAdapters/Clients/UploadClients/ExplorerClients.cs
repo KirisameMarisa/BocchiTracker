@@ -18,6 +18,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
 #endif
         }
 
+        public bool IsAvailableFileUpload()
+        {
+            return true;
+        }
+
         public bool IsAuthenticated()
         {
             return false;

@@ -14,39 +14,6 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-//public class TicketProperty
-//{
-//    [Required(ErrorMessage = "Required")]
-//    public ReactiveProperty<string> Summary { get; }
-
-//    [Required(ErrorMessage = "Required")]
-//    public ReactiveProperty<string> Description { get; }
-
-//    [Required(ErrorMessage = "Required")]
-//    public ReactiveProperty<string> SelectedTicketType { get; }
-
-//    public ReactiveCommand PostIssueCommand { get; private set; }
-
-//    public TicketProperty()
-//    {
-//        this.Summary = new ReactiveProperty<string>().SetValidateAttribute(() => this.Summary);
-//        this.Description = new ReactiveProperty<string>().SetValidateAttribute(() => this.Description);
-//        this.SelectedTicketType = new ReactiveProperty<string>().SetValidateAttribute(() => this.SelectedTicketType);
-
-//        // 実行コマンドのアクティブ設定
-//        this.PostIssueCommand =
-//            new[]
-//            {
-//                    this.Summary.ObserveHasErrors,
-//                    this.Description.ObserveHasErrors,
-//                    this.SelectedTicketType.ObserveHasErrors,
-//            }
-//            .CombineLatestValuesAreAllFalse()   // すべてエラーなしの場合にアクティブ設定
-//            .ToReactiveCommand();
-//    }
-//}
-
 namespace BocchiTracker.Data
 {
     public class TicketProperty

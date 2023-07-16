@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
+using System.Windows.Documents;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -166,9 +167,37 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
         }
 
-        public Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        public bool IsAvailableFileUpload()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        public async Task<bool> UploadFiles(string inIssueKey, List<string> inFilenames)
+        {
+            if (_client == null)
+                return false;
+
+            try
+            {
+                Issue issue = _client.GetObject<Issue>(inIssueKey, new NameValueCollection { { "include", "attachments" } });
+                if (issue.Uploads == null)
+                    issue.Uploads = new List<Upload>();
+
+                foreach (var file in inFilenames)
+                {
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(file);
+
+                    Upload attachment = _client.UploadFile(fileBytes);
+                    attachment.FileName = Path.GetFileName(file);
+                    issue.Uploads.Add(attachment);
+                }
+                await _client.UpdateObjectAsync(issue.Id.ToString(), issue);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<List<IdentifierData>?> GetTicketTypes()

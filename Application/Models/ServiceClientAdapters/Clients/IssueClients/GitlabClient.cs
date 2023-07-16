@@ -49,5 +49,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         {
             throw new NotImplementedException();
         }
+
+        public bool IsAvailableFileUpload()
+        {
+            return false;
+        }
     }
 }

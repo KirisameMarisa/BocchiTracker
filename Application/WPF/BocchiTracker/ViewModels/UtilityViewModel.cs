@@ -99,7 +99,7 @@ namespace BocchiTracker.ViewModels
                     if (key == null)
                         continue;
 
-                    //!< Upload Files...
+                    await _issueAssetUploader.Upload(serviceEnum, key, _issueAssetsBundle, _projectConfig);
                 }
             }
         }
