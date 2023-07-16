@@ -17,7 +17,7 @@ using System.Xml.Linq;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config;
 using BocchiTracker.Config.Configs;
-using System.Windows.Documents;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {

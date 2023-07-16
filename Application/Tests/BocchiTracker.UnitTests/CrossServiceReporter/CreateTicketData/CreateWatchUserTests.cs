@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Moq;
 using System.Collections.ObjectModel;
 using Redmine.Net.Api.Types;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {

@@ -44,6 +44,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.ConnectionTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Config", "Models\Config\Config.csproj", "{E703C033-82F7-4294-B0CE-ACF9703FE0B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClientData", "Models\ServiceClientData\ServiceClientData.csproj", "{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{E703C033-82F7-4294-B0CE-ACF9703FE0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E703C033-82F7-4294-B0CE-ACF9703FE0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E703C033-82F7-4294-B0CE-ACF9703FE0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{30DFA2A5-1CCB-4AF2-B49C-78D3774260E2} = {12AAC0C3-970D-43F6-BD47-0B662B7157F6}
 		{ABF54AFD-B968-4600-A0E1-5364021E78D4} = {E876F453-952B-4D58-AA0E-1D95DFF58FB5}
 		{E703C033-82F7-4294-B0CE-ACF9703FE0B6} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
+		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F04B3FFB-34D2-4BBE-85BA-F28DEE1BCAB6}

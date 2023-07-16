@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using BocchiTracker.ServiceClientAdapters.Data;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {

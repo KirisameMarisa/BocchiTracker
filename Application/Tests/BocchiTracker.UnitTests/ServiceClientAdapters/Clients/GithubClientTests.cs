@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using System.Collections.ObjectModel;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {

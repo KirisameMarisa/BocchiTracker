@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YamlDotNet.Core.Tokens;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Data
 {

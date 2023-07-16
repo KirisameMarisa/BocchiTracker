@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {

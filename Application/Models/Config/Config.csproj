@@ -6,5 +6,9 @@
     <PackageReference Include="System.IO.Abstractions" Version="19.2.29" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceClientData\ServiceClientData.csproj" />
+  </ItemGroup>
   
 </Project>

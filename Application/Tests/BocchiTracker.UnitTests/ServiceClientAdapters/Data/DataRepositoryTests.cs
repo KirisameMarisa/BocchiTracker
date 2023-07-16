@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Data
 {

@@ -14,6 +14,7 @@ using System.Threading;
 using System.IO.Abstractions;
 using System.Diagnostics;
 using System.IO;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {

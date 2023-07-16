@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.CrossServiceReporter.Converter;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.CrossServiceReporter
 {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.IO;
 using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {

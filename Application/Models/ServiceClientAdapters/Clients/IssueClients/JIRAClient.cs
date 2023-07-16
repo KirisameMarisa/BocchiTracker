@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
