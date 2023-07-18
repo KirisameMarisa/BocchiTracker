@@ -36,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{12AAC0C3-970
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.Event", "WPF\BocchiTracker.Event\BocchiTracker.Event.csproj", "{94CD4E67-EBF7-48AB-BA53-7E5444F61084}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.Config", "WPF\BocchiTracker.Config\BocchiTracker.Config.csproj", "{30DFA2A5-1CCB-4AF2-B49C-78D3774260E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.ConfigApp", "WPF\BocchiTracker.Config\BocchiTracker.ConfigApp.csproj", "{30DFA2A5-1CCB-4AF2-B49C-78D3774260E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E876F453-952B-4D58-AA0E-1D95DFF58FB5}"
 EndProject
@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.ConnectionTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Config", "Models\Config\Config.csproj", "{E703C033-82F7-4294-B0CE-ACF9703FE0B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClientData", "Models\ServiceClientData\ServiceClientData.csproj", "{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceClientData", "Models\ServiceClientData\ServiceClientData.csproj", "{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
