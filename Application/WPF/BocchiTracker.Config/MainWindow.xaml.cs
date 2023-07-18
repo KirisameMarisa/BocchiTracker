@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Config
+namespace BocchiTracker.ConfigApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
