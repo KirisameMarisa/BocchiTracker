@@ -61,10 +61,15 @@ namespace BocchiTracker.Config
 
         public void Save(T settings)
         {
+            var dir = Path.GetDirectoryName(_filePath);
+            if (string.IsNullOrEmpty(dir))
+                return;
+
             var serializer = new SerializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
 
+            _fileSystem.Directory.CreateDirectory(dir);
             using var writer = _fileSystem.File.CreateText(_filePath);
             serializer.Serialize(writer, settings);
         }

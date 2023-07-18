@@ -1,5 +1,9 @@
-﻿using BocchiTracker.Data;
+﻿using BocchiTracker.Config.Configs;
+using BocchiTracker.Config;
+using BocchiTracker.Data;
 using BocchiTracker.Event;
+using BocchiTracker.IssueAssetCollector;
+using BocchiTracker.IssueInfoCollector;
 using Prism.Events;
 using Prism.Mvvm;
 using Reactive.Bindings;
@@ -9,14 +13,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity;
+using Prism.Commands;
+using System.Windows.Input;
 
 namespace BocchiTracker.ViewModels
 {
     public class TicketBasicViewModel : BindableBase
     {
-        [Dependency]
         public TicketProperty TicketProperty { get; set; }
-
         public ReactiveCollection<string> TicketTypes { get; }
 
         public TicketBasicViewModel(IEventAggregator inEventAggregator, TicketProperty inTicketProperty)

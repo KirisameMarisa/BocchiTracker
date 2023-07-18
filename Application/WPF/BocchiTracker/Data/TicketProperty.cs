@@ -14,6 +14,10 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientData;
+using BocchiTracker.Event;
+using Prism.Events;
+using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace BocchiTracker.Data
 {
@@ -40,7 +44,7 @@ namespace BocchiTracker.Data
 
         public AppStatusBundles AppStatusBundles { get; set; }
 
-        public TicketProperty(IssueInfoBundle inIssueInfoBundle, AppStatusBundles inAppStatusBundles)
+        public TicketProperty(IEventAggregator inEventAggregator, IssueInfoBundle inIssueInfoBundle, AppStatusBundles inAppStatusBundles)
         {
             AppStatusBundles = inAppStatusBundles;
 
@@ -54,7 +58,10 @@ namespace BocchiTracker.Data
             Description.Subscribe(value => inIssueInfoBundle.TicketData.Description = value);
 
             Class = new ReactiveProperty<string>(inIssueInfoBundle.TicketData.Class);
-            Class.Subscribe(value => inIssueInfoBundle.TicketData.Class = value);
+            Class.Subscribe(value => 
+            { 
+                inIssueInfoBundle.TicketData.Class = value; Trace.TraceInformation(value); 
+            });
 
             Priority = new ReactiveProperty<string>(inIssueInfoBundle.TicketData.Priority);
             Priority.Subscribe(value => inIssueInfoBundle.TicketData.Priority = value);
@@ -67,6 +74,37 @@ namespace BocchiTracker.Data
 
             Watchers = new ReactiveCollection<UserData>(/*inIssueInfoBundle.TicketData.Lables*/);
             Watchers.CollectionChanged += (_, __) => { inIssueInfoBundle.TicketData.Watchers = Watchers.ToList(); };
+
+            inEventAggregator
+                .GetEvent<ConfigReloadEvent>()
+                .Subscribe(OnConfigReload, ThreadOption.UIThread);
+        }
+
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
+        {
+            if(inParam.UserConfig != null)
+            {
+                Summary.Value       = inParam.UserConfig.DraftTicketData.Summary;
+                TicketType.Value    = inParam.UserConfig.DraftTicketData.TicketType;
+                Description.Value   = inParam.UserConfig.DraftTicketData.Description;
+                Class.Value         = inParam.UserConfig.DraftTicketData.Class;
+                Priority.Value      = inParam.UserConfig.DraftTicketData.Priority;
+                Assign.Value        = inParam.UserConfig.DraftTicketData.Assign;
+
+                foreach (var value in inParam.UserConfig.DraftTicketData.Lables)
+                {
+                    if (value == null)
+                        continue;
+                    Labels.Add(value);
+                }
+
+                foreach (var value in inParam.UserConfig.DraftTicketData.Watchers)
+                {
+                    if (value == null)
+                        continue;
+                    Watchers.Add(value);
+                }
+            }
         }
     }
 }

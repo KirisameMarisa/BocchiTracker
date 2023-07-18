@@ -12,9 +12,12 @@ namespace BocchiTracker.Event
     {
         public ProjectConfig ProjectConfig { get; set; }
 
-        public ConfigReloadEventParameter(ProjectConfig inProjectConfig)
+        public UserConfig UserConfig { get; set; }
+
+        public ConfigReloadEventParameter(ProjectConfig inProjectConfig, UserConfig userConfig)
         {
             ProjectConfig = inProjectConfig;
+            UserConfig = userConfig;
         }
     }
 

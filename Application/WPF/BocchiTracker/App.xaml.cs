@@ -63,6 +63,7 @@ namespace BocchiTracker.Client
             regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
 
+            var userConfig                  = LoadUserConfig(Container);
             var projectConfig               = LoadProjectConfig(Container);
             //!< force exit?
             if (projectConfig == null)
@@ -78,20 +79,26 @@ namespace BocchiTracker.Client
                 var serviceAuthenticator = new ServiceAuthenticator(serviceClientFactory, autoConfigRepositoryFactory);
                 await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
                 await issueInfoBundle.Initialize(dataRepository);
-                PublishEvents(Container, projectConfig);
+                PublishEvents(Container, projectConfig, userConfig);
             });
         }
 
-        private void PublishEvents(IContainerProvider inContainer, ProjectConfig inProjectConfig)
+        private void PublishEvents(IContainerProvider inContainer, ProjectConfig inProjectConfig, UserConfig inUserConfig)
         {
             var eventAggregator = inContainer.Resolve<IEventAggregator>();
-            eventAggregator.GetEvent<IssueInfoLoadCompleteEvent>().Publish();
-            eventAggregator.GetEvent<ConfigReloadEvent>().Publish(new ConfigReloadEventParameter(inProjectConfig));
+            eventAggregator.GetEvent<ConfigReloadEvent>().Publish(new ConfigReloadEventParameter(inProjectConfig, inUserConfig));
+            eventAggregator.GetEvent<PopulateCbValuesEvent>().Publish();
         }
 
         private ProjectConfig LoadProjectConfig(IContainerProvider container)
         {
             var configRepo = container.Resolve<CachedConfigRepository<ProjectConfig>>();
+            return configRepo.Load();
+        }
+
+        private UserConfig LoadUserConfig(IContainerProvider container)
+        {
+            var configRepo = container.Resolve<CachedConfigRepository<UserConfig>>();
             return configRepo.Load();
         }
 

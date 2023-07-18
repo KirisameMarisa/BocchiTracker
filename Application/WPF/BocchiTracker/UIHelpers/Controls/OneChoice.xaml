@@ -1,19 +1,19 @@
-﻿<UserControl x:Class="BocchiTracker.CustomControl.OneChoice"
+﻿<UserControl x:Class="BocchiTracker.UIHelpers.Controls.OneChoice"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-             xmlns:local="clr-namespace:BocchiTracker.CustomControl"
+             xmlns:local="clr-namespace:BocchiTracker.UIHelpers.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ComboBox 
             x:Name="comboBox"
             ItemsSource="{Binding ViewModel.FilteredItems, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
-            SelectedItem="{Binding ViewModel.Selected.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
-            Text="{Binding ViewModel.EditText.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
+            SelectedItem="{Binding ViewModel.Selected.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}, Mode=TwoWay}"
+            Text="{Binding ViewModel.EditText.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}, Mode=TwoWay}"
             Foreground="White"
             IsDropDownOpen="{Binding ViewModel.IsOpen.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
             IsTextSearchEnabled="False"

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Input;
 
-namespace BocchiTracker.CustomControl
+namespace BocchiTracker.UIHelpers.Controls
 {
     public abstract class ComboboxBase
     {

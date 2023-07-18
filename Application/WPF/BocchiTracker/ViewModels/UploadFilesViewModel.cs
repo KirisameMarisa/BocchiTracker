@@ -1,5 +1,4 @@
-﻿using BocchiTracker.Behaviors;
-using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.Config.Configs;
 using BocchiTracker.Config;
 using BocchiTracker.Event;
 using BocchiTracker.IssueAssetCollector;
@@ -20,6 +19,7 @@ using System.Windows;
 using System.Windows.Input;
 using Reactive.Bindings;
 using System.Reflection.Metadata;
+using System.Diagnostics;
 
 namespace BocchiTracker.ViewModels
 {
@@ -65,6 +65,11 @@ namespace BocchiTracker.ViewModels
                 issueAssetMonitor.RenamedAction = OnRenameFile;
                 _issueAssetMonitors.Add(issueAssetMonitor);
             }
+
+            foreach(var item in inParam.UserConfig.DraftUploadFiles)
+            {
+                OnAddFile(item);
+            }
         }
 
         public void OnAddDroppedFiles(AssetDropedEventParameter inParameter)
@@ -97,7 +102,8 @@ namespace BocchiTracker.ViewModels
 
         public void OnOpenFile(string inFilePath)
         {
-            //!< TODO::
+            var info = new ProcessStartInfo(inFilePath) { UseShellExecute = true };
+            System.Diagnostics.Process.Start(info);
         }
 
         public void OnUpdateCollection()

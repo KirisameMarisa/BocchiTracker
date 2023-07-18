@@ -1,7 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using BocchiTracker.UIHelpers.Controls;
 
-namespace BocchiTracker.CustomControl
+namespace BocchiTracker.UIHelpers.Controls
 {
     /// <summary>
     /// MultipleChoice.xaml の相互作用ロジック

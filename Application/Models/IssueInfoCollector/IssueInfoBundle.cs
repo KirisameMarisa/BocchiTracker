@@ -15,6 +15,8 @@ namespace BocchiTracker.IssueInfoCollector
 {
     public class IssueInfoBundle
     {
+        public List<ServiceDefinitions>         PostServices            { get; set; } = new List<ServiceDefinitions>();
+
         public MetaListService<IdentifierData>  LabelListService        { get; } = new LabelListService();
 
         public MetaListService<IdentifierData>  PriorityListService     { get; } = new PriorityListService();

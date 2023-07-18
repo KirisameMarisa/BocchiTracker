@@ -10,7 +10,7 @@ using Microsoft.Xaml.Behaviors;
 using Prism.Ioc;
 using Prism.Unity;
 
-namespace BocchiTracker.Behaviors
+namespace BocchiTracker.UIHelpers.Behaviors
 {
     public class AssetDropHandler : Behavior<UIElement>
     {

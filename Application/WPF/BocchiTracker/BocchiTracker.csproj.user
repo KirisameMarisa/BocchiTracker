@@ -10,10 +10,10 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="CustomControl\MultipleChoice.xaml.cs">
+    <Compile Update="UIHelpers\Controls\MultipleChoice.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="CustomControl\OneChoice.xaml.cs">
+    <Compile Update="UIHelpers\Controls\OneChoice.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\TicketBasicView.xaml.cs">
@@ -33,10 +33,10 @@
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="CustomControl\MultipleChoice.xaml">
+    <Page Update="UIHelpers\Controls\MultipleChoice.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="CustomControl\OneChoice.xaml">
+    <Page Update="UIHelpers\Controls\OneChoice.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TicketBasicView.xaml">

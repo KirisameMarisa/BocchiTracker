@@ -53,14 +53,14 @@
                                     <ColumnDefinition SharedSizeGroup="Checkerz" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
+                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected.Value}" />
                                 <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                                    <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                                        <TextBlock FontWeight="Bold" Text="{Binding Name.Value}" />
                                 </StackPanel>
                             </Grid>
                         </Border>
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <DataTrigger Binding="{Binding IsSelected.Value}" Value="True">
                                 <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}" />
                             </DataTrigger>
                         </DataTemplate.Triggers>

@@ -4,13 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BocchiTracker.Views"
-        xmlns:behaviors="clr-namespace:BocchiTracker.Behaviors"
+        xmlns:behaviors="clr-namespace:BocchiTracker.UIHelpers.Behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         AllowDrop="True"
         Title="MainWindow" Height="850" Width="800" MinWidth="400">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <prism:InvokeCommandAction Command="{Binding ClosedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">
         <i:Interaction.Behaviors>
             <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />

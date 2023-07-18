@@ -2,7 +2,6 @@
 using BocchiTracker.Event;
 using BocchiTracker.IssueInfoCollector;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.CustomControl;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Unity;
@@ -18,6 +17,7 @@ using Unity;
 using Prism.Mvvm;
 using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ServiceClientData;
+using BocchiTracker.UIHelpers.Controls;
 
 namespace BocchiTracker.ViewModels
 {
@@ -96,10 +96,7 @@ namespace BocchiTracker.ViewModels
 
         public TicketAssign(TicketProperty ticketProperty) : base("Assign") { _ticketProperty = ticketProperty; }
 
-        public override void OnSelected(object inItem)
-        {
-            _ticketProperty.Assign.Value = inItem as UserData; 
-        }
+        public override void OnSelected(object inItem) { _ticketProperty.Assign.Value = inItem as UserData; }
     }
 
     public class TicketClass : OneChoiceControl
@@ -149,6 +146,10 @@ namespace BocchiTracker.ViewModels
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
+
+            inEventAggregator
+                .GetEvent<PopulateCbValuesEvent>()
+                .Subscribe(OnPopulateCbValuesEvent, ThreadOption.UIThread);
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -167,6 +168,28 @@ namespace BocchiTracker.ViewModels
             {
                 TicketAssign.Items.Add(item);
                 TicketWatchers.Items.Add(item);
+            }
+        }
+
+        private void OnPopulateCbValuesEvent()
+        {
+            TicketClass.Selected.Value      = TicketProperty.Class.Value;
+            TicketClass.EditText.Value      = TicketProperty.Class.Value;
+            TicketPriority.Selected.Value   = TicketProperty.Priority.Value;
+            TicketPriority.EditText.Value   = TicketProperty.Priority.Value;
+            TicketAssign.Selected.Value     = TicketProperty.Assign.Value;
+            TicketAssign.EditText.Value     = TicketProperty.Assign.Value.Name;
+
+            {
+                var temporaryList = new List<string>(TicketProperty.Labels);
+                foreach (var item in temporaryList)
+                    TicketLabels.RegisteredItems.Add(item);
+            }
+
+            {
+                var temporaryList = new List<UserData>(TicketProperty.Watchers);
+                foreach (var item in temporaryList)
+                    TicketWatchers.RegisteredItems.Add(item.Name);
             }
         }
     }

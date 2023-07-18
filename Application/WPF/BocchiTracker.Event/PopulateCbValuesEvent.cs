@@ -7,7 +7,5 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.Event
 {
-    public class IssueInfoLoadCompleteEvent : PubSubEvent
-    {
-    }
+    public class PopulateCbValuesEvent : PubSubEvent {}
 }

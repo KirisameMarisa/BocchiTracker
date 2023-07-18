@@ -27,22 +27,17 @@ using BocchiTracker.CrossServiceReporter;
 using System.ComponentModel.DataAnnotations;
 using Reactive.Bindings.Extensions;
 using BocchiTracker.CrossServiceUploader;
+using BocchiTracker.Data;
+using BocchiTracker.UIHelpers.Commands;
 
 namespace BocchiTracker.ViewModels
 {
-    public class PostServiceItem
-    {
-        public string Name { get; set; }
-
-        public bool IsSelected { get; set; }
-    }
-
     public class UtilityViewModel : BindableBase
     {
+        private IEventAggregator _eventAggregator;
+
         public ICommand TakeScreenshotCommand { get; private set; }
-
         public ICommand CaptureCoredumpCommand { get; private set; }
-
         public ICommand PostIssueCommand { get; private set; }
 
         [Required(ErrorMessage = "Required")]
@@ -55,18 +50,18 @@ namespace BocchiTracker.ViewModels
         private readonly IIssuePoster _issuePoster;
         private readonly IIssueAssetUploader _issueAssetUploader;
         private ProjectConfig _projectConfig;
+        private UserConfig _userConfig;
 
         public UtilityViewModel(IEventAggregator inEventAggregator, IIssuePoster inIssuePoster, IIssueAssetUploader inIssueAssetUploader, ICreateActionHandler inCreateActionHandler, IssueInfoBundle inIssueInfoBundle, IssueAssetsBundle inIssueAssetsBundle, AppStatusBundles inAppStatusBundles)
         {
             TakeScreenshotCommand   = new DelegateCommand(OnTakeScreenshot);
             CaptureCoredumpCommand  = new DelegateCommand(OnCaptureCoredump);
-            PostIssueCommand        = new DelegateCommand(async () =>
-            {
-                await OnPostIssue();
-            });
+            PostIssueCommand        = new AsyncCommand(OnPostIssue);
+
             PostServices            = new ReactiveCollection<PostServiceItem>();
 
-            inEventAggregator
+            _eventAggregator = inEventAggregator;
+            _eventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
 
@@ -81,26 +76,49 @@ namespace BocchiTracker.ViewModels
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
+            _userConfig = inParam.UserConfig;
             _projectConfig = inParam.ProjectConfig;
+            
             foreach (var item in _projectConfig.ServiceConfigs)
-                PostServices.Add(new PostServiceItem { Name = item.Service.ToString() });
+            {
+                var serviceItem = new PostServiceItem { 
+                    Name = new ReactiveProperty<string>(item.Service.ToString()),
+                    IsSelected = new ReactiveProperty<bool>(false)
+                };
+                serviceItem.IsSelected.Subscribe(_ => OnChangedPostService());
+                PostServices.Add(serviceItem);
+            }
+
+            foreach (var item in PostServices)
+            {
+                if (_userConfig != null)
+                {
+                    if (_userConfig.SelectedService.Contains(item.Name.Value))
+                        item.IsSelected.Value = true;
+                }
+            }
+            _eventAggregator.GetEvent<IssuePostedEvent>().Publish();
+        }
+
+        public void OnChangedPostService()
+        {
+            _issueInfoBundle.PostServices = PostServices
+                .Where(x => x.IsSelected.Value)
+                .Select(x => Enum.Parse<ServiceDefinitions>(x.Name.Value))
+                .ToList();
         }
 
         public async Task OnPostIssue()
         {
-            foreach(var service in PostServices) 
+            foreach(var service in _issueInfoBundle.PostServices) 
             {
-                if(service.IsSelected)
-                {
-                    ServiceDefinitions serviceEnum = Enum.Parse<ServiceDefinitions>(service.Name);
-                    string key = await _issuePoster.Post(serviceEnum, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
-                    Trace.TraceInformation($"{service.Name}, {key}");
+                string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
+                Trace.TraceInformation($"{service}, {key}");
 
-                    if (key == null)
-                        continue;
+                if (key == null)
+                    continue;
 
-                    await _issueAssetUploader.Upload(serviceEnum, key, _issueAssetsBundle, _projectConfig);
-                }
+                await _issueAssetUploader.Upload(service, key, _issueAssetsBundle, _projectConfig);
             }
         }
 
