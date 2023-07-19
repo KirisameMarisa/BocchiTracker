@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <OutputType>WinExe</OutputType>
+    <Nullable>disable</Nullable>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <Copyright>YutoArita</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    <PackageReference Include="ReactiveProperty" Version="9.2.0" />
+    <PackageReference Include="ReactiveProperty.Core" Version="9.2.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="19.2.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BocchiTracker.Client.Share\BocchiTracker.Client.Share.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configs\AuthConfigs\Github.AuthConfig.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\AuthConfigs\Redmine.AuthConfig.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\AuthConfigs\Slack.AuthConfig.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\ProjectConfigs\Default.ProjectConfig.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Default.ProjectConfig.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

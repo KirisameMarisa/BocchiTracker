@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="ReactiveProperty" Version="9.2.0" />
+    <PackageReference Include="ReactiveProperty.Core" Version="9.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\ApplicationInfoCollector\ApplicationInfoCollector.csproj" />
+    <ProjectReference Include="..\..\Models\Config\Config.csproj" />
+    <ProjectReference Include="..\..\Models\CrossServiceReporter\CrossServiceReporter.csproj" />
+    <ProjectReference Include="..\..\Models\CrossServiceUploader\CrossServiceUploader.csproj" />
+    <ProjectReference Include="..\..\Models\IssueAssetCollector\IssueAssetCollector.csproj" />
+    <ProjectReference Include="..\..\Models\IssueInfoCollector\IssueInfoCollector.csproj" />
+    <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
+    <ProjectReference Include="..\..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
+  </ItemGroup>
+
+</Project>
