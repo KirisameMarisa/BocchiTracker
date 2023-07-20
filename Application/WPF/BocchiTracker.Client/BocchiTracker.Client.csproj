@@ -10,13 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Prism.Unity" Version="8.1.97" />
-    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty" Version="9.2.0" />
-    <PackageReference Include="ReactiveProperty.Core" Version="9.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="19.2.29" />
   </ItemGroup>
 

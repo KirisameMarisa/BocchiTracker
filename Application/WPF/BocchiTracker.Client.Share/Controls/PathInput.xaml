@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Share.Controls.PathInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BocchiTracker.Client.Share.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="400">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.2*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox
+                Text="{Binding Text, RelativeSource={RelativeSource AncestorType=local:PathInput}}"
+                Foreground="White"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.HelperText="{Binding HelperText, RelativeSource={RelativeSource AncestorType=local:PathInput}}"
+                materialDesign:HintAssist.Hint="{Binding Hint, RelativeSource={RelativeSource AncestorType=local:PathInput}}"/>
+        <Button x:Name="BrowseButton" Grid.Column="1" Margin="5,1,5,1">
+            <materialDesign:PackIcon Kind="FolderSearchOutline" />
+        </Button>
+    </Grid>
+</UserControl>

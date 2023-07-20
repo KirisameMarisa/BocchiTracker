@@ -10,18 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-    <PackageReference Include="Prism.Unity" Version="8.1.97" />
-    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty" Version="9.2.0" />
-    <PackageReference Include="ReactiveProperty.Core" Version="9.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="19.2.29" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\Config\Config.csproj" />
-    <ProjectReference Include="..\..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
+    <ProjectReference Include="..\BocchiTracker.Client.Share\BocchiTracker.Client.Share.csproj" />
   </ItemGroup>
 
 </Project>

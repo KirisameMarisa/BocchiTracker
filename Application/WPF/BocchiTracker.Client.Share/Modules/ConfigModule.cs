@@ -36,7 +36,7 @@ namespace BocchiTracker.Client.Share.Modules
         {
             string projectConfigName = null;
             var args = Environment.GetCommandLineArgs();
-            if (args.Length <= 2)
+            if (args.Length >= 2)
                 projectConfigName = args[1];
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
