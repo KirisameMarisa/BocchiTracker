@@ -18,6 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Controls\MultipleChoice.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\OneChoice.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Configs\AuthConfigs\Github.AuthConfig.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

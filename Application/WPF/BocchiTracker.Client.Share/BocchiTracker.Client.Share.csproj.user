@@ -2,39 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Controls\DirectoryEntryListControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\PathInput.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\MultipleChoice.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\OneChoice.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\TextEntryListControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Controls\DirectoryEntryListControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\PathInput.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\MultipleChoice.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\OneChoice.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Controls\Resoruce.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\TextEntryListControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

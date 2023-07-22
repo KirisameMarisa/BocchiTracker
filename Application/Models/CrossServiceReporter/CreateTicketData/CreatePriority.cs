@@ -18,7 +18,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 
             var find = inConfig.PriorityMappings.Find(x => x.Definition == inBundle.TicketData.Priority);
             if (find == null)
-                return null;
+                find = new ValueMapping { Name = inBundle.TicketData.Priority };
 
             var priorities = inBundle.PriorityListService.GetData(inService);
             if (priorities == null)

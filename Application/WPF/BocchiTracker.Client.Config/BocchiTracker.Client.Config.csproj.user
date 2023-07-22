@@ -7,6 +7,21 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\Authentication.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\DirectoryEntryListControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\PathInput.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\ServiceValueMappingControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\SetURL.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

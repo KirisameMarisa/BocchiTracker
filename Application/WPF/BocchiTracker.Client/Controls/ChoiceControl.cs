@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Input;
 
-namespace BocchiTracker.Client.Share.Controls
+namespace BocchiTracker.Client.Controls
 {
     public abstract class ComboboxBase
     {

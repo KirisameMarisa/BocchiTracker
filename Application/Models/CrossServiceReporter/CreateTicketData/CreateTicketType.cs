@@ -18,7 +18,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 
             var find = inConfig.TicketTypeMappings.Find(x => x.Definition == inBundle.TicketData.TicketType);
             if (find == null)
-                return null;
+                find = new ValueMapping { Name = inBundle.TicketData.TicketType };
 
             return find.Name;
         }

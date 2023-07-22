@@ -17,4 +17,22 @@
     <ProjectReference Include="..\BocchiTracker.Client.Share\BocchiTracker.Client.Share.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controls\Authentication.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\DirectoryEntryListControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\PathInput.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\ServiceValueMappingControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\SetURL.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

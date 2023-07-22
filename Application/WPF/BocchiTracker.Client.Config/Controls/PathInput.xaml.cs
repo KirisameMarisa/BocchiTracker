@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 
-namespace BocchiTracker.Client.Share.Controls
+namespace BocchiTracker.Client.Config.Controls
 {
     /// <summary>
     /// PathInput.xaml の相互作用ロジック

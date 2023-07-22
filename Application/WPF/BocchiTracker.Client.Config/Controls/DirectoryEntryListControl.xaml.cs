@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace BocchiTracker.Client.Share.Controls
+namespace BocchiTracker.Client.Config.Controls
 {
     /// <summary>
     /// DirectoryEntryListControl.xaml の相互作用ロジック

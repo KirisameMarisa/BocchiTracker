@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Client.Share.Controls
+namespace BocchiTracker.Client.Controls
 {
     /// <summary>
     /// MultipleChoice.xaml の相互作用ロジック

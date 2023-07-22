@@ -17,7 +17,7 @@ using Unity;
 using Prism.Mvvm;
 using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.Client.Share.Controls;
+using BocchiTracker.Client.Controls;
 
 namespace BocchiTracker.Client.ViewModels
 {

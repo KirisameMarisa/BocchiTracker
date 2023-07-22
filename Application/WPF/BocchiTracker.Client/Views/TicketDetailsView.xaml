@@ -3,17 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:customUI="clr-namespace:BocchiTracker.Client.Share.Controls;assembly=BocchiTracker.Client.Share"
+             xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <customUI:OneChoice ViewModel="{Binding ConnectTo}"/>
-        <customUI:OneChoice ViewModel="{Binding TicketAssign}"/>
-        <customUI:OneChoice ViewModel="{Binding TicketClass}"/>
-        <customUI:OneChoice ViewModel="{Binding TicketPriority}"/>
-        <customUI:MultipleChoice ViewModel="{Binding TicketLabels}"/>
-        <customUI:MultipleChoice ViewModel="{Binding TicketWatchers}"/>
+        <controls:OneChoice ViewModel="{Binding ConnectTo}"/>
+        <controls:OneChoice ViewModel="{Binding TicketAssign}"/>
+        <controls:OneChoice ViewModel="{Binding TicketClass}"/>
+        <controls:OneChoice ViewModel="{Binding TicketPriority}"/>
+        <controls:MultipleChoice ViewModel="{Binding TicketLabels}"/>
+        <controls:MultipleChoice ViewModel="{Binding TicketWatchers}"/>
     </StackPanel>
 </UserControl>
