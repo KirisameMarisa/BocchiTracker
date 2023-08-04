@@ -6,41 +6,42 @@ BocchiTracker is a bug reporting tool that allows you to report issues to variou
 
 Currently supported services include:
 
-- Redmine
-- Github
-- Slack
-
-We have plans to extend the tool's capabilities to support additional services in the future:
-
-- Discord
-- Gitlab
-- JIRA
-
-Furthermore, we intend to enable file upload functionality for:
-
-- Dropbox
-- Explorer (local directories and file servers)
+|Service|Supported|
+|:--|--:|
+|Redmine|◯|
+|Github|◯|
+|Slack|◯|
+|Discord||
+|Gitlab||
+|JIRA||
 
 ## Features
 
-- Integrates with your game/application to gather application-specific information.
-- Utilizes the collected information to create detailed bug reports.
+- It can be gathered application-specific information if you Integrate plugin with game/application.
+  - [How to integration?](#)
+- Custom fields for reporting services can be supported.
 - Supports attaching screenshots and core dumps to the bug reports.
 - Offers directory monitoring to ensure thorough ticket reporting.
 
+## Feature Plans
+
+- Add to feature file upload functionality.
+  - Dropbox
+  - Explorer (Your file servers)
+- Create a sample to add the plugin to your game.
+
 ## Getting Started
+
 In Preparation...
 
+## How to build?
 
-## Reporting Issues
+In Preparation...
 
-If you encounter any issues, have feature requests, or wish to provide feedback, please feel free to do so through the following channels:
+## Problems? 
 
-- Slack: [Join our Slack workspace](https://join.slack.com/t/bocchitracker/shared_invite/zt-20lzjarua-cmYTqEiBiCSFp_A1cq36Qg)
-- Discord: [Join our Discord server](https://join.slack.com/t/bocchitracker/shared_invite/zt-20lzjarua-cmYTqEiBiCSFp_A1cq36Qg)
-
-Your input is invaluable to us and helps us improve BocchiTracker to better serve your bug tracking needs.
+If you encounter any issues, have feature requests, or wish to provide feedback, please feel free to create issues
 
 ---
 
-[License](LICENCE.txt) | [Contributing Guidelines(In Preparation...)](CONTRIBUTING.md)
+[License](LICENCE.txt)
