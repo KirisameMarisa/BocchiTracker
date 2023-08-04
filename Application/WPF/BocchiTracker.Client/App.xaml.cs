@@ -34,6 +34,7 @@ using BocchiTracker.Client.Share.Modules;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Controls;
 using Prism.Services.Dialogs;
+using System.Linq;
 
 namespace BocchiTracker.Client
 {
@@ -42,6 +43,8 @@ namespace BocchiTracker.Client
     /// </summary>
     public partial class App : PrismApplication
     {
+        public string ProjectConfigDirectory => Path.Combine("Configs", "ProjectConfigs");
+
         protected override Window CreateShell() 
         { 
             return Container.Resolve<MainWindow>(); 
@@ -68,6 +71,21 @@ namespace BocchiTracker.Client
             }
             else
             {
+                if(Directory.GetFiles(ProjectConfigDirectory, "*.yaml").Count() == 0)
+                {
+                    using (Process proc = new Process())
+                    {
+                        proc.StartInfo = new ProcessStartInfo
+                        {
+                            FileName = "BocchiTracker.Client.Config.exe",
+                            UseShellExecute = false,
+                            Arguments = $"/r"
+                        };
+                        proc.Start();
+                        proc.WaitForExit();
+                    }
+                }
+
                 var dialogService = Container.Resolve<IDialogService>();
                 dialogService.ShowDialog("ConfigFilePickerDialog", new DialogParameters(), r =>
                 {

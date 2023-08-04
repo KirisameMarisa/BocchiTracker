@@ -14,7 +14,7 @@
                 <ColumnDefinition Width="0.8*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Margin="15,5,15,5" ToolTip="Show Setting" >
+            <Button Grid.Column="0" Margin="15,5,15,5" ToolTip="Show Setting" Command="{Binding RunConfigCommand}" >
                 <materialDesign:PackIcon Kind="CogOutline" Width="18" Height="18" Foreground="White"/>
             </Button>
 

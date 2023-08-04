@@ -140,7 +140,7 @@ namespace BocchiTracker.Client.Config.ViewModels
                 var moniteredDirectory = new MonitoredDirectoryConfig();
 
                 moniteredDirectory.Directory = splits[0];
-                moniteredDirectory.Filter = splits.Count() > 1 ? splits[1] : null;
+                moniteredDirectory.Filter = splits.Count() > 1 ? splits[1].Trim() : null;
                 projectConfig.MonitoredDirectoryConfigs.Add(moniteredDirectory);
             }
             projectConfig.ExternalToolsPath.ProcDumpPath = ExternalToolPathes.ProcdumpPath.Value;

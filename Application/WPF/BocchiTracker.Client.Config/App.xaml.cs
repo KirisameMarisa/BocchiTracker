@@ -17,6 +17,8 @@ using BocchiTracker.ServiceClientAdapters;
 using System.Collections.Generic;
 using BocchiTracker.ProcessLinkQuery;
 using System.Linq;
+using System.IO;
+using System.Diagnostics;
 
 namespace BocchiTracker.Client.Config
 {
@@ -25,6 +27,8 @@ namespace BocchiTracker.Client.Config
     /// </summary>
     public partial class App : PrismApplication
     {
+        bool NeedClientRestart = false;
+
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -47,18 +51,39 @@ namespace BocchiTracker.Client.Config
             }
             projectConfigRepo.Save(projectConfig);
 
+            if(NeedClientRestart)
+            {
+                var application = "bocchitracker.client";
+                var process = Process.GetProcessesByName(application);
+                foreach (var i in process) { i.Kill(); }
+                Process.Start(application + ".exe");
+            }
             base.OnExit(e);
         }
 
         protected override void OnInitialized()
         {
-            var dialogService = Container.Resolve<IDialogService>();
-            dialogService.ShowDialog("ConfigFilePickerDialog", new DialogParameters($"EnableFileCreation={true}"), r =>
+            string[] cmds = System.Environment.GetCommandLineArgs();
+            var configRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
+            if (cmds.Length > 1)
             {
-                var filename = r.Parameters.GetValue<string>("Config");
-                var configRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-                configRepo.SetLoadFilename(filename);
-            });
+                var filename = cmds[1];
+                if(File.Exists(filename))
+                    configRepo.SetLoadFilename(cmds[1]);
+            }
+
+            if(cmds.Contains("/r"))
+                NeedClientRestart = true;
+
+            if(string.IsNullOrEmpty(configRepo.GetLoadFilename()) || !File.Exists(configRepo.GetLoadFilename()))
+            {
+                var dialogService = Container.Resolve<IDialogService>();
+                dialogService.ShowDialog("ConfigFilePickerDialog", new DialogParameters($"EnableFileCreation={true}"), r =>
+                {
+                    var filename = r.Parameters.GetValue<string>("Config");
+                    configRepo.SetLoadFilename(filename);
+                });
+            }
 
             base.OnInitialized();
 
