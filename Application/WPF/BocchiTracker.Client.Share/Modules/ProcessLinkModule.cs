@@ -15,16 +15,6 @@ namespace BocchiTracker.Client.Share.Modules
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.AppBasicInfo, new ProcessDataAppBasicInfo());
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.PlayerPosition, new ProcessDataPlayerPosition());
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.ScreenshotData, new ProcessDataScreenshotData());
-
-            var configRepo = containerProvider.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var projectConfig = configRepo.Load();
-            //!< force exit?
-            if (projectConfig == null)
-                return;
-
-            //!< Start connection
-            var connection = containerProvider.Resolve<Connection>();
-            _ = connection.StartAsync(projectConfig.Port);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

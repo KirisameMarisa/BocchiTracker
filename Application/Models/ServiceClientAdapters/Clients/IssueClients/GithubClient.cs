@@ -21,11 +21,17 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private long? _repoId;
         private bool _isAuthenticated;
 
-        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
             if (string.IsNullOrEmpty(inAuthConfig.APIKey))
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} APIKey is null");
+                return false;
+            }
+
+            if(string.IsNullOrEmpty(inURL))
+            {
+                Trace.TraceError($"{ServiceDefinitions.Github} URL is null or empty");
                 return false;
             }
 

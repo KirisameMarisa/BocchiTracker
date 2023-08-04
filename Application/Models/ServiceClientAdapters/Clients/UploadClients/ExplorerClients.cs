@@ -9,7 +9,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
 {
     public class ExplorerClients : IServiceUploadClient
     {
-        public Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
 #if WINDOWS
             return Task.FromResult(true);

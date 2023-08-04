@@ -43,7 +43,7 @@ namespace BocchiTracker.Tests.Config
             var config = new ProjectConfig();
 
             // Act
-            var service_config = config.GetServiceConfig(ServiceDefinitions.Github);
+            var service_config = config.GetServiceConfig(ServiceDefinitions.Discord);
 
             // Assert
             Assert.Null(service_config);

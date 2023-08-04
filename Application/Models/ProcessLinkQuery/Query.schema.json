@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "definitions": {
+    "BocchiTracker_ProcessLinkQuery_Queries_QueryID" : {
+      "type" : "string",
+      "enum": ["NONE", "AppBasicInfo", "RequestQuery", "PlayerPosition", "ScreenshotData"]
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" : {
+      "type" : "object",
+      "properties" : {
+        "width" : {
+                "type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647
+              },
+        "height" : {
+                "type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647
+              },
+        "data" : {
+                "type" : "array", "items" : {"type" : "integer", "minimum" : 0, "maximum" :255}
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" : {
+      "type" : "object",
+      "properties" : {
+        "x" : {
+                "type" : "number"
+              },
+        "y" : {
+                "type" : "number"
+              },
+        "z" : {
+                "type" : "number"
+              },
+        "stage" : {
+                "type" : "string"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" : {
+      "type" : "object",
+      "properties" : {
+        "pid" : {
+                "type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647
+              },
+        "app_name" : {
+                "type" : "string"
+              },
+        "args" : {
+                "type" : "string"
+              },
+        "platform" : {
+                "type" : "string"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_RequestQuery" : {
+      "type" : "object",
+      "properties" : {
+        "query_id" : {
+                "type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_Packet" : {
+      "type" : "object",
+      "properties" : {
+        "query_id_type" : {
+                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_QueryID"
+              },
+        "query_id" : {
+                "anyOf": [{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_RequestQuery" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" }]
+              }
+      },
+      "additionalProperties" : false
+    }
+  },
+  "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Packet"
+}

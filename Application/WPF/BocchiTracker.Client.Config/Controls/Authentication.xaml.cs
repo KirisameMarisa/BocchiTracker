@@ -25,7 +25,7 @@ namespace BocchiTracker.Client.Config.Controls
     public partial class Authentication : UserControl
     {
         public static readonly DependencyProperty AuthenticationTypeProperty =
-            DependencyProperty.Register("AuthType", typeof(AuthenticationType), typeof(Authentication), new PropertyMetadata(AuthTypePropertyChanged));
+            DependencyProperty.Register("AuthType", typeof(AuthenticationType), typeof(Authentication), new PropertyMetadata(AuthenticationType.None, AuthTypePropertyChanged));
 
         public AuthenticationType AuthType
         {
@@ -34,7 +34,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty UsernameTextProperty =
-            DependencyProperty.Register("UsernameText", typeof(string), typeof(Authentication), new PropertyMetadata(null));
+            DependencyProperty.Register("UsernameText", typeof(string), typeof(Authentication), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string UsernameText
         {
@@ -43,7 +43,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty PasswordTextProperty =
-            DependencyProperty.Register("PasswordText", typeof(string), typeof(Authentication), new PropertyMetadata(null));
+            DependencyProperty.Register("PasswordText", typeof(string), typeof(Authentication), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string PasswordText
         {
@@ -52,7 +52,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty APIKeyTextProperty =
-            DependencyProperty.Register("APIKeyText", typeof(string), typeof(Authentication), new PropertyMetadata(null));
+            DependencyProperty.Register("APIKeyText", typeof(string), typeof(Authentication), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string APIKeyText
         {

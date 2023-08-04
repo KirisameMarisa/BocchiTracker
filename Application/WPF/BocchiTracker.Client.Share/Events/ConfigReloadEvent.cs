@@ -1,4 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.Config;
+using BocchiTracker.Config.Configs;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace BocchiTracker.Client.Share.Events
         public ProjectConfig ProjectConfig { get; set; }
 
         public UserConfig UserConfig { get; set; }
+
+        public Dictionary<ServiceDefinitions, AuthConfig> AuthConfigs { get; set; } = new Dictionary<ServiceDefinitions, AuthConfig>();
 
         public ConfigReloadEventParameter(ProjectConfig inProjectConfig, UserConfig userConfig)
         {

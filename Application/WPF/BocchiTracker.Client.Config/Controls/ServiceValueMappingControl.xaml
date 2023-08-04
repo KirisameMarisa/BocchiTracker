@@ -8,11 +8,6 @@
              xmlns:conveter="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="450">
-    
-    <UserControl.Resources>
-        <conveter:AuthenticationConverter x:Key="AuthenticationConverter" />
-    </UserControl.Resources>
-    
     <StackPanel Background="{DynamicResource MaterialDesignPaper}">
         <Grid Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
@@ -38,7 +33,7 @@
                                 <Button Margin="15,0,0,0" 
                                         Width="48" Height="24" 
                                         Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=local:ServiceValueMappingControl}}"
-                                        CommandParameter="{Binding Definition}">
+                                        CommandParameter="{Binding Definition.Value}">
                                     <materialDesign:PackIcon Kind="Close" />
                                 </Button>
                             </DataTemplate>
@@ -47,40 +42,28 @@
                     <GridViewColumn Header="Definition">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Label Margin="15,0,0,0" HorizontalContentAlignment="Center" Content="{Binding Definition}" MinWidth="60"/>
+                                <Label Margin="15,0,0,0" Content="{Binding Definition.Value}" MinWidth="60" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Redmine">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Margin="15,0,0,0" Text="{Binding Redmine}" MinWidth="60" VerticalAlignment="Center" VerticalContentAlignment="Center">
-                                    <TextBox.Visibility>
-                                        <Binding Converter="{StaticResource AuthenticationConverter}" ConverterParameter="Redmine"/>
-                                    </TextBox.Visibility>
-                                </TextBox>
+                                <TextBox Margin="15,0,0,0" Text="{Binding Redmine.Value}" MinWidth="60" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Github">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Margin="15,0,0,0" Text="{Binding Github}" MinWidth="60">
-                                    <TextBox.Visibility>
-                                        <Binding Converter="{StaticResource AuthenticationConverter}" ConverterParameter="Github"/>
-                                    </TextBox.Visibility>
-                                </TextBox>
+                                <TextBox Margin="15,0,0,0" Text="{Binding Github.Value}" MinWidth="60" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Slack">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Margin="15,0,0,0" Text="{Binding Slack}" MinWidth="60">
-                                    <TextBox.Visibility>
-                                        <Binding Converter="{StaticResource AuthenticationConverter}" ConverterParameter="Slack"/>
-                                    </TextBox.Visibility>
-                                </TextBox>
+                                <TextBox Margin="15,0,0,0" Text="{Binding Slack.Value}" MinWidth="60" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

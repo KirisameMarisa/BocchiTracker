@@ -9,7 +9,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.UploadClients
 {
     public class DropboxClients : IServiceUploadClient
     {
-        public Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
             throw new NotImplementedException();
         }

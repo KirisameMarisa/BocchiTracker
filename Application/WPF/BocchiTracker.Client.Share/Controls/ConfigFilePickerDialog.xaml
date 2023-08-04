@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Share.Controls.ConfigFilePickerDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BocchiTracker.Client.Share.Controls"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="85" d:DesignWidth="400" MinWidth="400">
+    <StackPanel Background="{DynamicResource MaterialDesignPaper}">
+        
+        <ComboBox 
+            ItemsSource="{Binding ItemsSource}"
+            Text="{Binding Text.Value}"
+            materialDesign:HintAssist.Hint="{Binding HintText.Value}"
+            Margin="5"
+            FontSize="16"
+            Foreground="White"
+            IsTextSearchEnabled="False"
+            IsEditable="{Binding EnableFileCreation.Value}"/>
+        <Button Command="{Binding CloseDialogCommand}" Content="OK" Margin="5" Width="100" HorizontalAlignment="Right"/>
+    </StackPanel>
+</UserControl>

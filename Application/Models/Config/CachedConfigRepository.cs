@@ -18,6 +18,16 @@ namespace BocchiTracker.Config
             _isCacheValid = false;
         }
 
+        public void SetLoadFilename(string inFilename)
+        {
+            _configRepository.SetLoadFilename(inFilename);
+        }
+
+        public string GetLoadFilename()
+        {
+            return _configRepository.GetLoadFilename();
+        }
+
         public T? Load()
         {
             if (_isCacheValid)

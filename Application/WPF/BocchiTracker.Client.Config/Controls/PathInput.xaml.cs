@@ -26,7 +26,7 @@ namespace BocchiTracker.Client.Config.Controls
     public partial class PathInput : UserControl
     {
         public static readonly DependencyProperty IsFolderPickerProperty =
-            DependencyProperty.Register("IsFolderPicker", typeof(bool), typeof(PathInput), new PropertyMetadata(null));
+            DependencyProperty.Register("IsFolderPicker", typeof(bool), typeof(PathInput), new PropertyMetadata(false));
 
         public bool IsFolderPicker
         {
@@ -35,7 +35,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(PathInput), new PropertyMetadata(null));
+            DependencyProperty.Register("Text", typeof(string), typeof(PathInput), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text
         {

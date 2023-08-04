@@ -48,15 +48,17 @@ namespace BocchiTracker.Client.ViewModels
 
         public void OnCloseCommand()
         {
-            var issueInfoBundle     = (Application.Current as PrismApplication).Container.Resolve<IssueInfoBundle>();
-            var issueAssetsBundle   = (Application.Current as PrismApplication).Container.Resolve<IssueAssetsBundle>();
-            var repository          = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<UserConfig>>();
+            var issueInfoBundle         = (Application.Current as PrismApplication).Container.Resolve<IssueInfoBundle>();
+            var issueAssetsBundle       = (Application.Current as PrismApplication).Container.Resolve<IssueAssetsBundle>();
+            var projectConfigrepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
+            var userConfigrepository    = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<UserConfig>>();
 
             UserConfig config = new UserConfig();
-            config.DraftUploadFiles = issueAssetsBundle.Bundle.Select(x => x.FullName).ToList();
-            config.DraftTicketData = issueInfoBundle.TicketData;
-            config.SelectedService = issueInfoBundle.PostServices.Select(x => x.ToString()).ToList();
-            repository.Save(config);
+            config.ProjectConfigFilename    = projectConfigrepository.GetLoadFilename();
+            config.DraftUploadFiles         = issueAssetsBundle.Bundle.Select(x => x.FullName).ToList();
+            config.DraftTicketData          = issueInfoBundle.TicketData;
+            config.SelectedService          = issueInfoBundle.PostServices.Select(x => x.ToString()).ToList();
+            userConfigrepository.Save(config);
         }
     }
 }

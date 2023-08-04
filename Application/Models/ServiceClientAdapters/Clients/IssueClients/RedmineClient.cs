@@ -28,8 +28,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private string? _projectName;
         private bool _isAuthenticated;
 
-        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (string.IsNullOrEmpty(inURL))
+            {
+                Trace.TraceError($"{ServiceDefinitions.Redmine} URL is null or empty");
+                return false;
+            }
+
             inURL = inURL.TrimEnd('/');
 
             var segments = inURL.Split('/');

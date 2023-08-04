@@ -19,7 +19,8 @@ namespace BocchiTracker.Tests.Config
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
+            var configRepository = new ConfigRepository<ProjectConfig>(fileSystemMock.Object);
+            configRepository.SetLoadFilename(filepath);
             var config = new ProjectConfig
             {
                 ServiceConfigs = new List<ServiceConfig>
@@ -65,8 +66,8 @@ ServiceConfigs:
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
-
+            var configRepository = new ConfigRepository<ProjectConfig>(fileSystemMock.Object);
+            configRepository.SetLoadFilename(filepath);
             var yaml = "Invalid YAML";
 
             using var memory_stream = new MemoryStream();
@@ -94,7 +95,8 @@ ServiceConfigs:
             // Arrange
             string filepath = "config.yaml";
             var fileSystemMock = new Mock<IFileSystem>();
-            var configRepository = new ConfigRepository<ProjectConfig>(filepath, fileSystemMock.Object);
+            var configRepository = new ConfigRepository<ProjectConfig>(fileSystemMock.Object);
+            configRepository.SetLoadFilename(filepath);
             var config = new ProjectConfig
             {
                 ServiceConfigs = new List<ServiceConfig>

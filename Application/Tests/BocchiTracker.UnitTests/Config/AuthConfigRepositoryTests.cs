@@ -25,7 +25,8 @@ APIKey: testapikey";
                 { filePath, new MockFileData(fileContent) }
             });
 
-            var repo = new ConfigRepository<AuthConfig>(filePath, fileSystemMock);
+            var repo = new ConfigRepository<AuthConfig>(fileSystemMock);
+            repo.SetLoadFilename(filePath);
 
             // Act
             var result = repo.Load();

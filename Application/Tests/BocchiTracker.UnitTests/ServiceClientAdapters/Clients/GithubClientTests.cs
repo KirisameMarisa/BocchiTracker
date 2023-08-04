@@ -34,7 +34,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             }
 
             {
-                var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
+                var repository = new ConfigRepository<ProjectConfig>(new FileSystem());
+                repository.SetLoadFilename(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"));
                 var config = repository.Load();
                 _project_url = config.GetServiceConfig(ServiceDefinitions.Github).URL;
             }

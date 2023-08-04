@@ -12,17 +12,7 @@ namespace BocchiTracker.Client.Share.Modules
 {
     public class ServiceClientAdaptersModule : IModule
     {
-        public void OnInitialized(IContainerProvider containerProvider) 
-        {
-            var cacheProvider = containerProvider.Resolve<ICacheProvider>();
-            var configRepo = containerProvider.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var projectConfig = configRepo.Load();
-            //!< force exit?
-            if (projectConfig == null)
-                return;
-
-            cacheProvider.SetCacheDirectory(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory);
-        }
+        public void OnInitialized(IContainerProvider containerProvider)  { }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {

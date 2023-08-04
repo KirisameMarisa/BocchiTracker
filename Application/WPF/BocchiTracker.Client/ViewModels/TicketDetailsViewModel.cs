@@ -154,7 +154,7 @@ namespace BocchiTracker.Client.ViewModels
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            foreach (var item in inParam.ProjectConfig.Classes)
+            foreach (var item in inParam.ProjectConfig.IssueGrades)
                 TicketClass.Items.Add(item);
 
             foreach (var item in inParam.ProjectConfig.Priorities)

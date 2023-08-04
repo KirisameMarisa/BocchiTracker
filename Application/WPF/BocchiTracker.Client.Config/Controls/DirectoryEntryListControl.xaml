@@ -4,9 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BocchiTracker.Client.Config.Controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:converters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="450">
+    
+    <UserControl.Resources>
+        <converters:PairStringValueConverter x:Key="PairStringValueConverter" />
+    </UserControl.Resources>
+    
     <StackPanel Background="{DynamicResource MaterialDesignPaper}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -16,7 +22,7 @@
                 <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
             
-            <TextBox Grid.Column="0"
+            <TextBox x:Name="PathTextBox" Grid.Column="0"
                 Text="{Binding Path, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
                 Foreground="White"  Margin="5,1,5,1"
                 VerticalContentAlignment="Center"
@@ -24,7 +30,7 @@
                 materialDesign:HintAssist.HelperText="{Binding HelperText, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
                 materialDesign:HintAssist.Hint="[Example] C:\Path\Path1"
                 materialDesign:HintAssist.HelperTextFontSize="12"/>
-            <TextBox Grid.Column="1"
+            <TextBox x:Name="FilterTextBox" Grid.Column="1"
                 Text="{Binding Filter, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
                 Foreground="White"  Margin="5,1,5,1"
                 HorizontalContentAlignment="Center"
@@ -39,8 +45,13 @@
             </Button>
             <Button Grid.Column="3" 
                     Margin="5,1,5,1"
-                    Command="{Binding AddItemCommand, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
-                    CommandParameter="{Binding}">
+                    Command="{Binding AddItemCommand, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource PairStringValueConverter}">
+                        <Binding ElementName="PathTextBox" Path="Text" />
+                        <Binding ElementName="FilterTextBox" Path="Text" />
+                    </MultiBinding>
+                </Button.CommandParameter>
                 <materialDesign:PackIcon Kind="PlusThick" />
             </Button>
         </Grid>

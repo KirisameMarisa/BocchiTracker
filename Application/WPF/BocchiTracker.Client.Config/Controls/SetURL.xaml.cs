@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +20,7 @@ namespace BocchiTracker.Client.Config.Controls
     public partial class SetURL : UserControl
     {
         public static readonly DependencyProperty URLTextProperty =
-            DependencyProperty.Register("URLText", typeof(string), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("URLText", typeof(string), typeof(SetURL), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string URLText
         {
@@ -27,7 +29,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty URLHintProperty =
-            DependencyProperty.Register("URLHint", typeof(string), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("URLHint", typeof(string), typeof(SetURL), new PropertyMetadata(null));
 
         public string URLHint
         {
@@ -36,7 +38,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty ProxyURLTextProperty =
-            DependencyProperty.Register("ProxyURLText", typeof(string), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("ProxyURLText", typeof(string), typeof(SetURL), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string ProxyURLText
         {
@@ -45,7 +47,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty ProxyURLHintProperty =
-            DependencyProperty.Register("ProxyURLHint", typeof(string), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("ProxyURLHint", typeof(string), typeof(SetURL), new PropertyMetadata(null));
 
         public string ProxyURLHint
         {
@@ -54,7 +56,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty EnableInputProxyProperty =
-            DependencyProperty.Register("EnableInputProxy", typeof(bool), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("EnableInputProxy", typeof(bool), typeof(SetURL), new PropertyMetadata(false));
 
         public bool EnableInputProxy
         {

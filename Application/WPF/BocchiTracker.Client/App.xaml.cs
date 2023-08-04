@@ -32,6 +32,8 @@ using BocchiTracker.IssueAssetCollector.Handlers;
 using Prism.Modularity;
 using BocchiTracker.Client.Share.Modules;
 using BocchiTracker.Data;
+using BocchiTracker.Client.Share.Controls;
+using Prism.Services.Dialogs;
 
 namespace BocchiTracker.Client
 {
@@ -55,6 +57,25 @@ namespace BocchiTracker.Client
 
         protected override void OnInitialized()
         {
+            var projectConfigRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
+            var userConfig = LoadUserConfig(Container);
+            if (
+                    userConfig != null 
+                &&  !string.IsNullOrEmpty(userConfig.ProjectConfigFilename) 
+                &&  System.IO.File.Exists(userConfig.ProjectConfigFilename)) 
+            {
+                projectConfigRepo.SetLoadFilename(userConfig.ProjectConfigFilename);
+            }
+            else
+            {
+                var dialogService = Container.Resolve<IDialogService>();
+                dialogService.ShowDialog("ConfigFilePickerDialog", new DialogParameters(), r =>
+                {
+                    var filename = r.Parameters.GetValue<string>("Config");
+                    projectConfigRepo.SetLoadFilename(filename);
+                });
+            }
+            
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
@@ -62,17 +83,25 @@ namespace BocchiTracker.Client
             regionManager.RegisterViewWithRegion("TicketDetailsRegion", typeof(TicketDetailsView));
             regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
-
-            var userConfig                  = LoadUserConfig(Container);
+            
             var projectConfig               = LoadProjectConfig(Container);
             //!< force exit?
             if (projectConfig == null)
                 return;
 
+            if (!CreateWorkingDirectory(projectConfig))
+                return;
+
+            var cacheProvider               = Container.Resolve<ICacheProvider>();
+            var connection                  = Container.Resolve<Connection>();
             var dataRepository              = Container.Resolve<IDataRepository>();
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
             var autoConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+
+            _ = connection.StartAsync(projectConfig.Port);
+
+            cacheProvider.SetCacheDirectory(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory);
 
             Task.Run(async () =>
             {
@@ -102,10 +131,21 @@ namespace BocchiTracker.Client
             return configRepo.Load();
         }
 
+        public bool CreateWorkingDirectory(ProjectConfig inProjectConfig)
+        {
+            try
+            {
+                Directory.CreateDirectory(inProjectConfig.FileSaveDirectory);
+                return Directory.Exists(inProjectConfig.FileSaveDirectory);
+            }
+            catch { return false; }
+        }
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
+            containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

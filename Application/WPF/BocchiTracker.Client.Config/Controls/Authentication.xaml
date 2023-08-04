@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:BocchiTracker.Client.Config.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="300">
     
@@ -11,6 +12,7 @@
 
         <StackPanel x:Name="Input_UserAndPass">
             <TextBox
+                Text="{Binding UsernameText, RelativeSource={RelativeSource AncestorType=local:Authentication}}"
                 x:Name="Username"
                 Foreground="White"
                 FontSize="16"

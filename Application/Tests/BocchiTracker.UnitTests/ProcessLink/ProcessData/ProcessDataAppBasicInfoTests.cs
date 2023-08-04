@@ -59,10 +59,10 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             mockedEvent.Verify(x => x.Publish(It.Is<AppStatusQueryEventParameter>(
                    m => m.AppStatus.ClientID == cClientID
                 && m.AppStatus.QueryID == (byte)QueryID.AppBasicInfo
-                && m.AppStatus.Status["Pid"] == app_pid.ToString()
-                && m.AppStatus.Status["AppName"] == cAppName
-                && m.AppStatus.Status["Args"] == cArgs
-                && m.AppStatus.Status["Platform"] == cPlatform
+                && m.AppStatus.Status["AppBasicInfo.pid"] == app_pid.ToString()
+                && m.AppStatus.Status["AppBasicInfo.app_name"] == cAppName
+                && m.AppStatus.Status["AppBasicInfo.args"] == cArgs
+                && m.AppStatus.Status["AppBasicInfo.platform"] == cPlatform
             )));
         }
     }

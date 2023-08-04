@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,15 @@ namespace BocchiTracker.Client.Config.Controls
     /// </summary>
     public partial class DirectoryEntryListControl : UserControl
     {
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(DirectoryEntryListControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
         public static readonly DependencyProperty HelperTextProperty =
             DependencyProperty.Register("HelperText", typeof(string), typeof(DirectoryEntryListControl), new PropertyMetadata(null));
 
@@ -32,7 +42,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(DirectoryEntryListControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Path", typeof(string), typeof(DirectoryEntryListControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Path
         {
@@ -41,7 +51,7 @@ namespace BocchiTracker.Client.Config.Controls
         }
 
         public static readonly DependencyProperty FilterProperty =
-            DependencyProperty.Register("Filter", typeof(string), typeof(DirectoryEntryListControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Filter", typeof(string), typeof(DirectoryEntryListControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Filter
         {

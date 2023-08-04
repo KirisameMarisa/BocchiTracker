@@ -13,7 +13,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
     {
         public string? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            if (inConfig.PriorityMappings == null || inBundle.TicketData.Priority == null)
+            if (inConfig.PriorityMappings.Count == 0 || inBundle.TicketData.Priority == null)
                 return null;
 
             var find = inConfig.PriorityMappings.Find(x => x.Definition == inBundle.TicketData.Priority);

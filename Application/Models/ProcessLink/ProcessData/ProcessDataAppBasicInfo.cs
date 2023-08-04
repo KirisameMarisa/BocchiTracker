@@ -16,10 +16,10 @@ namespace BocchiTracker.ProcessLink.ProcessData
         {
             var data = inPacket.QueryIdAsAppBasicInfo();
             var status = new Dictionary<string, string>();
-            status["Pid"] = data.Pid.ToString();
-            status["AppName"] = data.AppName;
-            status["Args"] = data.Args;
-            status["Platform"] = data.Platform;
+            status["AppBasicInfo.pid"] = data.Pid.ToString();
+            status["AppBasicInfo.app_name"] = data.AppName;
+            status["AppBasicInfo.args"] = data.Args;
+            status["AppBasicInfo.platform"] = data.Platform;
 
             inEventAggregator
                 .GetEvent<AppStatusQueryEvent>()

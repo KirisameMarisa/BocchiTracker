@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
+using System.Diagnostics;
+using BocchiTracker.Config;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -15,8 +17,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     {
         private Jira? _client;
 
-        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (string.IsNullOrEmpty(inURL))
+            {
+                Trace.TraceError($"{ServiceDefinitions.JIRA} URL is null or empty");
+                return false;
+            }
+
             try
             {
                 var settings = inProxyURL != null

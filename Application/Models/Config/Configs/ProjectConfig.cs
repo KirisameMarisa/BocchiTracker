@@ -30,13 +30,15 @@ namespace BocchiTracker.Config.Configs
 
         public string?                          DescriptionFormat { get; set; }
 
-        public List<ValueMapping>?              PriorityMappings { get; set; }
+        public List<ValueMapping>               PriorityMappings { get; set; } = new List<ValueMapping>();
 
-        public List<ValueMapping>?              TicketTypeMappings { get; set; }
+        public List<ValueMapping>               TicketTypeMappings { get; set; } = new List<ValueMapping>();
 
-        public List<ValueMapping>?              QueryFieldMappings { get; set; }
+        public List<ValueMapping>               IssueGradeMappings { get; set; } = new List<ValueMapping>();
 
-        public List<ValueMapping>?              DefaultValue { get; set;}
+        public List<ValueMapping>               QueryFieldMappings { get; set; } = new List<ValueMapping>();
+
+        public List<ValueMapping>               DefaultValue { get; set;} = new List<ValueMapping>();
     }
 
     public class ExternalToolsPath
@@ -46,28 +48,33 @@ namespace BocchiTracker.Config.Configs
 
     public class ProjectConfig
     {
-        public int Port { get; set; } = 8888;
+        public int Port { get; set; }                  = 8888;
 
-        public List<string>? TicketTypes { get; set; }
+        public List<string> TicketTypes { get; set; }  = new List<string> { "Bug", "Task", "Question" };
 
-        public List<string>? Priorities { get; set; }
+        public List<string> Priorities { get; set; }   = new List<string> { "Low", "Middle", "High" };
 
-        public List<string>? Classes { get; set; }
+        public List<string> IssueGrades { get; set; }  = new List<string> { "A", "B", "C" };
 
-        public string FileSaveDirectory { get; set; } = Path.Combine(Environment.CurrentDirectory, "FileSave");
+        public List<string> QueryFields { get; set; } = new List<string>();
 
-        public List<MonitoredDirectoryConfig>? MonitoredDirectoryConfigs { get; set; }
+        public string FileSaveDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "FileSave");
+
+        public List<MonitoredDirectoryConfig> MonitoredDirectoryConfigs { get; set; } = new List<MonitoredDirectoryConfig>();
 
         public string? CacheDirectory { get; set; }
 
         public ExternalToolsPath ExternalToolsPath { get; set; } = new ExternalToolsPath();
 
-        public List<ServiceConfig>? ServiceConfigs { get; set; }
+        public List<ServiceConfig> ServiceConfigs { get; set; } = new List<ServiceConfig> 
+        {
+            new ServiceConfig { Service = ServiceDefinitions.Redmine    },
+            new ServiceConfig { Service = ServiceDefinitions.Github     },
+            new ServiceConfig { Service = ServiceDefinitions.Slack      },
+        };
 
         public ServiceConfig? GetServiceConfig(ServiceDefinitions inServiceDefinitions)
         {
-            if (ServiceConfigs == null)
-                return null;
             return ServiceConfigs.Find(x => x.Service == inServiceDefinitions);
         }
     }

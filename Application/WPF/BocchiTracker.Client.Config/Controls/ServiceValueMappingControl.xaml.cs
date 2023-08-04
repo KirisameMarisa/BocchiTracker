@@ -19,7 +19,7 @@ namespace BocchiTracker.Client.Config.Controls
     public partial class ServiceValueMappingControl : UserControl
     {
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ServiceValueMapping>), typeof(ServiceValueMappingControl), new PropertyMetadata(null));
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ServiceValueMapping>), typeof(ServiceValueMappingControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public IEnumerable<ServiceValueMapping> ItemsSource
         {
