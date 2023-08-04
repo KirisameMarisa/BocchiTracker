@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Config.Controls.DirectoryEntryListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BocchiTracker.Client.Config.Controls"
+             xmlns:converters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="450">
+    
+    <UserControl.Resources>
+        <converters:PairStringValueConverter x:Key="PairStringValueConverter" />
+    </UserControl.Resources>
+    
+    <StackPanel Background="{DynamicResource MaterialDesignPaper}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox x:Name="PathTextBox" Grid.Column="0"
+                Text="{Binding Path, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
+                Foreground="White"  Margin="5,1,5,1"
+                VerticalContentAlignment="Center"
+                FontSize="14"     
+                materialDesign:HintAssist.HelperText="{Binding HelperText, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
+                materialDesign:HintAssist.Hint="[Example] C:\Path\Path1"
+                materialDesign:HintAssist.HelperTextFontSize="12"/>
+            <TextBox x:Name="FilterTextBox" Grid.Column="1"
+                Text="{Binding Filter, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
+                Foreground="White"  Margin="5,1,5,1"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                FontSize="14"
+                materialDesign:HintAssist.HelperText="Filename filter"
+                materialDesign:HintAssist.Hint="*.txt"
+                materialDesign:HintAssist.HelperTextFontSize="12"/>
+            <Button Grid.Column="2" 
+                    x:Name="BrowseButton"  Margin="5,1,5,1">
+                <materialDesign:PackIcon Kind="FolderSearchOutline" />
+            </Button>
+            <Button Grid.Column="3" 
+                    Margin="5,1,5,1"
+                    Command="{Binding AddItemCommand, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource PairStringValueConverter}">
+                        <Binding ElementName="PathTextBox" Path="Text" />
+                        <Binding ElementName="FilterTextBox" Path="Text" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+                <materialDesign:PackIcon Kind="PlusThick" />
+            </Button>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox/>
+        </Grid>
+        <ListView ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}">
+            <ListView.View>
+                <GridView >
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Header="Value">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Remove">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="48" Height="24" 
+                                        Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=local:DirectoryEntryListControl}}"
+                                        CommandParameter="{Binding}">
+                                    <materialDesign:PackIcon Kind="Close" VerticalAlignment="Center" Width="12" Height="12"/>
+                                </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </StackPanel>
+</UserControl>

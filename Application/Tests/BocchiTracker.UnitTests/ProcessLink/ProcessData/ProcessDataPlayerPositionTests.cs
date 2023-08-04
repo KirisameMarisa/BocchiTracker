@@ -54,10 +54,10 @@ namespace BocchiTracker.Tests.ProcessLink.ProcessData
             mockedEvent.Verify(x => x.Publish(It.Is<AppStatusQueryEventParameter>(
                    m => m.AppStatus.ClientID == cClientID
                 && m.AppStatus.QueryID == (byte)QueryID.PlayerPosition
-                && m.AppStatus.Status["X"] == PosX.ToString()
-                && m.AppStatus.Status["Y"] == PosY.ToString()
-                && m.AppStatus.Status["Z"] == PosZ.ToString()
-                && m.AppStatus.Status["Stage"] == cStage
+                && m.AppStatus.Status["PlayerPosition.x"] == PosX.ToString()
+                && m.AppStatus.Status["PlayerPosition.y"] == PosY.ToString()
+                && m.AppStatus.Status["PlayerPosition.z"] == PosZ.ToString()
+                && m.AppStatus.Status["PlayerPosition.stage"] == cStage
             )));
         }
     }

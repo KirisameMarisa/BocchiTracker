@@ -5,5 +5,11 @@
   <ItemGroup>
     <PackageReference Include="Google.FlatBuffers" Version="23.5.26" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Query.schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Controls.OneChoice"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:BocchiTracker.Client.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             mc:Ignorable="d" d:Width="300">
+    <Grid>
+        <ComboBox 
+            x:Name="comboBox"
+            ItemsSource="{Binding ViewModel.FilteredItems, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
+            SelectedItem="{Binding ViewModel.Selected.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}, Mode=TwoWay}"
+            Text="{Binding ViewModel.EditText.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}, Mode=TwoWay}"
+            Foreground="White"
+            IsDropDownOpen="{Binding ViewModel.IsOpen.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
+            IsTextSearchEnabled="False"
+            IsEditable="True"
+            StaysOpenOnEdit="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            materialDesign:HintAssist.Hint="{Binding ViewModel.HintText.Value, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"
+            FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+            ItemTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource AncestorType=local:OneChoice}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="GotFocus">
+                    <i:InvokeCommandAction Command="{Binding ViewModel.ShowItemCommand, RelativeSource={RelativeSource AncestorType=local:OneChoice}}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ComboBox.InputBindings>
+                <KeyBinding Command="{Binding ViewModel.ReturnKeyCommand, RelativeSource={RelativeSource AncestorType=local:OneChoice}}" CommandParameter="{Binding Text, ElementName=comboBox}" Key="Return" />
+            </ComboBox.InputBindings>
+        </ComboBox>
+    </Grid>
+</UserControl>

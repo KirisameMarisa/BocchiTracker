@@ -33,7 +33,9 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             }
 
             {
-                var repository = new ConfigRepository<ProjectConfig>(Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml"), new FileSystem());
+                var repository = new ConfigRepository<ProjectConfig>(new FileSystem());
+                var filepath = Path.Combine("Resources", "Configs", "ProjectConfigs", "Test.ProjectConfig.yaml");
+                repository.SetLoadFilename(filepath);
                 var config = repository.Load();
                 _channel = config.GetServiceConfig(ServiceDefinitions.Slack).URL;
             }

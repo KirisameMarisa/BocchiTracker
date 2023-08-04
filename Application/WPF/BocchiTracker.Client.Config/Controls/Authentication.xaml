@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Config.Controls.Authentication"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:BocchiTracker.Client.Config.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="300">
+    
+    <StackPanel Background="{DynamicResource MaterialDesignPaper}">
+
+        <StackPanel x:Name="Input_UserAndPass">
+            <TextBox
+                Text="{Binding UsernameText, RelativeSource={RelativeSource AncestorType=local:Authentication}}"
+                x:Name="Username"
+                Foreground="White"
+                FontSize="16"
+                materialDesign:HintAssist.Hint="Username"/>
+            <PasswordBox
+                x:Name="Password"
+                Foreground="White"
+                FontSize="16"
+                materialDesign:HintAssist.Hint="Password"
+                materialDesign:TextFieldAssist.HasClearButton="True" />
+        </StackPanel>
+        
+        <StackPanel x:Name="Input_APIKey">
+            <PasswordBox
+                x:Name="APIKey"
+                Foreground="White"
+                FontSize="16"
+                materialDesign:HintAssist.Hint="APIKey"
+                materialDesign:TextFieldAssist.HasClearButton="True"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

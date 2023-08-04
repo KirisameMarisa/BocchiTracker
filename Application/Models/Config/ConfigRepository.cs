@@ -12,13 +12,22 @@ namespace BocchiTracker.Config
 {
     public class ConfigRepository<T>
     {
-        private string _filePath;
+        private string _filePath = default!;
         private IFileSystem _fileSystem;
 
-        public ConfigRepository(string filePath, IFileSystem inFileSystem)
+        public ConfigRepository(IFileSystem inFileSystem)
         {
-            _filePath = filePath;
             _fileSystem = inFileSystem;
+        }
+
+        public void SetLoadFilename(string inFilename)
+        {
+            _filePath = inFilename;
+        }
+
+        public string GetLoadFilename() 
+        {
+            return _filePath;
         }
 
         public bool TryLoad(out T? outConfig)
@@ -62,14 +71,15 @@ namespace BocchiTracker.Config
         public void Save(T settings)
         {
             var dir = Path.GetDirectoryName(_filePath);
-            if (string.IsNullOrEmpty(dir))
+            if (dir == null)
                 return;
 
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
 
-            _fileSystem.Directory.CreateDirectory(dir);
+            if(dir != "")
+                _fileSystem.Directory.CreateDirectory(dir);
             using var writer = _fileSystem.File.CreateText(_filePath);
             serializer.Serialize(writer, settings);
         }

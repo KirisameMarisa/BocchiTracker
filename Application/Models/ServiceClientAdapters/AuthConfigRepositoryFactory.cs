@@ -28,7 +28,9 @@ namespace BocchiTracker.ServiceClientAdapters
                 if (_caches.ContainsKey(serviceType))
                     continue;
                 string filePath = Path.Combine(inBaseDirectory, $"{serviceType}.AuthConfig.yaml");
-                _caches.TryAdd(serviceType, new ConfigRepository<AuthConfig>(filePath, new FileSystem()));
+                var configRepo = new ConfigRepository<AuthConfig>(new FileSystem());
+                configRepo.SetLoadFilename(filePath);
+                _caches.TryAdd(serviceType, configRepo);
             }
         }
 

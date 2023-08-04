@@ -1,0 +1,29 @@
+﻿<Window x:Class="BocchiTracker.Client.Config.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BocchiTracker.Client.Config.Views"
+        xmlns:prism="http://prismlibrary.com/"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="560" Width="800">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <TabControl>
+            <TabItem Header="Service">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="ServiceRegion"/>
+            </TabItem>
+
+            <TabItem Header="Ticket">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="TicketRegion"/>
+            </TabItem>
+            
+            <TabItem Header="Directory">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="DirectoryRegion"/>
+            </TabItem>
+            
+            <TabItem Header="Network">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="NetworkRegion"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

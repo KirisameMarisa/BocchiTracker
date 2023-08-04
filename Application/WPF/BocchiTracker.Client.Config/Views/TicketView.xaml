@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Config.Views.TicketView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:BocchiTracker.Client.Config.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">
+        <StackPanel Margin="15">
+            <Expander Header="Ticket Types" Foreground="White" Background="Gray">
+                <controls:ServiceValueMappingControl
+                                    DefinitionHint="Ticket Types definitions (Bug, Task, Question, etc.) are pre-set by the tool"
+                                    ItemsSource="{Binding TicketTypes.ValueMappings}"
+                                    AddItemCommand="{Binding TicketTypes.AddItemCommand}"
+                                    RemoveItemCommand="{Binding TicketTypes.RemoveItemCommand}"/>
+            </Expander>
+            <Border UseLayoutRounding="True" HorizontalAlignment="Stretch" Height="1" Background="DarkBlue" />
+            <Expander Header="Priorities" Foreground="White" Background="Gray">
+                <controls:ServiceValueMappingControl 
+                                    DefinitionHint="Priority definitions (Low, Middle, High, etc.) are pre-set by the tool"
+                                    ItemsSource="{Binding Priorities.ValueMappings}"
+                                    AddItemCommand="{Binding Priorities.AddItemCommand}"
+                                    RemoveItemCommand="{Binding Priorities.RemoveItemCommand}"/>
+            </Expander>
+            <Border UseLayoutRounding="True" HorizontalAlignment="Stretch" Height="1" Background="DarkBlue" />
+
+            <Expander Header="Issue Grades" Foreground="White" Background="Gray">
+                <controls:ServiceValueMappingControl
+                                    DefinitionHint="Issue Grades definitions (A, B, C, etc.) are pre-set by the tool"
+                                    ItemsSource="{Binding IssueGrades.ValueMappings}"
+                                    AddItemCommand="{Binding IssueGrades.AddItemCommand}"
+                                    RemoveItemCommand="{Binding IssueGrades.RemoveItemCommand}"/>
+            </Expander>
+            <Border UseLayoutRounding="True" HorizontalAlignment="Stretch" Height="1" Background="DarkBlue" />
+            
+            <Expander Header="Query Fields" Foreground="White" Background="Gray">
+                <controls:ServiceValueMappingControl
+                                    DefinitionHint="Query Fields definitions"
+                                    ItemsSource="{Binding QueryFields.ValueMappings}"
+                                    AddItemCommand="{Binding QueryFields.AddItemCommand}"
+                                    RemoveItemCommand="{Binding QueryFields.RemoveItemCommand}"/>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

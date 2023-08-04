@@ -16,10 +16,10 @@ namespace BocchiTracker.ProcessLink.ProcessData
         {
             var data = inPacket.QueryIdAsPlayerPosition();
             var status = new Dictionary<string, string>();
-            status["X"] = data.X.ToString();
-            status["Y"] = data.Y.ToString();
-            status["Z"] = data.Z.ToString();
-            status["Stage"] = data.Stage;
+            status["PlayerPosition.x"] = data.X.ToString();
+            status["PlayerPosition.y"] = data.Y.ToString();
+            status["PlayerPosition.z"] = data.Z.ToString();
+            status["PlayerPosition.stage"] = data.Stage;
 
             inEventAggregator
                 .GetEvent<AppStatusQueryEvent>()

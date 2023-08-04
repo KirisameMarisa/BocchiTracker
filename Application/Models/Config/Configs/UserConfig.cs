@@ -9,6 +9,8 @@ namespace BocchiTracker.Config.Configs
 {
     public class UserConfig
     {
+        public string? ProjectConfigFilename { get; set; }
+
         public List<string> SelectedService { get; set; } = new List<string>();
 
         public TicketData DraftTicketData { get; set; } = new TicketData();

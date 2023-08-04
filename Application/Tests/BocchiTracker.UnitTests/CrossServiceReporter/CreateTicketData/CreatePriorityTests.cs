@@ -109,7 +109,6 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             inBundle.TicketData = new TicketData { Priority = "High" };
 
             var inConfig = new ServiceConfig();
-            inConfig.PriorityMappings = null;
 
             var createPriority = new CreatePriority();
 

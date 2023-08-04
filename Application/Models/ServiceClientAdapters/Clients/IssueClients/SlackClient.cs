@@ -15,6 +15,7 @@ using System.IO.Abstractions;
 using System.Diagnostics;
 using System.IO;
 using BocchiTracker.ServiceClientData;
+using BocchiTracker.Config;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -24,8 +25,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private string? _channel;
         private bool _isAuthenticated;
 
-        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string inURL, string? inProxyURL = null)
+        public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (string.IsNullOrEmpty(inURL))
+            {
+                Trace.TraceError($"{ServiceDefinitions.Slack} URL is null or empty");
+                return false;
+            }
+
             try
             {
                 _channel = inURL;
