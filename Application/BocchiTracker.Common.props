@@ -4,6 +4,7 @@
     <AssemblyName>BocchiTracker.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>BocchiTracker.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <Configurations>Debug;Release</Configurations>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(SolutionName)' == 'BocchiTracker.WPF'">

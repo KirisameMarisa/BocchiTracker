@@ -2,7 +2,7 @@
 
 BocchiTracker is a bug reporting tool that allows you to report issues to various services. 
 
-<img src="./Documents/Resources/BocchiTracker.png" width="50%">
+<img src="./Documents/Resources/BocchiTracker.png" width="70%">
 
 Currently supported services include:
 
@@ -32,7 +32,9 @@ Currently supported services include:
 
 ## Getting Started
 
-In Preparation...
+1. [Download BocchiTracker](#)
+2. Setup Config - [JP](/Documents/JP/ConfigurationGuide.md)/[EN](/Documents/EN/ConfigurationGuide.md)
+3. Read UserGuide - [JP](/Documents/JP/UserGuide.md)/[EN](/Documents/EN/UserGuide.md)
 
 ## How to build?
 
@@ -41,6 +43,10 @@ In Preparation...
 ## Problems? 
 
 If you encounter any issues, have feature requests, or wish to provide feedback, please feel free to create issues
+
+If you want to communicate a problem directly with me, you can join Discord. Please feel free to ask!
+
+- Discord: [Join our Discord server](https://join.slack.com/t/bocchitracker/shared_invite/zt-20lzjarua-cmYTqEiBiCSFp_A1cq36Qg)
 
 ---
 
