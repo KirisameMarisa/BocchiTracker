@@ -86,7 +86,7 @@ BocchiTrackerを使用するためには、プロジェクトの設定ファイ�
 ④ フィルターの指定:<br>
 ファイルの検索に使用するフィルターを指定します。[C#::GetFilesのファイル検索文字](https://learn.microsoft.com/ja-jp/dotnet/api/system.io.directory.getfiles?view=net-7.0#system-io-directory-getfiles(system-string-system-string-system-io-searchoption)) の書式で指定可能です。
 
-#### External tool Path
+#### ⑤External tool Path
 
 外部ツールのパスを指定することで、以下のツールの機能を利用できます。
 
