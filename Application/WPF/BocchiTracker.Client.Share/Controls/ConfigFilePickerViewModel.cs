@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Prism.Commands;
 using Reactive.Bindings;
+using System.Reactive.Linq;
 
 namespace BocchiTracker.Client.Share.Controls
 {
@@ -21,11 +22,18 @@ namespace BocchiTracker.Client.Share.Controls
         public ReactiveProperty<string>     Text                { get; set; } = new ReactiveProperty<string>();
         public ReactiveProperty<string>     HintText            { get; set; } = new ReactiveProperty<string>();
         public ReactiveProperty<bool>       EnableFileCreation  { get; set; } = new ReactiveProperty<bool>(false);
-        
-        private DelegateCommand<string> _closeDialogCommand;
-        public DelegateCommand<string> CloseDialogCommand => _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+
+        public ReactiveCommand<string>      CloseDialogCommand  { get; set; }
 
         public event Action<IDialogResult> RequestClose;
+
+        public ConfigFilePickerViewModel()
+        {
+            CloseDialogCommand = Text
+                                    .Select(text => !string.IsNullOrWhiteSpace(text))
+                                    .ToReactiveCommand<string>();
+            CloseDialogCommand.Subscribe(CloseDialog);
+        }
 
         protected virtual void CloseDialog(string parameter)
         {

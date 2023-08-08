@@ -36,7 +36,13 @@ namespace BocchiTracker.ServiceClientAdapters
 
         public AuthConfig? Load(ServiceDefinitions inServiceType)
         {
-            return _caches[inServiceType].Load();
+            if (!_caches.ContainsKey(inServiceType))
+                return null;
+
+            AuthConfig? authConfig = null;
+            bool result = _caches[inServiceType].TryLoad(out authConfig);
+
+            return authConfig;
         }
 
         public void Save(ServiceDefinitions inServiceType, AuthConfig inAuthConfig)

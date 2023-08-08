@@ -13,7 +13,7 @@
         
         <ComboBox 
             ItemsSource="{Binding ItemsSource}"
-            Text="{Binding Text.Value}"
+            Text="{Binding Text.Value, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="{Binding HintText.Value}"
             Margin="5"
             FontSize="16"
