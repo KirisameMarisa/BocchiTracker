@@ -167,11 +167,13 @@ void FBocchiTrackerTcpSocket::ProcessReciveData()
         return;
 
     TArray<uint8> ReceivedData;
+    ReceivedData.SetNumUninitialized(1024);
     int32 BytesRead = 0;
     if (Socket->Recv(ReceivedData.GetData(), ReceivedData.Num(), BytesRead))
     {
         if (BytesRead > 0)
         {
+            UE_LOG(LogTemp, Error, TEXT("ProcessReciveData::Success, size=%d"), BytesRead);
             ReceivedData.SetNum(BytesRead);
             OnRecive.ExecuteIfBound(ReceivedData);
         }

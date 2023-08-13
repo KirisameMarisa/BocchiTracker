@@ -1,8 +1,13 @@
 #include "BocchiTrackerActor.h"
 #include "BocchiTrackerSettings.h"
 #include "BocchiTrackerTcpSocket.h"
+#include "BocchiTrackerPacket.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
+#include "Engine/TextureRenderTarget2D.h"
+#include "Engine/GameViewportClient.h"
+#include "IImageWrapper.h"
+#include "Async/TaskGraphInterfaces.h"
 
 #include "flatbuffers/flatbuffers.h"
 #include "Query_generated.h"
@@ -25,22 +30,116 @@ void ABocchiTrackerActor::BeginPlay()
         Socket = MakeUnique<FBocchiTrackerTcpSocket>();
         Socket->CreateSocket(Settings->IPAddress, Settings->Port, ReciveDelegate);
     }
+    bSentAppBasicInfo = false;
 }
 
 void ABocchiTrackerActor::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 
-    if (const auto PlayerControler = UGameplayStatics::GetPlayerController(this, 0))
+    if(Socket->IsConnect())
     {
-        // Update the tracked player's position in each tick
-        const auto& Position = PlayerControler->GetPawn()->GetActorLocation();
+        ProcessSendAppBasicInfo();
 
-        UE_LOG(LogTemp, Warning, TEXT("Tracked Player Position: X=%.2f, Y=%.2f, Z=%.2f"), Position.X, Position.Y, Position.Z);
+        ProcessSendPlayerPosition();
+       
+        uint8 OutQueryID;
+        if(PendingProcessRequest.Dequeue(OutQueryID))
+        {
+            switch(OutQueryID)
+            {
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_ScreenshotData:
+                    ProcessSendScreenshot(); break;
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_AppBasicInfo:
+                    ProcessSendAppBasicInfo(); break;
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_PlayerPosition:
+                    ProcessSendPlayerPosition(); break;
+            }
+        }
     }
 }
 
 void ABocchiTrackerActor::OnReciveData(TArray<uint8> inData)
 {
-    //!< TODO::
+    const BocchiTracker::ProcessLinkQuery::Queries::Packet* packet 
+        = BocchiTracker::ProcessLinkQuery::Queries::GetPacket(inData.GetData());
+
+    if (packet)
+    {
+        BocchiTracker::ProcessLinkQuery::Queries::QueryID queryID = packet->query_id_type();
+        switch (queryID)
+        {
+            case BocchiTracker::ProcessLinkQuery::Queries::QueryID_RequestQuery:
+            {
+                const BocchiTracker::ProcessLinkQuery::Queries::RequestQuery* requestQuery = packet->query_id_as_RequestQuery();
+                if (requestQuery)
+                {
+                    PendingProcessRequest.Enqueue(requestQuery->query_id());
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+void ABocchiTrackerActor::ProcessSendPlayerPosition()
+{
+    static FVector PreviousPosition;
+    FVector CurrentPosition = TrackedPosition;
+
+    float Distance = FVector::Dist(CurrentPosition, PreviousPosition);
+    if (Distance >= 100.0f)
+    {
+        auto PlayerPositionPacket = CreatePacketHelper::CreatePlayerPosition(TrackedPosition, Stage);
+        Socket->AddSendData(PlayerPositionPacket);
+        PreviousPosition = CurrentPosition;
+    }
+}
+
+void ABocchiTrackerActor::ProcessSendAppBasicInfo()
+{
+    if(bSentAppBasicInfo)
+        return;
+
+    auto ApplicationBsicInformationPacket = CreatePacketHelper::CreateApplicationBsicInformation();
+    Socket->AddSendData(ApplicationBsicInformationPacket);
+
+    bSentAppBasicInfo = true;
+}
+
+void ABocchiTrackerActor::ProcessSendScreenshot()
+{
+    if(!Socket->IsConnect())
+        return;
+
+    UGameViewportClient* GameViewportClient = GEngine->GameViewport;
+    if (!GameViewportClient)
+        return;
+
+    FIntPoint ViewportSize = GameViewportClient->Viewport->GetSizeXY();
+    FIntRect ScreenshotRect(0, 0, ViewportSize.X, ViewportSize.Y);
+
+    TArray<FColor> Bitmap;
+    if (!GameViewportClient->Viewport->ReadPixels(Bitmap, FReadSurfaceDataFlags(), ScreenshotRect))
+        return;
+
+    TArray<uint8> ScreenshotData;
+    for (const FColor& PixelColor : Bitmap)
+    {
+        ScreenshotData.Add(PixelColor.R);
+        ScreenshotData.Add(PixelColor.G);
+        ScreenshotData.Add(PixelColor.B);
+        ScreenshotData.Add(255);
+    }
+
+    auto ScreenshotDataPacket = CreatePacketHelper::CreateScreenshotData(ViewportSize.X, ViewportSize.Y, ScreenshotData);
+    Socket->AddSendData(ScreenshotDataPacket);
+}
+
+void ABocchiTrackerActor::SetPlayerPosition(const FVector &InTrackedPosition, const FString &InStage)
+{
+    TrackedPosition = InTrackedPosition;
+    Stage = InStage;
 }
