@@ -17,16 +17,18 @@ namespace BocchiTracker.CrossServiceReporter.Converter
         public Dictionary<string, List<string>> Convert(AppStatusBundle inAppBundle)
         {
             Dictionary<string, List<string>> customFields = new Dictionary<string, List<string>>();
-
-            customFields[nameof(inAppBundle.AppBasicInfo.Platform)].Add(inAppBundle.AppBasicInfo.Platform);
-            customFields[nameof(inAppBundle.AppBasicInfo.Args)].Add(inAppBundle.AppBasicInfo.Args);
-            customFields[nameof(inAppBundle.AppBasicInfo.AppVersion)].Add(inAppBundle.AppBasicInfo.AppVersion);
-            customFields[nameof(inAppBundle.AppBasicInfo.AppName)].Add(inAppBundle.AppBasicInfo.AppName);
-            customFields[nameof(inAppBundle.AppBasicInfo.Pid)].Add(inAppBundle.AppBasicInfo.Pid.ToString());
-            customFields[nameof(inAppBundle.AppBasicInfo.ClientID)].Add(inAppBundle.AppBasicInfo.ClientID.ToString());
+            
+            foreach(var (key, value) in inAppBundle.AppBasicInfo.ToDict())
+            {
+                customFields.Add(key, new List<string> { value });
+            }
 
             foreach (var (key, value) in inAppBundle.AppStatusDynamics)
+            {
+                if (!customFields.ContainsKey(key))
+                    customFields.Add(key, new List<string>());
                 customFields[key].Add(value);
+            }
 
             return customFields;
         }

@@ -74,7 +74,8 @@ namespace BocchiTracker.ProcessLink
             var packet = Packet.EndPacket(fbb);
             Packet.FinishPacketBuffer(fbb, packet);
 
-            _tcpClient.Client.Send(fbb.SizedByteArray());
+            int ret = _tcpClient.Client.Send(fbb.SizedByteArray());
+            System.Console.WriteLine(ret);
         }
 
         public void Dispose()

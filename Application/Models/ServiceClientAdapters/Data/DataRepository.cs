@@ -16,6 +16,8 @@ namespace BocchiTracker.ServiceClientAdapters.Data
         Task<List<IdentifierData>?>     GetLabels(ServiceDefinitions inServiceType);
 
         Task<List<IdentifierData>?>     GetPriorities(ServiceDefinitions inServiceType);
+        
+        Task<List<IdentifierData>?>     GetCustomFields(ServiceDefinitions inServiceType);
 
         Task<List<UserData>?>           GetUsers(ServiceDefinitions inServiceType);
     }
@@ -29,6 +31,25 @@ namespace BocchiTracker.ServiceClientAdapters.Data
         {
             _serviceClientFactory = inServiceClientAdapterFactory;
             _cacheProvider        = inCacheProvider;
+        }
+
+        public async Task<List<IdentifierData>?> GetCustomFields(ServiceDefinitions inServiceType)
+        {
+            var cacheName = $"{inServiceType}.Customfields";
+            List<IdentifierData>? result;
+            if (_cacheProvider.IsExpired(cacheName) || !_cacheProvider.TryGet(cacheName, out result))
+            {
+                var client = _serviceClientFactory.CreateIssueService(inServiceType);
+                if (client == null || !client.IsAuthenticated())
+                {
+                    Trace.TraceError($"Cannt get {inServiceType}Client");
+                    return null;
+                }
+
+                result = await client.GetCustomfields();
+                _cacheProvider.Set(cacheName, result);
+            }
+            return result;
         }
 
         public async Task<List<IdentifierData>?> GetLabels(ServiceDefinitions inServiceType)

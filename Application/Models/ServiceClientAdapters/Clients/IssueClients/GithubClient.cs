@@ -175,6 +175,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             return null;
         }
 
+#pragma warning disable CS1998
+        public async Task<List<IdentifierData>?> GetCustomfields()
+#pragma warning restore CS1998
+        {
+            return null;
+        }
+
         public async Task<List<UserData>?> GetUsers()
         {
             if (_client == null)

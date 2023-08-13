@@ -69,7 +69,7 @@ namespace BocchiTracker.Client.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var foundItems = Items.Where(x => x == inAppStatusBundle);
+                var foundItems = Items.Where(x => x == inAppStatusBundle).ToList();
                 if (foundItems.Count() == 0)
                 {
                     base.AddItem(inAppStatusBundle);
@@ -81,10 +81,16 @@ namespace BocchiTracker.Client.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var foundItems = Items.Where(x => x == inAppStatusBundle);
+                var foundItems = Items.Where(x => x == inAppStatusBundle).ToList();
                 foreach (var removeItem in foundItems)
                 {
                     base.RemoveItem(removeItem);
+                }
+
+
+                if((Selected.Value as AppStatusBundle) == inAppStatusBundle)
+                {
+                    Selected.Value = null;
                 }
             });
         }

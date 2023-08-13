@@ -18,6 +18,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
         Task<List<IdentifierData>?>     GetLabels();
 
         Task<List<IdentifierData>?>     GetPriorities();
+
+        Task<List<IdentifierData>?>      GetCustomfields();
          
         Task<List<UserData>?>           GetUsers();
     }

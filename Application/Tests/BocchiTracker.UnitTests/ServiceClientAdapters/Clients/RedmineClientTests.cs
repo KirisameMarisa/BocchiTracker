@@ -65,7 +65,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             {
                 Summary = "Test Summary",
                 Description = "Test Description",
-                TicketType = "2",
+                TicketType = "1",
+                CustomFields = new Dictionary<string, List<string>> { { "2", new List<string> { "100" } } }
             };
             var post_result = await _client.Post(ticket);
             Assert.True(post_result.Item1);

@@ -22,7 +22,9 @@ namespace BocchiTracker.IssueInfoCollector
         public MetaListService<IdentifierData>  PriorityListService     { get; } = new PriorityListService();
         
         public MetaListService<IdentifierData>  TicketTypeListService   { get; } = new TicketTypeListService();
-        
+
+        public MetaListService<IdentifierData>  CustomFieldsListService { get; } = new CustomFieldListService();
+
         public MetaListService<UserData>        UserListService         { get; } = new UserListService();
 
         public List<ServiceDefinitions>         IssuePostServices       { get; set; } = new List<ServiceDefinitions>();
@@ -35,6 +37,7 @@ namespace BocchiTracker.IssueInfoCollector
             await PriorityListService.Load(inRepository);
             await TicketTypeListService.Load(inRepository);
             await UserListService.Load(inRepository);
+            await CustomFieldsListService.Load(inRepository);
         }
     }
 }

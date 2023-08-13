@@ -97,7 +97,7 @@ namespace BocchiTracker.ProcessLink
         private async Task HandleClientAsync(IPAddress inIP, TcpClient ioClient)
         {
             Console.WriteLine($"Client connected: {inIP}");
-            AppStatusQuery appStatusQuery = new AppStatusQuery(_eventAggregator, _serviceProcessData, inIP.GetHashCode(), ioClient);
+            using AppStatusQuery appStatusQuery = new AppStatusQuery(_eventAggregator, _serviceProcessData, inIP.GetHashCode(), ioClient);
             while (IsConnected(ioClient))
             {
                 try

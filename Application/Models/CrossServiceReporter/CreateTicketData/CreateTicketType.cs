@@ -20,7 +20,16 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             if (find == null)
                 return null;
 
-            return find.Name;
+            var ticketType = inBundle.TicketTypeListService.GetData(inService);
+            if (ticketType == null)
+                return null;
+
+            foreach (var value in ticketType)
+            {
+                if (value.Name == find.Name)
+                    return value.Id;
+            }
+            return null;
         }
     }
 }

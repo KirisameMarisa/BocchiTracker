@@ -54,7 +54,9 @@ namespace BocchiTracker.Client.ViewModels
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            foreach(var item in inParam.ProjectConfig.MonitoredDirectoryConfigs)
+            var monitoredDirectories = inParam.ProjectConfig.MonitoredDirectoryConfigs;
+            monitoredDirectories.Add(new MonitoredDirectoryConfig { Directory = inParam.ProjectConfig.FileSaveDirectory, Filter = "*" });
+            foreach (var item in monitoredDirectories)
             {
                 if (string.IsNullOrEmpty(item.Directory) || !Directory.Exists(item.Directory))
                     continue;
