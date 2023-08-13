@@ -36,6 +36,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             throw new NotImplementedException();
         }
 
+        public  Task<List<IdentifierData>?> GetCustomfields()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<UserData>?> GetUsers()
         {
             throw new NotImplementedException();

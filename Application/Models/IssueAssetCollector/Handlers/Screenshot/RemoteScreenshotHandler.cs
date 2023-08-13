@@ -14,7 +14,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 {
     public class RemoteScreenshotSaveProcess
     {
-        public static string Output { get; set; } = string.Empty;
+        public string Output { get; set; } = string.Empty;
 
         private IEventAggregator _mediator;
 
@@ -38,16 +38,18 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
     public class RemoteScreenshotHandler : ScreenshotHandler
     {
         private IEventAggregator _eventAggregator;
+        private RemoteScreenshotSaveProcess _saveProcess;
 
         public RemoteScreenshotHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator)
             : base(inFilenameGenerator)
         {
             this._eventAggregator = inEventAggregator;
+            this._saveProcess = new RemoteScreenshotSaveProcess(inEventAggregator);
         }
 
         public override void Handle(int inClientID, int inPID, string inOutput)
         {
-            RemoteScreenshotSaveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
+            this._saveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
 
             _eventAggregator
                 .GetEvent<RequestQueryEvent>()

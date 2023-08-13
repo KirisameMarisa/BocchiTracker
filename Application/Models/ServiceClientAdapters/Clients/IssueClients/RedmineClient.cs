@@ -129,17 +129,23 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             if (inTicketData.CustomFields != null && inTicketData.CustomFields.Count != 0)
             {
+                newIssue.CustomFields = new List<IssueCustomField>();
                 foreach (var (key, values) in inTicketData.CustomFields)
                 {
                     if (values == null)
                         continue;
 
-                    var newIssueCustomFiled = new IssueCustomField { Name = key };
-                    foreach (var value in values)
+                    if(int.TryParse(key, out id))
                     {
-                        newIssueCustomFiled.Values.Add(new CustomFieldValue { Info = value });
+                        var newIssueCustomFiled = IssueCustomField.Create<IssueCustomField>(id);
+                        newIssueCustomFiled.Values = new List<CustomFieldValue>();
+                        foreach (var value in values)
+                        {
+                            newIssueCustomFiled.Values.Add(new CustomFieldValue { Info = value });
+                        }
+                        newIssue.CustomFields.Add(newIssueCustomFiled);
+
                     }
-                    newIssue.CustomFields.Add(newIssueCustomFiled);
                 }
             }
 
@@ -278,6 +284,32 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             var result = new List<IdentifierData>();
             foreach (var value in priorities)
+            {
+                result.Add(new IdentifierData { Name = value.Name, Id = value.Id.ToString() });
+            }
+            return result;
+        }
+
+        public async Task<List<IdentifierData>?> GetCustomfields()
+        {
+            if (_client == null)
+            {
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _client is null");
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(_projectName))
+            {
+                Trace.TraceError($"{ServiceDefinitions.Redmine} _project_name is null");
+                return null;
+            }
+
+            var customFields = await _client.GetObjectsAsync<CustomField>(new NameValueCollection { { "project_id", _projectName } });
+            if (customFields == null)
+                return null;
+
+            var result = new List<IdentifierData>();
+            foreach (var value in customFields)
             {
                 result.Add(new IdentifierData { Name = value.Name, Id = value.Id.ToString() });
             }

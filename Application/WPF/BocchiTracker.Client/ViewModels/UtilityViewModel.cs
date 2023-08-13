@@ -140,9 +140,26 @@ namespace BocchiTracker.Client.ViewModels
             if (_appStatusBundles.TrackerApplication == null)
                 return;
 
-            if (IPAddress.Parse("127.0.0.1").GetHashCode() == _appStatusBundles.TrackerApplication.AppBasicInfo.ClientID)
+            if (_projectConfig == null)
+                return;
+
+            string hostname = Dns.GetHostName();
+
+            var addresses = Dns.GetHostAddresses(hostname).ToList();
+            addresses.Add(IPAddress.Parse("127.0.0.1"));
+
+            bool found_ip_address = false;
+            foreach(var address in addresses)
             {
-                if(int.TryParse(_appStatusBundles.TrackerApplication.AppBasicInfo.Pid, out int outPid ))
+                if(address.GetHashCode() == _appStatusBundles.TrackerApplication.AppBasicInfo.ClientID)
+                {
+                    found_ip_address = true; break;
+                }
+            }
+
+            if (found_ip_address)
+            {
+                if (int.TryParse(_appStatusBundles.TrackerApplication.AppBasicInfo.Pid, out int outPid))
                 {
                     var handler = _createActionHandler.Create(typeof(LocalScreenshotHandler));
                     handler.Handle(0, outPid, _projectConfig.FileSaveDirectory);

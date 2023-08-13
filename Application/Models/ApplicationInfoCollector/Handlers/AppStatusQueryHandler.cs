@@ -41,10 +41,10 @@ namespace BocchiTracker.ApplicationInfoCollector.Handlers
             
             if (inData is not null)
             {
-                _bundles[inClientID].AppBasicInfo.Pid = inData["Pid"] ?? "";
-                _bundles[inClientID].AppBasicInfo.AppName = inData["AppName"] ?? "";
-                _bundles[inClientID].AppBasicInfo.Args = inData["Args"] ?? "";
-                _bundles[inClientID].AppBasicInfo.Platform = inData["Platform"] ?? "";
+                foreach(var (key, value) in inData)
+                {
+                    _bundles[inClientID].AppBasicInfo.Set(key, value);
+                }
             }
         }
 

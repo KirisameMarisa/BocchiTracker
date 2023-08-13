@@ -7,6 +7,35 @@ namespace BocchiTracker.IssueAssetCollector.Utils.Win32
 
     public class WindowsClientCapture : IClientCapture
     {
+        private delegate void CaptureCallback(IntPtr data, int width, int height);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDC(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        private static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr SelectObject(IntPtr hdc, IntPtr hObject);
+
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateDIBSection(IntPtr hdc, ref BITMAPINFO pbmi, uint usage, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
+
+        [DllImport("user32.dll")]
+        private static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteDC(IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
+
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
         {
@@ -16,48 +45,57 @@ namespace BocchiTracker.IssueAssetCollector.Utils.Win32
             public int bottom;
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetDC(IntPtr hwnd);
-
-        [DllImport("user32.dll")]
-        static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
-
-        [DllImport("gdi32.dll")]
-        static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
+        [StructLayout(LayoutKind.Sequential)]
+        private struct BITMAPINFO
+        {
+            public int biSize;
+            public int biWidth;
+            public int biHeight;
+            public short biPlanes;
+            public short biBitCount;
+            public int biCompression;
+            public int biSizeImage;
+            public int biXPelsPerMeter;
+            public int biYPelsPerMeter;
+            public int biClrUsed;
+            public int biClrImportant;
+        }
 
         public CaptureData CaptureWindow(IntPtr hwnd)
         {
             ForceActiveWindow.Process(hwnd);
 
-            IntPtr hdc = GetDC(hwnd);
-
             RECT rect;
             GetWindowRect(hwnd, out rect);
-
             int width = rect.right - rect.left;
             int height = rect.bottom - rect.top;
 
-            byte[] pixelData = new byte[width * height * 4];
+            BITMAPINFO info = new BITMAPINFO();
+            info.biSize = Marshal.SizeOf(info);
+            info.biWidth = width;
+            info.biHeight = -height;
+            info.biPlanes = 1;
+            info.biBitCount = 32;
+            info.biCompression = 0; // BI_RGB
+            info.biSizeImage = width * height * 4;
 
-            for (int y = 0; y < height; y++)
+            byte[] pixelData = new byte[info.biSizeImage];
+
+            IntPtr hscreen = GetDC(hwnd);
+            IntPtr hdc = CreateCompatibleDC(hscreen);
+            IntPtr pvBits;
+            IntPtr hbmp = CreateDIBSection(hdc, ref info, 0, out pvBits, IntPtr.Zero, 0);
+
+            if(hbmp != IntPtr.Zero)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    uint colorref = GetPixel(hdc, x, y);
-                    int index = (x + y * width) * 4;
-
-                    //!< R, G, B, A
-                    pixelData[index + 0] = (byte)(colorref >> 16 & 0xff);
-                    pixelData[index + 1] = (byte)(colorref >> 8 & 0xff);
-                    pixelData[index + 2] = (byte)(colorref & 0xff);
-                    pixelData[index + 3] = 255;
-                }
+                SelectObject(hdc, hbmp);
+                PrintWindow(hwnd, hdc, 0x2);
+                Marshal.Copy(pvBits, pixelData, 0, pixelData.Length);
+                DeleteObject(hbmp);
             }
+            DeleteDC(hdc);
+            ReleaseDC(hwnd, hscreen);
 
-            ReleaseDC(hwnd, hdc);
             return new CaptureData { ImageData = pixelData, Width = width, Height = height };
         }
     }

@@ -2,8 +2,12 @@
 bin/
 obj/
 Artifact/
-flatc.exe
-Plugins/*/Query_generated.h
-Plugins/*/BocchiTracker
+*.pyc
 *.yaml
 launchSettings.json
+
+Plugins/UnrealEngine/BocchiTracker/Content
+Plugins/UnrealEngine/BocchiTracker/Binaries
+Plugins/UnrealEngine/BocchiTracker/Intermediate
+Plugins/UnrealEngine/ThirdParty/flatbuffers/include
+Plugins/UnrealEngine/ThirdParty/flatbuffers/lib

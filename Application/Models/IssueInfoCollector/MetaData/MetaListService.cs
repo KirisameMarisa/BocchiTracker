@@ -76,6 +76,14 @@ namespace BocchiTracker.IssueInfoCollector.MetaData
         }
     }
 
+    public class CustomFieldListService : MetaListService<IdentifierData>
+    {
+        protected override async Task<List<IdentifierData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
+        {
+            return await inDataRepository.GetCustomFields(inServiceType);
+        }
+    }
+
     public class UserListService : MetaListService<UserData>
     {
         protected override async Task<List<UserData>?> GetDataAsync(IDataRepository inDataRepository, ServiceDefinitions inServiceType)
