@@ -9,10 +9,10 @@
       <HintPath>..\ThirdParty\flatbuffers\Google.FlatBuffers.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>..\UnityDLL\UnityEditor.dll</HintPath>
+      <HintPath>..\ThirdParty\Unity\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\UnityDLL\UnityEngine.dll</HintPath>
+      <HintPath>..\ThirdParty\Unity\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
 
