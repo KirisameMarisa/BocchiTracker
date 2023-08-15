@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+//!< Copyright (c) 2023 Yuto Arita
+
 using UnityEngine;
 
 namespace BocchiTracker
@@ -15,5 +15,10 @@ namespace BocchiTracker
         [SerializeField]
         private int serverPort = 8888;
         public int ServerPort => serverPort;
+
+        [SerializeField]
+        private Camera screenshotCamera = null;
+        public Camera ScreenshotCamera => screenshotCamera;
+
     }
 }

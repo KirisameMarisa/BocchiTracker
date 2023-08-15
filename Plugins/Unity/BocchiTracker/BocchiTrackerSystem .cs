@@ -1,33 +1,34 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
-using BocchiTracker;
-using System.Net.Sockets;
-using System.Text;
+﻿
+//!< Copyright (c) 2023 Yuto Arita
+
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
+using UnityEngine;
 using Google.FlatBuffers;
 
 namespace BocchiTracker
 {
+    /// <summary>
+    /// Manages communication with the BocchiTracker server and handles data packets.
+    /// </summary>
     public class BocchiTrackerSystem : MonoBehaviour
     {
         private static BocchiTrackerTcpSocket tcpSocket;
         private BocchiTrackerSetting setting;
         private bool isSentAppBasicInfo;
-        private Queue<ProcessLinkQuery.Queries.QueryID> pendingProcessRequest 
+        private Queue<ProcessLinkQuery.Queries.QueryID> pendingProcessRequest
             = new Queue<ProcessLinkQuery.Queries.QueryID>();
 
         public BocchiTrackerSystem()
         {
-            if(tcpSocket == null)
+            if (tcpSocket == null)
                 tcpSocket = new BocchiTrackerTcpSocket();
         }
 
-        async void Start()
+        private async void Start()
         {
             setting = GetComponent<BocchiTrackerSetting>();
-            if (!tcpSocket.IsConnect())
+            if (!IsConnect())
             {
                 isSentAppBasicInfo = false;
                 await tcpSocket.Connect(setting.ServerAddress, setting.ServerPort);
@@ -35,14 +36,14 @@ namespace BocchiTracker
             tcpSocket.ReciveCallback = this.OnReceiveData;
         }
 
-        void OnDestory()
+        private void OnDestroy()
         {
             tcpSocket.DisConnect();
         }
 
-        async void Update()
+        private async void Update()
         {
-            if (tcpSocket.IsConnect())
+            if (IsConnect())
             {
                 if (!isSentAppBasicInfo)
                     ProcessSendAppBasicInfo();
@@ -52,21 +53,28 @@ namespace BocchiTracker
 
         private void LateUpdate()
         {
-            if (tcpSocket.IsConnect())
+            if (IsConnect())
             {
-                if (pendingProcessRequest.TryDequeue(out ProcessLinkQuery.Queries.QueryID OutQueryID))
+                if (pendingProcessRequest.TryDequeue(out ProcessLinkQuery.Queries.QueryID outQueryID))
                 {
-                    switch (OutQueryID)
+                    switch (outQueryID)
                     {
                         case ProcessLinkQuery.Queries.QueryID.ScreenshotData:
-                            ProcessSendScreenshot(); break;
-                        default: break;
+                            StartCoroutine(ProcessSendScreenshot());
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
         }
 
-        void OnReceiveData(List<byte> inData)
+        public bool IsConnect()
+        {
+            return tcpSocket.IsConnect();
+        }
+
+        private void OnReceiveData(List<byte> inData)
         {
             ProcessLinkQuery.Queries.Packet packet = ProcessLinkQuery.Queries.Packet.GetRootAsPacket(new ByteBuffer(inData.ToArray()));
             ProcessLinkQuery.Queries.QueryID queryID = packet.QueryIdType;
@@ -84,12 +92,16 @@ namespace BocchiTracker
             }
         }
 
+        /// <summary>
+        /// Sends a data packet to the BocchiTracker server.
+        /// </summary>
+        /// <param name="inData">The data packet to send.</param>
         public void BocchiTrackerSendPacket(List<byte> inData)
         {
             tcpSocket.AddSendData(inData);
         }
 
-        void ProcessSendAppBasicInfo()
+        private void ProcessSendAppBasicInfo()
         {
             var appBasicInformationPacket = CreatePacketHelper.CreateApplicationBasicInformation();
             BocchiTrackerSendPacket(appBasicInformationPacket);
@@ -97,21 +109,54 @@ namespace BocchiTracker
             isSentAppBasicInfo = true;
         }
 
-        void ProcessSendScreenshot()
+        private IEnumerator ProcessSendScreenshot()
         {
-            if (!tcpSocket.IsConnect())
-                return;
+            if (!IsConnect())
+                yield break;
+
+            yield return new WaitForEndOfFrame();
 
             int screenWidth = Screen.width;
             int screenHeight = Screen.height;
 
-            Texture2D screenshotTexture = new Texture2D(screenWidth, screenHeight, TextureFormat.RGBA32, false);
-            screenshotTexture.ReadPixels(new Rect(0, 0, screenWidth, screenHeight), 0, 0);
-            screenshotTexture.Apply();
+            // Capture the screenshot
+            RenderTexture rt = new RenderTexture(screenWidth, screenHeight, 32);
+            RenderTexture prev_rt = setting.ScreenshotCamera.targetTexture;
+            Quaternion prev_rot = setting.ScreenshotCamera.transform.rotation;
+            Texture2D screenShot = new Texture2D(screenWidth, screenHeight, TextureFormat.RGBA32, false);
 
-            byte[] screenshotData = screenshotTexture.EncodeToPNG();
+            // Configure camera for screenshot
+            setting.ScreenshotCamera.targetTexture = rt;
+            setting.ScreenshotCamera.Render();
+            setting.ScreenshotCamera.targetTexture = prev_rt;
 
-            var screenshotDataPacket = CreatePacketHelper.CreateScreenshotData(screenWidth, screenHeight, screenshotData);
+            // Read and apply the screenshot data
+            RenderTexture.active = rt;
+            screenShot.ReadPixels(new Rect(0, 0, screenWidth, screenHeight), 0, 0);
+            screenShot.Apply();
+            RenderTexture.active = null;
+
+            Destroy(rt);
+            byte[] screenshotData = screenShot.GetRawTextureData();
+            byte[] newTextureRawData = new byte[screenshotData.Length];
+
+            // Repack the screenshot data
+            for (int y = 0; y < screenHeight; y++)
+            {
+                for (int x = 0; x < screenWidth; x++)
+                {
+                    int srcIndex = (screenHeight - y - 1) * screenWidth * 4 + x * 4;
+                    int destIndex = y * screenWidth * 4 + x * 4;
+
+                    newTextureRawData[destIndex] = screenshotData[srcIndex];
+                    newTextureRawData[destIndex + 1] = screenshotData[srcIndex + 1];
+                    newTextureRawData[destIndex + 2] = screenshotData[srcIndex + 2];
+                    newTextureRawData[destIndex + 3] = screenshotData[srcIndex + 3];
+                }
+            }
+
+            // Create a screenshot data packet and send it
+            var screenshotDataPacket = CreatePacketHelper.CreateScreenshotData(screenWidth, screenHeight, newTextureRawData);
             BocchiTrackerSendPacket(screenshotDataPacket);
         }
     }

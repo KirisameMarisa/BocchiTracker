@@ -1,13 +1,23 @@
-﻿using BocchiTracker.ProcessLinkQuery.Queries;
-using System;
+﻿
+//!< Copyright (c) 2023 Yuto Arita
+
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
+using BocchiTracker.ProcessLinkQuery.Queries;
 
 namespace BocchiTracker
 {
+    /// <summary>
+    /// Helper class for creating various data packets using FlatBuffers.
+    /// </summary>
     public static class CreatePacketHelper
     {
+        /// <summary>
+        /// Creates a data packet for player position information.
+        /// </summary>
+        /// <param name="inPlayerPosition">The player's position vector.</param>
+        /// <param name="inStage">The current stage or environment identifier.</param>
+        /// <returns>The created data packet.</returns>
         public static List<byte> CreatePlayerPosition(Vector3 inPlayerPosition, string inStage)
         {
             var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
@@ -33,6 +43,10 @@ namespace BocchiTracker
             return finalPacketData;
         }
 
+        /// <summary>
+        /// Creates a data packet for application basic information.
+        /// </summary>
+        /// <returns>The created data packet.</returns>
         public static List<byte> CreateApplicationBasicInformation()
         {
             int pid = System.Diagnostics.Process.GetCurrentProcess().Id;
@@ -66,6 +80,13 @@ namespace BocchiTracker
             return finalPacketData;
         }
 
+        /// <summary>
+        /// Creates a data packet for screenshot information.
+        /// </summary>
+        /// <param name="inWidth">The width of the screenshot image.</param>
+        /// <param name="inHeight">The height of the screenshot image.</param>
+        /// <param name="inData">The raw data of the screenshot image.</param>
+        /// <returns>The created data packet.</returns>
         public static List<byte> CreateScreenshotData(int inWidth, int inHeight, byte[] inData)
         {
             var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
