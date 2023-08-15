@@ -20,6 +20,7 @@ namespace BocchiTracker.ProcessLink
         private readonly TcpClient _tcpClient;
         private readonly int _clientId;
         private readonly IEventAggregator _eventAggregator;
+        private readonly SubscriptionToken _subscriptionToken;
         private readonly IServiceProcessData _serviceProcessData;
 
         public AppStatusQuery(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData, int inClientID, TcpClient inClient)
@@ -29,7 +30,7 @@ namespace BocchiTracker.ProcessLink
             _eventAggregator = inEventAggregator;
             _serviceProcessData = inServiceProcessData;
 
-            _eventAggregator
+            _subscriptionToken = _eventAggregator
                 .GetEvent<RequestQueryEvent>()
                 .Subscribe(Handle, ThreadOption.BackgroundThread);
         }
@@ -83,6 +84,9 @@ namespace BocchiTracker.ProcessLink
             _eventAggregator
                 .GetEvent<AppDisconnectEvent>()
                 .Publish(new AppDisconnectEventParameter(_clientId));
+            _eventAggregator
+                .GetEvent<RequestQueryEvent>()
+                .Unsubscribe(_subscriptionToken);
         }
     }
 }

@@ -3,5 +3,5 @@ set fbs=%~dp0/../Application/Models/ProcessLinkQuery/Query.fbs
 call %flatc% --python -o Python %fbs% 
 call %flatc% --cpp -o UnrealEngine/BocchiTracker/Source/BocchiTracker/Private %fbs%
 call %flatc% --cpp -o Godot %fbs% 
-call %flatc% --csharp -o Unity %fbs% 
+call %flatc% --csharp -o Unity/BocchiTracker %fbs% 
 pause

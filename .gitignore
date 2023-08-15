@@ -11,3 +11,6 @@ Plugins/UnrealEngine/BocchiTracker/Binaries
 Plugins/UnrealEngine/BocchiTracker/Intermediate
 Plugins/UnrealEngine/ThirdParty/flatbuffers/include
 Plugins/UnrealEngine/ThirdParty/flatbuffers/lib
+UnityEditor.dll
+UnityEngine.dll
+Google.FlatBuffers.*
