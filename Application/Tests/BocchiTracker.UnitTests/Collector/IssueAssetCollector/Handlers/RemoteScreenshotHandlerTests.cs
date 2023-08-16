@@ -67,7 +67,6 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
                     255, 255, 255,  255,
                 });
             
-            RemoteScreenshotSaveProcess.Output = "output\\test.png";
             Directory.CreateDirectory("output");
 
             // Instantiate the handler with the mocked dependencies
