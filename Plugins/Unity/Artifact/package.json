@@ -1,0 +1,25 @@
+﻿{
+  "name": "com.kirisamemarisa.bocchitracker",
+  "version": "1.0.0",
+  "displayName": "BocchiTracker",
+  "description": "BocchiTracker is a bug reporting tool that allows you to report issues to various services.",
+  "unity": "2022.3",
+  "unityRelease": "6f1",
+  "documentationUrl": "https://github.com/KirisameMarisa/BocchiTracker/tree/master/Documents",
+  "changelogUrl": "",
+  "licensesUrl": "https://github.com/KirisameMarisa/BocchiTracker/blob/master/LICENCE.txt",
+  "dependencies": {
+
+  },
+  "keywords": [
+    "bocchi",
+    "tracker",
+    "bug",
+    "issue",
+    "report"
+  ],
+  "author": {
+    "name": "YutoArita",
+    "url": "https://github.com/KirisameMarisa/BocchiTracker"
+  }
+}
