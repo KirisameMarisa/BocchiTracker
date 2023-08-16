@@ -2,18 +2,35 @@
 
 BocchiTracker is a bug reporting tool that allows you to report issues to various services. 
 
+<img src="./Documents/Resources/BocchiTracker_System.png" width="70%">
+
+<br>
+BocchiTracker View!
+
 <img src="./Documents/Resources/BocchiTracker.png" width="70%">
 
-Currently supported services include:
+<br>
 
-|Service|Supported|
-|:--|--:|
-|Redmine|◯|
-|Github|◯|
-|Slack|◯|
-|Discord||
-|Gitlab||
-|JIRA||
+Coordinates and other cumbersome inputs are automatically entered.
+<br>
+Screenshots can also be taken with the push of a button!
+<img src="./Documents/Resources/Redmine_Sample.png" width="70%">
+
+<br>
+Currently supported report services include:
+
+|Redmine|Github|Slack|Discord|Gitlab|JIRA|
+|:--:|:--:|:--:|:--:|:--:|:--:|
+|◯|◯|◯|||||
+
+<br>
+Currently supported upload service include:
+
+|Dropbox|Explorer|
+|:--:|:--:|
+|||
+
+<br>
 
 ## Features
 
