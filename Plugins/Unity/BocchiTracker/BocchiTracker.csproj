@@ -22,4 +22,8 @@
     </None>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="python $(SolutionDir)PostBuildAction.py $(OutDir) $(SolutionDir)" />
+  </Target>
+
 </Project>

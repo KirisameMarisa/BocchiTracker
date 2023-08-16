@@ -1,0 +1,5 @@
+import build_flatbuffers_cpp
+import build_flatbuffers_csharp
+
+build_flatbuffers_cpp.Build()
+build_flatbuffers_csharp.Build()
