@@ -40,6 +40,8 @@ namespace BocchiTracker.Client.Config
             eventAggregator.GetEvent<ApplicationExitEvent>().Publish();
 
             var authConfigRepositoryFactory = (Application.Current as PrismApplication).Container.Resolve<IAuthConfigRepositoryFactory>();
+            authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
+            
             var projectConfigRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
             var projectConfig = projectConfigRepo.Load();
 

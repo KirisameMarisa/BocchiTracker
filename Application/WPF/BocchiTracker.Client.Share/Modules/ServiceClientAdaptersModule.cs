@@ -12,15 +12,16 @@ namespace BocchiTracker.Client.Share.Modules
 {
     public class ServiceClientAdaptersModule : IModule
     {
-        public void OnInitialized(IContainerProvider containerProvider)  { }
+        public void OnInitialized(IContainerProvider containerProvider) { }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<ICacheProvider, CacheProvider>();
             containerRegistry.RegisterSingleton<IDataRepository, DataRepository>();
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
-            containerRegistry.RegisterInstance<IAuthConfigRepositoryFactory>(
-                new AuthConfigRepositoryFactory(Path.Combine("Configs", nameof(AuthConfig) + "s")));
+            containerRegistry.RegisterSingleton<IMacAddressProvider, MacAddressProvider>();
+            containerRegistry.RegisterSingleton<IPasswordService, PasswordService>();
+            containerRegistry.RegisterSingleton<IAuthConfigRepositoryFactory, AuthConfigRepositoryFactory>();
         }
     }
 }

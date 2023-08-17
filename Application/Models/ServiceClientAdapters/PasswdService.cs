@@ -7,22 +7,36 @@ namespace BocchiTracker.ServiceClientAdapters
 {
     public interface IPasswordService
     {
-        string Encrypy(string inText, string inMacAddress);
+        string Encrypy(string inText);
 
-        string Decrypy(string inCipherText, string inMacAddress);
+        string Decrypy(string inCipherText);
     }
 
     public class PasswordService : IPasswordService
     {
-        public string Encrypy(string inText, string inMacAddress)
+        private string? _macAddress;
+
+        public PasswordService(IMacAddressProvider inMacAddressProvider)
         {
+            var adresses = inMacAddressProvider.GetMacAddresses();
+            if (adresses.Count > 0)
+            {
+                _macAddress = adresses[0];
+            }
+        }
+
+        public string Encrypy(string inText)
+        {
+            if (string.IsNullOrEmpty(_macAddress))
+                return string.Empty;
+
             byte[] encrypted;
 
             using var aes = Aes.Create();
             aes.KeySize = 128;
             aes.Mode = CipherMode.CBC;
-            aes.Key = GenerateKey(inMacAddress);
-            aes.IV = GenerateIV(inMacAddress);
+            aes.Key = GenerateKey(_macAddress);
+            aes.IV = GenerateIV(_macAddress);
 
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using (MemoryStream msEncrypt = new MemoryStream())
@@ -40,28 +54,38 @@ namespace BocchiTracker.ServiceClientAdapters
             return Convert.ToBase64String(encrypted);
         }
 
-        public string Decrypy(string inCipherText, string inMacAddress)
+        public string Decrypy(string inCipherText)
         {
+            if (string.IsNullOrEmpty(_macAddress))
+                return string.Empty;
+
             string? plaintext = null;
 
             using var aes = Aes.Create();
             aes.KeySize = 128;
             aes.Mode = CipherMode.CBC;
-            aes.Key = GenerateKey(inMacAddress);
-            aes.IV = GenerateIV(inMacAddress);
+            aes.Key = GenerateKey(_macAddress);
+            aes.IV = GenerateIV(_macAddress);
 
-            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            using (MemoryStream msDecrypt = new MemoryStream(Convert.FromBase64String(inCipherText)))
+            try
             {
-                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                using (MemoryStream msDecrypt = new MemoryStream(Convert.FromBase64String(inCipherText)))
                 {
-                    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        plaintext = srDecrypt.ReadToEnd();
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
                     }
                 }
+                return plaintext;
             }
-            return plaintext;
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private byte[] GenerateIV(string inMacAddress)

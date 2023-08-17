@@ -23,7 +23,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
         public SlackClientTests()
         {
             {
-                var factory = new AuthConfigRepositoryFactory(Path.Combine("Resources", "Configs", "AuthConfigs"));
+                var factory = new AuthConfigRepositoryFactory(new PasswordService(new MacAddressProvider()));
+                factory.Initialize(Path.Combine("Resources", "Configs", "AuthConfigs"));
                 _auth_config = factory.Load(ServiceDefinitions.Slack);
             }
 
