@@ -115,7 +115,8 @@ namespace BocchiTracker.Client
             var dataRepository              = Container.Resolve<IDataRepository>();
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
-            var autoConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+            var authConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+            authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
 
             _ = connection.StartAsync(projectConfig.Port);
 
@@ -123,7 +124,7 @@ namespace BocchiTracker.Client
 
             Task.Run(async () =>
             {
-                var serviceAuthenticator = new ServiceAuthenticator(serviceClientFactory, autoConfigRepositoryFactory);
+                var serviceAuthenticator = new ServiceAuthenticator(serviceClientFactory, authConfigRepositoryFactory);
                 await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
                 await issueInfoBundle.Initialize(dataRepository);
                 PublishEvents(Container, projectConfig, userConfig);
