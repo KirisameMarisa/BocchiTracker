@@ -118,15 +118,6 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 newIssue.Priority = IdentifiableName.Create<IdentifiableName>(id);
             }
 
-            if (inTicketData.Watchers != null)
-            {
-                foreach (var userData in inTicketData.Watchers)
-                {
-                    if(int.TryParse(userData.Id, out id))
-                        newIssue.Watchers.Add(IdentifiableName.Create<Watcher>(id));
-                }
-            }
-
             if (inTicketData.CustomFields != null && inTicketData.CustomFields.Count != 0)
             {
                 newIssue.CustomFields = new List<IssueCustomField>();
@@ -159,10 +150,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 }
             }
 
+            Issue? createdIssue = null;
             try
             {
-                Issue createdIssue = await _client.CreateObjectAsync(newIssue);
-                return (true, createdIssue?.Id.ToString());
+                createdIssue = await _client.CreateObjectAsync(newIssue);
             }
             catch (WebException ex)
             {
@@ -174,7 +165,34 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     // Log the error message or do something else with it
                     Trace.TraceError(errorMessage);
                 }
+                return (false, null);
+            }
 
+            if (inTicketData.Watchers == null)
+                return (true, createdIssue?.Id.ToString());
+
+            if (createdIssue == null)
+                return (false, null);
+            
+            try
+            {
+                createdIssue.Watchers = new List<Watcher>();
+                foreach (var userData in inTicketData.Watchers)
+                {
+                    if (int.TryParse(userData.Id, out id))
+                        await _client.AddWatcherToIssueAsync(createdIssue.Id, id);
+                }
+                return (true, createdIssue?.Id.ToString());
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse response)
+                {
+                    using var reader = new StreamReader(response.GetResponseStream());
+                    var errorMessage = await reader.ReadToEndAsync();
+
+                    Trace.TraceError(errorMessage);
+                }
                 return (false, null);
             }
         }

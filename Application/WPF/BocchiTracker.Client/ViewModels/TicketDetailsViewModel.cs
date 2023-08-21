@@ -21,48 +21,113 @@ using BocchiTracker.Client.Controls;
 
 namespace BocchiTracker.Client.ViewModels
 {
-    public class TicketLabels : MultipleChoicesControl
+    public class TicketLabels : BindableBase
     {
-        public TicketProperty _ticketProperty { get; set; }
-
-        public TicketLabels(TicketProperty ticketProperty) : base("Labels") { _ticketProperty = ticketProperty; }
-
-        public override void OnUpdateRegisteredItems()
+        public class DisplayViewModel : MultipleItemDisplayViewModel
         {
-            _ticketProperty.Labels.Clear();
-            foreach (var item in RegisteredItems)
-                _ticketProperty.Labels.Add(item as string);
+            public TicketProperty _ticketProperty { get; set; }
+
+            public DisplayViewModel(TicketProperty inTicketProperty)
+            {
+                _ticketProperty = inTicketProperty;
+            }
+
+            public override void TransferParameter(IEnumerable<object> inItems)
+            {
+                _ticketProperty.Labels.Clear();
+                foreach (var item in inItems)
+                    _ticketProperty.Labels.Add(item as string);
+            }
+        }
+
+        public class ComboboxViewModel : ComboboxWithFilterViewModel
+        {
+            private MultipleItemDisplayViewModel _displayViewModel;
+
+            public ComboboxViewModel(IEventAggregator inEventAggregator, MultipleItemDisplayViewModel inDisplayViewModel) 
+                : base(inEventAggregator, "Labels", ESelectType.Multiple)
+            {
+                _displayViewModel = inDisplayViewModel;
+            }
+
+            public override void ProcessSelectedItems(IEnumerable<object> inItems)
+            {
+                foreach(var item in inItems)
+                    _displayViewModel.AddItem(item);
+            }
+        }
+
+        public DisplayViewModel Display { get; set; }
+        public ComboboxViewModel Combobox { get; set; }
+
+        public TicketLabels(IEventAggregator inEventAggregator, TicketProperty ticketProperty) 
+        {
+            Display = new DisplayViewModel(ticketProperty);
+            Combobox = new ComboboxViewModel(inEventAggregator, Display);
         }
     }
 
-    public class TicketWatchers : MultipleChoicesControl
+    public class TicketWatchers : BindableBase
     {
-        public TicketProperty _ticketProperty { get; set; }
-
-        public TicketWatchers(TicketProperty ticketProperty) : base("Watchers") { _ticketProperty = ticketProperty; }
-
-        public override void OnUpdateRegisteredItems()
+        public class DisplayViewModel : MultipleItemDisplayViewModel
         {
-            _ticketProperty.Watchers.Clear();
-            foreach (var item in RegisteredItems)
-                _ticketProperty.Watchers.Add(item as UserData);
+            public TicketProperty _ticketProperty { get; set; }
+
+            public DisplayViewModel(TicketProperty inTicketProperty)
+            {
+                _ticketProperty = inTicketProperty;
+            }
+
+            public override void TransferParameter(IEnumerable<object> inItems)
+            {
+                _ticketProperty.Watchers.Clear();
+                foreach (var item in inItems)
+                    _ticketProperty.Watchers.Add(item as UserData);
+            }
+        }
+
+        public class ComboboxViewModel : ComboboxWithFilterViewModel
+        {
+            private MultipleItemDisplayViewModel _displayViewModel;
+
+            public ComboboxViewModel(IEventAggregator inEventAggregator, MultipleItemDisplayViewModel inDisplayViewModel)
+                : base(inEventAggregator, "Watchers", ESelectType.Multiple)
+            {
+                _displayViewModel = inDisplayViewModel;
+            }
+
+            public override void ProcessSelectedItems(IEnumerable<object> inItems)
+            {
+                foreach (var item in inItems)
+                    _displayViewModel.AddItem(item);
+            }
+        }
+
+        public DisplayViewModel Display { get; set; }
+        public ComboboxViewModel Combobox { get; set; }
+
+        public TicketWatchers(IEventAggregator inEventAggregator, TicketProperty ticketProperty) 
+        {
+            Display = new DisplayViewModel(ticketProperty);
+            Combobox = new ComboboxViewModel(inEventAggregator, Display);
         }
     }
 
-    public class ConnectTo : OneChoiceControl
+    public class ConnectTo : BindableBase
     {
+        public ReactiveCollection<object> Items { get; } = new ReactiveCollection<object>();
+        public ReactiveProperty<object> Selected { get; set; } = new ReactiveProperty<object>();
+        public ReactiveProperty<string> HintText { get; set; } = new ReactiveProperty<string>("Connected To...");
+
         public TicketProperty _ticketProperty { get; set; }
 
-        public ConnectTo(TicketProperty ticketProperty) : base("Connected To...") 
+        public ConnectTo(TicketProperty ticketProperty)
         { 
             _ticketProperty = ticketProperty;
             _ticketProperty.AppStatusBundles.AppConnected       = this.Connected;
             _ticketProperty.AppStatusBundles.AppDisconnected    = this.Disconnected;
-        }
 
-        public override void OnSelected(object inItem)
-        {
-            _ticketProperty.AppStatusBundles.TrackerApplication = inItem as AppStatusBundle;
+            Selected.Subscribe(x => { _ticketProperty.AppStatusBundles.TrackerApplication = x as AppStatusBundle; });
         }
 
         public void Connected(AppStatusBundle inAppStatusBundle)
@@ -72,7 +137,7 @@ namespace BocchiTracker.Client.ViewModels
                 var foundItems = Items.Where(x => x == inAppStatusBundle).ToList();
                 if (foundItems.Count() == 0)
                 {
-                    base.AddItem(inAppStatusBundle);
+                    Items.Add(inAppStatusBundle);
                 }
             });
         }
@@ -84,9 +149,8 @@ namespace BocchiTracker.Client.ViewModels
                 var foundItems = Items.Where(x => x == inAppStatusBundle).ToList();
                 foreach (var removeItem in foundItems)
                 {
-                    base.RemoveItem(removeItem);
+                    Items.Remove(removeItem);
                 }
-
 
                 if((Selected.Value as AppStatusBundle) == inAppStatusBundle)
                 {
@@ -96,36 +160,52 @@ namespace BocchiTracker.Client.ViewModels
         }
     }
 
-    public class TicketAssign : OneChoiceControl
+    public class TicketAssign : ComboboxWithFilterViewModel
     {
         public TicketProperty _ticketProperty { get; set; }
 
-        public TicketAssign(TicketProperty ticketProperty) : base("Assign") { _ticketProperty = ticketProperty; }
+        public TicketAssign(IEventAggregator inEventAggregator, TicketProperty ticketProperty) 
+            : base(inEventAggregator, "Assign") { _ticketProperty = ticketProperty; }
 
-        public override void OnSelected(object inItem) { _ticketProperty.Assign.Value = inItem as UserData; }
+        public override void ProcessSelectedItems(IEnumerable<object> inItems)
+        {
+            if(inItems.Count() > 0)
+                _ticketProperty.Assign.Value = inItems.ElementAt(0) as UserData;
+        }
     }
 
-    public class TicketClass : OneChoiceControl
+    public class TicketClass : BindableBase
     {
+        public ReactiveCollection<object> Items { get; } = new ReactiveCollection<object>();
+        public ReactiveProperty<object> Selected { get; set; } = new ReactiveProperty<object>();
+        public ReactiveProperty<string> HintText { get; set; } = new ReactiveProperty<string>("Class");
+
         public TicketProperty _ticketProperty { get; set; }
 
-        public TicketClass(TicketProperty ticketProperty) : base("Class") { _ticketProperty = ticketProperty; }
-
-        public override void OnSelected(object inItem) { _ticketProperty.Class.Value = inItem?.ToString(); }
+        public TicketClass(TicketProperty ticketProperty) 
+        {
+            _ticketProperty = ticketProperty;
+            Selected.Subscribe(x => { _ticketProperty.Class.Value = x?.ToString(); });
+        }
     }
 
-    public class TicketPriority : OneChoiceControl
+    public class TicketPriority : BindableBase
     {
+        public ReactiveCollection<object> Items { get; } = new ReactiveCollection<object>();
+        public ReactiveProperty<object> Selected { get; set; } = new ReactiveProperty<object>();
+        public ReactiveProperty<string> HintText { get; set; } = new ReactiveProperty<string>("Priority");
+
         public TicketProperty _ticketProperty { get; set; }
 
-        public TicketPriority(TicketProperty ticketProperty) : base("Priority") { _ticketProperty = ticketProperty; }
-
-        public override void OnSelected(object inItem) { _ticketProperty.Priority.Value = inItem?.ToString(); }
+        public TicketPriority(TicketProperty ticketProperty) 
+        { 
+            _ticketProperty = ticketProperty;
+            Selected.Subscribe(x => { _ticketProperty.Priority.Value = x?.ToString(); });
+        }
     }
 
     public class TicketDetailsViewModel : BindableBase
     {
-        [Dependency]
         public TicketProperty TicketProperty { get; set; }
 
         public TicketClass TicketClass { get; set; }
@@ -142,11 +222,12 @@ namespace BocchiTracker.Client.ViewModels
 
         public TicketDetailsViewModel(IEventAggregator inEventAggregator, TicketProperty inTicketProperty) 
         {
+            TicketProperty = inTicketProperty;
             TicketClass = new TicketClass(inTicketProperty);
             TicketPriority = new TicketPriority(inTicketProperty);
-            TicketAssign = new TicketAssign(inTicketProperty);
-            TicketLabels = new TicketLabels(inTicketProperty);
-            TicketWatchers = new TicketWatchers(inTicketProperty);
+            TicketAssign = new TicketAssign(inEventAggregator, inTicketProperty);
+            TicketLabels = new TicketLabels(inEventAggregator, inTicketProperty);
+            TicketWatchers = new TicketWatchers(inEventAggregator, inTicketProperty);
             ConnectTo = new ConnectTo(inTicketProperty);
 
             inEventAggregator
@@ -167,35 +248,27 @@ namespace BocchiTracker.Client.ViewModels
                 TicketPriority.Items.Add(item);
 
             var issue_info_bundle = (Application.Current as PrismApplication).Container.Resolve<IssueInfoBundle>();
-            foreach (var item in issue_info_bundle.LabelListService.GetUnifiedData())
-                TicketLabels.Items.Add(item.Name);
-
-            foreach (var item in issue_info_bundle.UserListService.GetUnifiedData())
-            {
-                TicketAssign.Items.Add(item);
-                TicketWatchers.Items.Add(item);
-            }
+            TicketLabels.Combobox.Initialize(issue_info_bundle.LabelListService.GetUnifiedData().Select(x => x.Name));
+            TicketAssign.Initialize(issue_info_bundle.UserListService.GetUnifiedData());
+            TicketWatchers.Combobox.Initialize(issue_info_bundle.UserListService.GetUnifiedData());
         }
 
         private void OnPopulateCbValuesEvent()
         {
             TicketClass.Selected.Value      = TicketProperty.Class.Value;
-            TicketClass.EditText.Value      = TicketProperty.Class.Value;
             TicketPriority.Selected.Value   = TicketProperty.Priority.Value;
-            TicketPriority.EditText.Value   = TicketProperty.Priority.Value;
-            TicketAssign.Selected.Value     = TicketProperty.Assign.Value;
             TicketAssign.EditText.Value     = TicketProperty.Assign.Value.Name;
 
             {
                 var temporaryList = new List<string>(TicketProperty.Labels);
                 foreach (var item in temporaryList)
-                    TicketLabels.RegisteredItems.Add(item);
+                    TicketLabels.Display.AddItem(item);
             }
 
             {
                 var temporaryList = new List<UserData>(TicketProperty.Watchers);
                 foreach (var item in temporaryList)
-                    TicketWatchers.RegisteredItems.Add(item.Name);
+                    TicketWatchers.Display.AddItem(item.Name);
             }
         }
     }

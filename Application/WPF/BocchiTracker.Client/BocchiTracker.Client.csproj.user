@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Controls\ComboboxWithFilter.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\PickerDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -24,10 +30,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\MultipleChoice.xaml">
+    <Page Update="Controls\ComboboxWithFilter.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\OneChoice.xaml">
+    <Page Update="Controls\PickerDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\MultipleItemDisplay.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">

@@ -8,12 +8,95 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="CenteredContentPresenterStyle" TargetType="ContentPresenter">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
-        <controls:OneChoice ViewModel="{Binding ConnectTo}"/>
-        <controls:OneChoice ViewModel="{Binding TicketAssign}"/>
-        <controls:OneChoice ViewModel="{Binding TicketClass}"/>
-        <controls:OneChoice ViewModel="{Binding TicketPriority}"/>
-        <controls:MultipleChoice ViewModel="{Binding TicketLabels}"/>
-        <controls:MultipleChoice ViewModel="{Binding TicketWatchers}"/>
+        <ComboBox 
+            ItemsSource="{Binding ConnectTo.Items}"
+            SelectedItem="{Binding ConnectTo.Selected.Value, Mode=TwoWay}"
+            Foreground="White"
+            IsTextSearchEnabled="False"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            materialDesign:HintAssist.Hint="{Binding ConnectTo.HintText.Value}"
+            FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+            <ComboBox.Resources>
+                <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
+            </ComboBox.Resources>
+        </ComboBox>
+
+        <controls:ComboboxWithFilter
+                HintText="{Binding TicketAssign.HintText.Value}"
+                EditText="{Binding TicketAssign.EditText.Value, UpdateSourceTrigger=PropertyChanged}"
+                ShowPickerCommand="{Binding TicketAssign.ShowPickerCommand}"
+                PickerLocationX="{Binding TicketAssign.PickerLocationX.Value}" 
+                PickerLocationY="{Binding TicketAssign.PickerLocationY.Value}"/>
+
+        <ComboBox 
+            ItemsSource="{Binding TicketClass.Items}"
+            SelectedItem="{Binding TicketClass.Selected.Value, Mode=TwoWay}"
+            Foreground="White"
+            IsTextSearchEnabled="False"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            materialDesign:HintAssist.Hint="{Binding TicketClass.HintText.Value}"
+            FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+            <ComboBox.Resources>
+                <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
+            </ComboBox.Resources>
+        </ComboBox>
+
+        <ComboBox 
+            ItemsSource="{Binding TicketPriority.Items}"
+            SelectedItem="{Binding TicketPriority.Selected.Value, Mode=TwoWay}"
+            Foreground="White"
+            IsTextSearchEnabled="False"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            materialDesign:HintAssist.Hint="{Binding TicketPriority.HintText.Value}"
+            FontSize="16" 
+            VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+            <ComboBox.Resources>
+                <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
+            </ComboBox.Resources>
+        </ComboBox>
+
+        <Grid Margin="5,0,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.45*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="0,0,0,1"/>
+            <controls:MultipleItemDisplay
+                Grid.Column="0"
+                ItemsSource="{Binding TicketLabels.Display.Items}"
+                DeleteItemCommand="{Binding TicketLabels.Display.DeleteItemCommand}"/>
+            <controls:ComboboxWithFilter
+                Grid.Column="1"
+                HintText="{Binding TicketLabels.Combobox.HintText.Value}"
+                EditText="{Binding TicketLabels.Combobox.EditText.Value, UpdateSourceTrigger=PropertyChanged}"
+                ShowPickerCommand="{Binding TicketLabels.Combobox.ShowPickerCommand}"
+                PickerLocationX="{Binding TicketLabels.Combobox.PickerLocationX.Value}" 
+                PickerLocationY="{Binding TicketLabels.Combobox.PickerLocationY.Value}"/>
+        </Grid>
+
+        <Grid Margin="5,0,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.45*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="0,0,0,1"/>
+            <controls:MultipleItemDisplay
+                Grid.Column="0"
+                ItemsSource="{Binding TicketWatchers.Display.Items}"
+                DeleteItemCommand="{Binding TicketWatchers.Display.DeleteItemCommand}"/>
+            <controls:ComboboxWithFilter
+                Grid.Column="1"
+                HintText="{Binding TicketWatchers.Combobox.HintText.Value}"
+                EditText="{Binding TicketWatchers.Combobox.EditText.Value, UpdateSourceTrigger=PropertyChanged}"
+                ShowPickerCommand="{Binding TicketWatchers.Combobox.ShowPickerCommand}"
+                PickerLocationX="{Binding TicketWatchers.Combobox.PickerLocationX.Value}" 
+                PickerLocationY="{Binding TicketWatchers.Combobox.PickerLocationY.Value}"/>
+        </Grid>
     </StackPanel>
 </UserControl>

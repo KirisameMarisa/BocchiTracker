@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BocchiTracker.Client.Views"
+        xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
         xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -14,6 +15,15 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <prism:InvokeCommandAction Command="{Binding ClosedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseMove">
+            <prism:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Activated">
+            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="true"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Deactivated">
+            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="false"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">

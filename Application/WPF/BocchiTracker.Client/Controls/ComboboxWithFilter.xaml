@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Controls.ComboboxWithFilter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:BocchiTracker.Client.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="300">
+
+    <Grid>
+        <TextBox 
+            x:Name="Filter" 
+            FontSize="14"
+            Foreground="White"
+            Text="{Binding EditText, RelativeSource={RelativeSource AncestorType=local:ComboboxWithFilter}, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            materialDesign:HintAssist.Hint="{Binding HintText, RelativeSource={RelativeSource AncestorType=local:ComboboxWithFilter}}"
+            HorizontalContentAlignment="Center">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                    <prism:InvokeCommandAction Command="{Binding ShowPickerCommand, RelativeSource={RelativeSource AncestorType=local:ComboboxWithFilter}}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+    </Grid>
+</UserControl>
