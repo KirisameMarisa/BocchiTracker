@@ -19,7 +19,6 @@ namespace BocchiTracker.Client.Share.Modules
             containerRegistry.RegisterSingleton<ICacheProvider, CacheProvider>();
             containerRegistry.RegisterSingleton<IDataRepository, DataRepository>();
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
-            containerRegistry.RegisterSingleton<IMacAddressProvider, MacAddressProvider>();
             containerRegistry.RegisterSingleton<IPasswordService, PasswordService>();
             containerRegistry.RegisterSingleton<IAuthConfigRepositoryFactory, AuthConfigRepositoryFactory>();
         }

@@ -14,29 +14,15 @@ namespace BocchiTracker.ServiceClientAdapters
 
     public class PasswordService : IPasswordService
     {
-        private string? _macAddress;
-
-        public PasswordService(IMacAddressProvider inMacAddressProvider)
-        {
-            var adresses = inMacAddressProvider.GetMacAddresses();
-            if (adresses.Count > 0)
-            {
-                _macAddress = adresses[0];
-            }
-        }
-
         public string Encrypy(string inText)
         {
-            if (string.IsNullOrEmpty(_macAddress))
-                return string.Empty;
-
             byte[] encrypted;
 
             using var aes = Aes.Create();
             aes.KeySize = 128;
             aes.Mode = CipherMode.CBC;
-            aes.Key = GenerateKey(_macAddress);
-            aes.IV = GenerateIV(_macAddress);
+            aes.Key = GenerateChiper(32);
+            aes.IV = GenerateChiper(16);
 
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using (MemoryStream msEncrypt = new MemoryStream())
@@ -51,26 +37,28 @@ namespace BocchiTracker.ServiceClientAdapters
                     encrypted = msEncrypt.ToArray();
                 }
             }
-            return Convert.ToBase64String(encrypted);
+            return $"{Convert.ToBase64String(aes.Key)}:{Convert.ToBase64String(aes.IV)}:{Convert.ToBase64String(encrypted)}";
         }
 
-        public string Decrypy(string inCipherText)
+        public string Decrypy(string inText)
         {
-            if (string.IsNullOrEmpty(_macAddress))
+            var parts = inText.Split(":");
+            if (parts.Length != 3)
                 return string.Empty;
-
+            
             string? plaintext = null;
 
             using var aes = Aes.Create();
             aes.KeySize = 128;
             aes.Mode = CipherMode.CBC;
-            aes.Key = GenerateKey(_macAddress);
-            aes.IV = GenerateIV(_macAddress);
+            aes.Key = Convert.FromBase64String(parts[0]);
+            aes.IV = Convert.FromBase64String(parts[1]);
+            byte[] password = Convert.FromBase64String(parts[2]);
 
             try
             {
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                using (MemoryStream msDecrypt = new MemoryStream(Convert.FromBase64String(inCipherText)))
+                using (MemoryStream msDecrypt = new MemoryStream(password))
                 {
                     using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
@@ -88,23 +76,14 @@ namespace BocchiTracker.ServiceClientAdapters
             }
         }
 
-        private byte[] GenerateIV(string inMacAddress)
+        private byte[] GenerateChiper(int inSize)
         {
-            byte[] mac_bytes = Encoding.UTF8.GetBytes(inMacAddress.Replace(":", "").ToLower());
-            byte[] iv = new byte[16];
-
-            Array.Copy(mac_bytes, iv, Math.Min(mac_bytes.Length, iv.Length));
-            return iv;
-        }
-
-        private byte[] GenerateKey(string inMacAddress)
-        {
-            byte[] mac_bytes = Encoding.UTF8.GetBytes(inMacAddress.Replace(":", "").ToLower());
-            byte[] key = new byte[32];
-
-            for (int i = 0; i < key.Length; i++)
-                key[i] = mac_bytes[i % mac_bytes.Length];
-            return key;
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                var chiper = new byte[inSize];
+                rng.GetBytes(chiper);
+                return chiper;
+            }
         }
     }
 }
