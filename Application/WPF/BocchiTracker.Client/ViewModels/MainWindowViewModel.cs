@@ -22,6 +22,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Reactive.Bindings;
+using System.IO.Abstractions;
+using BocchiTracker.ModelEvent;
+using BocchiTracker.Client.Controls;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -29,14 +33,21 @@ namespace BocchiTracker.Client.ViewModels
     {
         private IEventAggregator _eventAggregator;
 
+        public ICommand LocationChangedCommand { get; }
+        public ICommand MouseMoveCommand { get; }
+        public ICommand ActiveChangedCommand { get; }
         public ICommand DropFilesCommand { get; private set; }
         public ICommand ClosedCommand { get; private set; }
 
         public MainWindowViewModel(IEventAggregator inEventAggregator) 
         {
             _eventAggregator = inEventAggregator;
-            DropFilesCommand = new DelegateCommand<string[]>(OnDropFiles);
-            ClosedCommand = new DelegateCommand(OnCloseCommand);
+
+            DropFilesCommand        = new DelegateCommand<string[]>(OnDropFiles);
+            ClosedCommand           = new DelegateCommand(OnCloseCommand);
+            MouseMoveCommand        = new DelegateCommand(OnMouseMove);
+            ActiveChangedCommand    = new DelegateCommand<string>(OnActiveChanged);
+            LocationChangedCommand  = new DelegateCommand(OnLocationChanged);
         }
 
         private void OnDropFiles(string[] inFiles)
@@ -44,6 +55,31 @@ namespace BocchiTracker.Client.ViewModels
             _eventAggregator
                 .GetEvent<AssetDropedEvent>()
                 .Publish(new AssetDropedEventParameter(inFiles));
+        }
+
+
+        private void OnLocationChanged()
+        {
+            _eventAggregator
+                .GetEvent<WindowLocationChangedEvent>()
+                .Publish();
+        }
+
+        private void OnMouseMove()
+        {
+            _eventAggregator
+                .GetEvent<WindowMouseMoveEvent>()
+                .Publish();
+        }
+
+        private void OnActiveChanged(string inState)
+        {
+            if(bool.TryParse(inState, out bool outState)) 
+            {
+                _eventAggregator
+                    .GetEvent<WindowActiveChangedEvent>()
+                    .Publish(outState);
+            }
         }
 
         public void OnCloseCommand()
