@@ -80,9 +80,9 @@ namespace BocchiTracker.Client.ViewModels
 
             public override void TransferParameter(IEnumerable<object> inItems)
             {
-                _ticketProperty.Labels.Clear();
+                _ticketProperty.Watchers.Clear();
                 foreach (var item in inItems)
-                    _ticketProperty.Labels.Add(item as string);
+                    _ticketProperty.Watchers.Add(item as UserData);
             }
         }
 
