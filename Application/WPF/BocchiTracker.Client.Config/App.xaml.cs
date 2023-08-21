@@ -98,6 +98,7 @@ namespace BocchiTracker.Client.Config
             var eventAggregator = Container.Resolve<IEventAggregator>();
             {
                 var authConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+                authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
                 var projectConfigRepo           = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
                 var userConfigRepo              = Container.Resolve<CachedConfigRepository<UserConfig>>();
                 var variableDump                = Container.Resolve<VariableDump>();
