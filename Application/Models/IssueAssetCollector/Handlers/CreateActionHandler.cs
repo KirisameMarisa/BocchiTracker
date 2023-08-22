@@ -1,4 +1,4 @@
-﻿using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.IssueAssetCollector.Handlers.Coredump;
 using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using Prism.Events;

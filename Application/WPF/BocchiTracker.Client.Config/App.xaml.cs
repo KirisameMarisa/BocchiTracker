@@ -1,8 +1,8 @@
 ﻿using BocchiTracker.Client.Config.Views;
 using BocchiTracker.Client.Share.Controls;
 using BocchiTracker.Client.Share.Modules;
-using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using MaterialDesignThemes.Wpf;
 using Prism.Events;
 using Prism.Ioc;

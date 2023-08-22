@@ -14,6 +14,7 @@ namespace BocchiTracker.Client.Share.Modules
             containerRegistry.RegisterSingleton<IAppInfoToCustomFieldsConverter, AppInfoToCustomFieldsConverter>();
             containerRegistry.RegisterSingleton<ITicketDataFactory, TicketDataFactory>();
             containerRegistry.RegisterSingleton<IIssuePoster, IssuePoster>();
+            containerRegistry.RegisterSingleton<IIssueOpener, IssueOpener>();
         }
     }
 }

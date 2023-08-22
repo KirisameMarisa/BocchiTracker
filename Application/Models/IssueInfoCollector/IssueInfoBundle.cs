@@ -1,4 +1,4 @@
-﻿using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.IssueInfoCollector.MetaData;
 using System;
@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters;
 using System.IO;
 using System.IO.Abstractions;
-using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.IssueInfoCollector
 {

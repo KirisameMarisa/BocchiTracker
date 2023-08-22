@@ -1,6 +1,6 @@
 ﻿using YamlDotNet.Serialization;
 
-namespace BocchiTracker.Config.Configs
+namespace BocchiTracker.ServiceClientData.Configs
 {
     public class AuthConfig
     {

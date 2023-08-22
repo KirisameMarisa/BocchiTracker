@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using Prism.Events;
 using System;
 using System.Collections.Generic;

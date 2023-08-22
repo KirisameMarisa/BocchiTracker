@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using Moq;
@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Clients;
-using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Data
 {

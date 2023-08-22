@@ -6,10 +6,9 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ServiceClientData;
 using System.Diagnostics;
-using BocchiTracker.Config;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -87,6 +86,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         public bool IsAvailableFileUpload()
         {
             return false;
+        }
+
+        public void OpenWebBrowser(string inIssueKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

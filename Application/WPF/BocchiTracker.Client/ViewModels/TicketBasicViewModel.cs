@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Events;
 using BocchiTracker.IssueAssetCollector;
@@ -19,6 +19,7 @@ using System.Windows;
 using Slack.NetStandard.Messages.Blocks;
 using System.Diagnostics;
 using System.IO;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -39,6 +40,9 @@ namespace BocchiTracker.Client.ViewModels
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
+            inEventAggregator
+                .GetEvent<IssueSubmittedEvent>()
+                .Subscribe(OnIssueSubmittedEvent, ThreadOption.UIThread);
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -50,6 +54,12 @@ namespace BocchiTracker.Client.ViewModels
             {
                 useProjectConfig = inParam.UserConfig.ProjectConfigFilename;
             }
+        }
+
+        private void OnIssueSubmittedEvent(IssueSubmittedEventParameter inParam)
+        {
+            TicketProperty.Summary.Value = string.Empty;
+            TicketProperty.Description.Value = string.Empty;
         }
 
         private void OnRunConfig()

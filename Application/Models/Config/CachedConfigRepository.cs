@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Config
+namespace BocchiTracker.ServiceClientData
 {
     public class CachedConfigRepository<T>
     {

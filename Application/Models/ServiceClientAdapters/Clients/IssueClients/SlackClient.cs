@@ -9,13 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData.Configs;
 using System.Threading;
 using System.IO.Abstractions;
 using System.Diagnostics;
 using System.IO;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.Config;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -73,7 +72,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 Channel = _channel,
                 Text    = text
             });
-            return (response.OK, response.Timestamp.RawValue);
+
+            if(!response.OK)
+                return (false, string.Empty);
+
+            return (true, response.Timestamp.RawValue);
         }
 
         public bool IsAvailableFileUpload()
@@ -166,6 +169,11 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 });
             }
             return result;
+        }
+
+        public void OpenWebBrowser(string inIssueKey)
+        {
+            //!< nothing
         }
     }
 }

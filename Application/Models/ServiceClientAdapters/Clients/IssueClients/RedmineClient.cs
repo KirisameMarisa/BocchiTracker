@@ -15,9 +15,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -25,6 +24,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     {
         private RedmineManager? _client;
         private int? _projectId;
+        private string? _url;
         private string? _projectName;
         private bool _isAuthenticated;
 
@@ -47,7 +47,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
 
             _projectName = segments[^1];
-            var baseUrl = string.Join('/', segments.Take(segments.Length - 2));
+            _url = string.Join('/', segments.Take(segments.Length - 2));
 
             var webProxy = !string.IsNullOrEmpty(inProxyURL)
                 ? new WebProxy(inProxyURL, true)
@@ -55,12 +55,12 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             if (inAuthConfig.APIKey != null)
             {
-                _client = new RedmineManager(host: baseUrl, apiKey:inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: webProxy);
+                _client = new RedmineManager(host: _url, apiKey:inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: webProxy);
 
             }
             else if(inAuthConfig.Username != null && inAuthConfig.Password != null)
             {
-                _client = new RedmineManager(host: baseUrl, login: inAuthConfig.Username, password: inAuthConfig.Password, mimeFormat: MimeFormat.Json, proxy: webProxy);
+                _client = new RedmineManager(host: _url, login: inAuthConfig.Username, password: inAuthConfig.Password, mimeFormat: MimeFormat.Json, proxy: webProxy);
             }
 
             if (_client == null)
@@ -354,6 +354,19 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 });
             }
             return result;
+        }
+
+        public void OpenWebBrowser(string inIssueKey)
+        {
+            if (string.IsNullOrEmpty(_url))
+                return;
+
+            string issueURL = $"{_url}/issues/{inIssueKey}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = issueURL,
+                UseShellExecute = true
+            });
         }
     }
 }

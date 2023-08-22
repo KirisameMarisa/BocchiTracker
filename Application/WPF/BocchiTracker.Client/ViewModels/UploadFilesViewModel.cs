@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.Client.Share.Events;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.IssueInfoCollector;
@@ -20,6 +20,7 @@ using System.Windows.Input;
 using Reactive.Bindings;
 using System.Reflection.Metadata;
 using System.Diagnostics;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -50,6 +51,10 @@ namespace BocchiTracker.Client.ViewModels
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
+
+            inEventAggregator
+                .GetEvent<IssueSubmittedEvent>()
+                .Subscribe(OnIssueSubmittedEvent, ThreadOption.UIThread);
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -75,6 +80,12 @@ namespace BocchiTracker.Client.ViewModels
                     OnAddFile(item);
                 }
             }
+        }
+
+
+        private void OnIssueSubmittedEvent(IssueSubmittedEventParameter inParam)
+        {
+            Bundle.Clear();
         }
 
         public void OnAddDroppedFiles(AssetDropedEventParameter inParameter)

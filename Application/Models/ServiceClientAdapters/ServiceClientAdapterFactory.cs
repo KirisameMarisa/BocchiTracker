@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BocchiTracker.Config;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.ServiceClientAdapters.Clients;
 using BocchiTracker.ServiceClientAdapters.Clients.IssueClients;
 using BocchiTracker.ServiceClientAdapters.Clients.UploadClients;

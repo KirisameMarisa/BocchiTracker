@@ -18,6 +18,7 @@ using Prism.Mvvm;
 using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ServiceClientData;
 using BocchiTracker.Client.Controls;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -65,6 +66,13 @@ namespace BocchiTracker.Client.ViewModels
             Display = new DisplayViewModel(ticketProperty);
             Combobox = new ComboboxViewModel(inEventAggregator, Display);
         }
+
+        public void Clear()
+        {
+            Combobox.EditText.Value = string.Empty;
+            Display.Items.Clear();
+            Display._ticketProperty.Watchers.Clear();
+        }
     }
 
     public class TicketWatchers : BindableBase
@@ -110,6 +118,13 @@ namespace BocchiTracker.Client.ViewModels
         {
             Display = new DisplayViewModel(ticketProperty);
             Combobox = new ComboboxViewModel(inEventAggregator, Display);
+        }
+
+        public void Clear()
+        {
+            Combobox.EditText.Value = string.Empty;
+            Display.Items.Clear();
+            Display._ticketProperty.Watchers.Clear();
         }
     }
 
@@ -172,6 +187,12 @@ namespace BocchiTracker.Client.ViewModels
             if(inItems.Count() > 0)
                 _ticketProperty.Assign.Value = inItems.ElementAt(0) as UserData;
         }
+
+        public void Clear()
+        {
+            EditText.Value = string.Empty;
+            _ticketProperty.Assign.Value = UserData.sUnknown;
+        }
     }
 
     public class TicketClass : BindableBase
@@ -187,6 +208,12 @@ namespace BocchiTracker.Client.ViewModels
             _ticketProperty = ticketProperty;
             Selected.Subscribe(x => { _ticketProperty.Class.Value = x?.ToString(); });
         }
+
+        public void Clear()
+        {
+            Selected.Value = null;
+            _ticketProperty.Class.Value = string.Empty;
+        }
     }
 
     public class TicketPriority : BindableBase
@@ -201,6 +228,12 @@ namespace BocchiTracker.Client.ViewModels
         { 
             _ticketProperty = ticketProperty;
             Selected.Subscribe(x => { _ticketProperty.Priority.Value = x?.ToString(); });
+        }
+
+        public void Clear()
+        {
+            Selected.Value = null;
+            _ticketProperty.Priority.Value = string.Empty;
         }
     }
 
@@ -237,7 +270,12 @@ namespace BocchiTracker.Client.ViewModels
             inEventAggregator
                 .GetEvent<PopulateCbValuesEvent>()
                 .Subscribe(OnPopulateCbValuesEvent, ThreadOption.UIThread);
+
+            inEventAggregator
+                .GetEvent<IssueSubmittedEvent>()
+                .Subscribe(OnIssueSubmittedEvent, ThreadOption.UIThread);
         }
+
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
@@ -251,6 +289,15 @@ namespace BocchiTracker.Client.ViewModels
             TicketLabels.Combobox.Initialize(issue_info_bundle.LabelListService.GetUnifiedData().Select(x => x.Name));
             TicketAssign.Initialize(issue_info_bundle.UserListService.GetUnifiedData());
             TicketWatchers.Combobox.Initialize(issue_info_bundle.UserListService.GetUnifiedData());
+        }
+
+        private void OnIssueSubmittedEvent(IssueSubmittedEventParameter inParam)
+        {
+            TicketClass.Clear();
+            TicketPriority.Clear();
+            TicketAssign.Clear();
+            TicketLabels.Clear();
+            TicketWatchers.Clear();
         }
 
         private void OnPopulateCbValuesEvent()
