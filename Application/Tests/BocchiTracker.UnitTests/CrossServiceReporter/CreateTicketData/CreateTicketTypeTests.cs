@@ -8,17 +8,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {
     public class CreateTicketTypeTests
     {
         [Fact]
-        public void Create_ShouldReturnTicketType_WhenMappingExists()
+        public async Task Create_ShouldReturnTicketType_WhenMappingExists()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
+            var tickets = new List<IdentifierData>
+            {
+                new IdentifierData { Id = "1", Name = "Defect" },
+                new IdentifierData { Id = "2", Name = "Enhancement" },
+            };
+            var mockDataRepository = new Mock<IDataRepository>();
+            mockDataRepository.Setup(repo => repo.GetTicketTypes(inService)).ReturnsAsync(tickets);
+
             var inBundle = new IssueInfoBundle();
+            await inBundle.Initialize(mockDataRepository.Object);
             inBundle.TicketData = new TicketData { TicketType = "Bug" };
 
             var inConfig = new ServiceConfig();
@@ -34,15 +44,24 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var result = createTicketType.Create(inService, inBundle, inConfig);
 
             // Assert
-            Assert.Equal("Defect", result);
+            Assert.Equal("1", result);
         }
 
         [Fact]
-        public void Create_ShouldReturnNull_WhenMappingDoesNotExist()
+        public async Task Create_ShouldReturnNull_WhenMappingDoesNotExist()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
+            var tickets = new List<IdentifierData>
+            {
+                new IdentifierData { Id = "1", Name = "Defect" },
+                new IdentifierData { Id = "2", Name = "Enhancement" },
+            };
+            var mockDataRepository = new Mock<IDataRepository>();
+            mockDataRepository.Setup(repo => repo.GetTicketTypes(inService)).ReturnsAsync(tickets);
+
             var inBundle = new IssueInfoBundle();
+            await inBundle.Initialize(mockDataRepository.Object);
             inBundle.TicketData = new TicketData { TicketType = "Task" };
 
             var inConfig = new ServiceConfig();
@@ -62,11 +81,20 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         }
 
         [Fact]
-        public void Create_ShouldReturnNull_WhenTicketTypeIsNull()
+        public async Task Create_ShouldReturnNull_WhenTicketTypeIsNull()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
+            var tickets = new List<IdentifierData>
+            {
+                new IdentifierData { Id = "1", Name = "Defect" },
+                new IdentifierData { Id = "2", Name = "Enhancement" },
+            };
+            var mockDataRepository = new Mock<IDataRepository>();
+            mockDataRepository.Setup(repo => repo.GetTicketTypes(inService)).ReturnsAsync(tickets);
+
             var inBundle = new IssueInfoBundle();
+            await inBundle.Initialize(mockDataRepository.Object);
             inBundle.TicketData = new TicketData { TicketType = null };
 
             var inConfig = new ServiceConfig();

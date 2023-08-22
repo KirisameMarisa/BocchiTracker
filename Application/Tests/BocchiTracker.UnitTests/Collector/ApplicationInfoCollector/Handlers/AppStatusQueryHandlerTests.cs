@@ -34,10 +34,10 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
                 QueryID = (byte)QueryID.AppBasicInfo,
                 Status = new Dictionary<string, string>
                 {
-                    { "Pid", "1234" },
-                    { "AppName", "TestApp" },
-                    { "Args", "TestArgs" },
-                    { "Platform", "Windows" },
+                    { "AppBasicInfo.pid", "1234" },
+                    { "AppBasicInfo.app_name", "TestApp" },
+                    { "AppBasicInfo.args", "TestArgs" },
+                    { "AppBasicInfo.platform", "Windows" },
                 },
             });
 
