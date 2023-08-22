@@ -165,6 +165,7 @@ namespace BocchiTracker.Client
             containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
+            containerRegistry.RegisterDialog<UserConfigDialog, UserConfigViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

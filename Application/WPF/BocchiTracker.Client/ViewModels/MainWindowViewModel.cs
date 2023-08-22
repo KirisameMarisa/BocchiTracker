@@ -39,6 +39,8 @@ namespace BocchiTracker.Client.ViewModels
         public ICommand DropFilesCommand { get; private set; }
         public ICommand ClosedCommand { get; private set; }
 
+        public ReactiveProperty<bool> IsSubmitting { get; set; }
+
         public MainWindowViewModel(IEventAggregator inEventAggregator) 
         {
             _eventAggregator = inEventAggregator;
@@ -48,6 +50,11 @@ namespace BocchiTracker.Client.ViewModels
             MouseMoveCommand        = new DelegateCommand(OnMouseMove);
             ActiveChangedCommand    = new DelegateCommand<string>(OnActiveChanged);
             LocationChangedCommand  = new DelegateCommand(OnLocationChanged);
+
+            IsSubmitting            = new ReactiveProperty<bool>(false);
+
+            _eventAggregator.GetEvent<IssueSubmitPreEvent>().Subscribe( () => { IsSubmitting.Value = true;  });
+            _eventAggregator.GetEvent<IssueSubmittedEvent>().Subscribe(  _ => { IsSubmitting.Value = false; });
         }
 
         private void OnDropFiles(string[] inFiles)

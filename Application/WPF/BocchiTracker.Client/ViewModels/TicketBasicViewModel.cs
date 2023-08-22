@@ -20,6 +20,7 @@ using Slack.NetStandard.Messages.Blocks;
 using System.Diagnostics;
 using System.IO;
 using BocchiTracker.ModelEvent;
+using Prism.Services.Dialogs;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -31,11 +32,14 @@ namespace BocchiTracker.Client.ViewModels
 
         private string useProjectConfig = default!;
 
-        public TicketBasicViewModel(IEventAggregator inEventAggregator, TicketProperty inTicketProperty)
+        private IDialogService _dialogService;
+
+        public TicketBasicViewModel(IEventAggregator inEventAggregator, IDialogService inDialogService, TicketProperty inTicketProperty)
         {
             TicketProperty = inTicketProperty;
             TicketTypes = new ReactiveCollection<string>();
             RunConfigCommand = new DelegateCommand(OnRunConfig);
+            _dialogService = inDialogService;
 
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
@@ -64,17 +68,10 @@ namespace BocchiTracker.Client.ViewModels
 
         private void OnRunConfig()
         {
-            using (Process proc = new Process())
+            _dialogService.ShowDialog("UserConfigDialog", new DialogParameters(), r =>
             {
-                proc.StartInfo = new ProcessStartInfo
-                {
-                    FileName = "BocchiTracker.Client.Config.exe",
-                    UseShellExecute = false,
-                    Arguments = $"{useProjectConfig} /r"
-                };
-                proc.Start();
-                proc.WaitForExit();
-            }
+
+            });
         }
     }
 }

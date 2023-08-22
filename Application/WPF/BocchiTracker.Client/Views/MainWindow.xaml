@@ -6,12 +6,19 @@
         xmlns:local="clr-namespace:BocchiTracker.Client.Views"
         xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
         xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
+        xmlns:conveters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         AllowDrop="True"
         Title="MainWindow" Height="850" Width="800" MinWidth="400">
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+        <conveters:InvertBoolConverter x:Key="InvertBoolConverter" />
+    </Window.Resources>
+    
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <prism:InvokeCommandAction Command="{Binding ClosedCommand}"/>
@@ -26,24 +33,31 @@
             <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="false"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <ScrollViewer Background="{DynamicResource MaterialDesignPaper}">
-        <i:Interaction.Behaviors>
-            <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
-        </i:Interaction.Behaviors>
-        <StackPanel Margin="10">
-            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion"/>
-            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion"/>
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid Panel.ZIndex="1" Visibility="{Binding IsSubmitting.Value, Converter={StaticResource BoolVisibilityConverter}}">
+            <ProgressBar
+                 Height="100" Width="100" IsIndeterminate="True" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="35" />
+        </Grid>
+        <ScrollViewer Panel.ZIndex="0" IsEnabled="{Binding IsSubmitting.Value, Converter={StaticResource InvertBoolConverter}}">
+            <i:Interaction.Behaviors>
+                <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
+            </i:Interaction.Behaviors>
+            <StackPanel Margin="10">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion"/>
+                <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion"/>
 
-            <Grid>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="0.45*"/>
-                    </Grid.ColumnDefinitions>
-                    <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion"/>
-                    <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.45*"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion"/>
+                        <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion"/>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </StackPanel>
-    </ScrollViewer>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+
 </Window>

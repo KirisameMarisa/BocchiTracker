@@ -121,20 +121,22 @@ namespace BocchiTracker.Client.ViewModels
         public async Task OnPostIssue()
         {
             var eventParam = new IssueSubmittedEventParameter();
-
-            foreach (var service in _issueInfoBundle.PostServices) 
+            _eventAggregator.GetEvent<IssueSubmitPreEvent>().Publish();
             {
-                string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
-                Trace.TraceInformation($"{service}, {key}");
+                foreach (var service in _issueInfoBundle.PostServices)
+                {
+                    string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
+                    Trace.TraceInformation($"{service}, {key}");
 
-                if (key == null)
-                    continue;
-                eventParam.IssueIDMap.Add(service, key);
+                    if (key == null)
+                        continue;
+                    eventParam.IssueIDMap.Add(service, key);
 
-                await _issueAssetUploader.Upload(service, key, _issueAssetsBundle, _projectConfig);
+                    await _issueAssetUploader.Upload(service, key, _issueAssetsBundle, _projectConfig);
 
-                if(_userConfig.IsOpenWebBrowser)
-                    _issueOpener.Open(service, key);
+                    if (_userConfig.IsOpenWebBrowser)
+                        _issueOpener.Open(service, key);
+                }
             }
             _eventAggregator.GetEvent<IssueSubmittedEvent>().Publish(eventParam);
         }

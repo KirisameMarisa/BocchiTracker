@@ -13,5 +13,7 @@ namespace BocchiTracker.ModelEvent
         public Dictionary<ServiceDefinitions, string> IssueIDMap = new Dictionary<ServiceDefinitions, string>();
     }
 
-    public class IssueSubmittedEvent : PubSubEvent<IssueSubmittedEventParameter> { } 
+    public class IssueSubmittedEvent : PubSubEvent<IssueSubmittedEventParameter> { }
+
+    public class IssueSubmitPreEvent : PubSubEvent { }
 }
