@@ -17,8 +17,4 @@
     <PackageReference Include="WindowsAPICodePackShell" Version="7.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
-
 </Project>

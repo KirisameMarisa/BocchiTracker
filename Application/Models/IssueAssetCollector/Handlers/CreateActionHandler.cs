@@ -46,11 +46,13 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
                 var handler = new RemoteScreenshotHandler(_eventAggregator, _filenameGenerator);
                 _cacheHandles.Add(inType, handler);
             }
+#if WINDOWS
             else if (inType == typeof(WindowsCoredumpHandler))
             {
                 var handler = new WindowsCoredumpHandler(_filenameGenerator, _projectConfig.ExternalToolsPath?.ProcDumpPath);
                 _cacheHandles.Add(inType, handler);
             }
+#endif
             return _cacheHandles[inType];
         }
     }
