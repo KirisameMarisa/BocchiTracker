@@ -2,7 +2,7 @@
 using Prism.Ioc;
 using Prism.Modularity;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.IssueInfoCollector
 {
     public class IssueInfoCollectorModule : IModule
     {

@@ -3,6 +3,7 @@
   <Import Project="..\..\BocchiTracker.Common.props" />
 
   <ItemGroup>
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="System.IO.Abstractions" Version="19.2.29" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>

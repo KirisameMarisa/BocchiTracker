@@ -12,7 +12,7 @@ using BocchiTracker.CrossServiceReporter;
 using BocchiTracker.CrossServiceReporter.Converter;
 using System.IO.Abstractions;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.IssueInfoCollector;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.ApplicationInfoCollector;
@@ -23,18 +23,19 @@ using System.IO;
 using System.Reflection;
 using System;
 using Prism.Events;
-using BocchiTracker.Client.Share.Events;
 using Unity.Resolution;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLink;
 using BocchiTracker.ApplicationInfoCollector.Handlers;
 using BocchiTracker.IssueAssetCollector.Handlers;
 using Prism.Modularity;
-using BocchiTracker.Client.Share.Modules;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Controls;
 using Prism.Services.Dialogs;
 using System.Linq;
+using BocchiTracker.Config;
+using BocchiTracker.CrossServiceUploader;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client
 {

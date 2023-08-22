@@ -1,5 +1,4 @@
-﻿using Octokit;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 
 namespace BocchiTracker.Client.Share.Converters

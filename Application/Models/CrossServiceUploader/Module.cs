@@ -1,6 +1,4 @@
-﻿using BocchiTracker.CrossServiceReporter.Converter;
-using BocchiTracker.CrossServiceReporter;
-using Prism.Ioc;
+﻿using Prism.Ioc;
 using Prism.Modularity;
 using System;
 using System.Collections.Generic;
@@ -9,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.CrossServiceUploader;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.CrossServiceUploader
 {
     public class CrossServiceUploaderModule : IModule
     {

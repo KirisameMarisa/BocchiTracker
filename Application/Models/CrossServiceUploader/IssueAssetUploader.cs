@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.ServiceClientAdapters;
 using System;

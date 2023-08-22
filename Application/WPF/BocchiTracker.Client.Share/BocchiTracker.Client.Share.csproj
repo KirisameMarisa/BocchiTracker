@@ -18,14 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\ApplicationInfoCollector\ApplicationInfoCollector.csproj" />
-    <ProjectReference Include="..\..\Models\Config\Config.csproj" />
-    <ProjectReference Include="..\..\Models\CrossServiceReporter\CrossServiceReporter.csproj" />
-    <ProjectReference Include="..\..\Models\CrossServiceUploader\CrossServiceUploader.csproj" />
-    <ProjectReference Include="..\..\Models\IssueAssetCollector\IssueAssetCollector.csproj" />
-    <ProjectReference Include="..\..\Models\IssueInfoCollector\IssueInfoCollector.csproj" />
-    <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
-    <ProjectReference Include="..\..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
+    <Folder Include="Events\" />
   </ItemGroup>
 
 </Project>

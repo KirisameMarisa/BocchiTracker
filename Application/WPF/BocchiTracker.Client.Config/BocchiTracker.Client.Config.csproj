@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Models\Config\Config.csproj" />
+    <ProjectReference Include="..\..\Models\ModelEvent\ModelEvent.csproj" />
+    <ProjectReference Include="..\..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
     <ProjectReference Include="..\BocchiTracker.Client.Share\BocchiTracker.Client.Share.csproj" />
   </ItemGroup>
 

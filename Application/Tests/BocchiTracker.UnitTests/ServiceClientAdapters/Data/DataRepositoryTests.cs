@@ -1,5 +1,5 @@
 ﻿using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using Moq;

@@ -1,7 +1,7 @@
 ﻿using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using BocchiTracker.ServiceClientAdapters.Clients;
+using BocchiTracker.Config;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {

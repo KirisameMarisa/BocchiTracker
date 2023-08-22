@@ -1,11 +1,8 @@
-﻿using BocchiTracker.ServiceClientData.Configs;
-using BocchiTracker.ServiceClientData;
-using BocchiTracker.ProcessLink.ProcessData;
+﻿using BocchiTracker.ProcessLink.ProcessData;
 using Prism.Ioc;
 using Prism.Modularity;
-using BocchiTracker.ProcessLink;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.ProcessLink
 {
     public class ProcessLinkModule : IModule
     {
