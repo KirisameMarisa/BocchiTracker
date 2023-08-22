@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ServiceClientData.Configs;
+﻿using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.IO.Abstractions;
 using System.IO;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.Config
 {
     public class ConfigModule : IModule
     {
@@ -24,7 +24,7 @@ namespace BocchiTracker.Client.Share.Modules
         private string GetUserConfigFilePath()
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            assemblyName = assemblyName.Substring(0, assemblyName.IndexOf('.'));
+            assemblyName = assemblyName?.Substring(0, assemblyName.IndexOf('.'));
             var configFileName = $"{assemblyName}.{nameof(UserConfig)}.yaml";
             return Path.Combine("Configs", nameof(UserConfig) + "s", configFileName);
         }

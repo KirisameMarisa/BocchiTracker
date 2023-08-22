@@ -1,7 +1,6 @@
 ﻿using BocchiTracker.Client.Config.Views;
 using BocchiTracker.Client.Share.Controls;
-using BocchiTracker.Client.Share.Modules;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
 using MaterialDesignThemes.Wpf;
 using Prism.Events;
@@ -12,13 +11,14 @@ using Prism.Services.Dialogs;
 using Prism.Unity;
 using System.IO.Abstractions;
 using System.Windows;
-using BocchiTracker.Client.Share.Events;
 using BocchiTracker.ServiceClientAdapters;
 using System.Collections.Generic;
 using BocchiTracker.ProcessLinkQuery;
 using System.Linq;
 using System.IO;
 using System.Diagnostics;
+using BocchiTracker.Config;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.Config
 {

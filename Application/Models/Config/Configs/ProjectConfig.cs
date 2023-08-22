@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using BocchiTracker.ServiceClientData;
 
-namespace BocchiTracker.ServiceClientData.Configs
+namespace BocchiTracker.Config.Configs
 {
     public class MonitoredDirectoryConfig
     {

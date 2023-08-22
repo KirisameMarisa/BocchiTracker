@@ -1,4 +1,4 @@
-﻿using BocchiTracker.ServiceClientData.Configs;
+﻿using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters;
 using Reactive.Bindings;
-using MS.WindowsAPICodePack.Internal;
+using BocchiTracker.Config;
 
 namespace BocchiTracker.Client.ViewModels
 {

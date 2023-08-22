@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Client.Share.Events
+namespace BocchiTracker.ModelEvent
 {
-    public class ApplicationExitEvent : PubSubEvent { }
+    public class PopulateCbValuesEvent : PubSubEvent {}
 }

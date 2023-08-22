@@ -9,7 +9,7 @@ using Redmine;
 using Redmine.Net.Api;
 using System.Diagnostics;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
@@ -17,7 +17,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     public class GithubClient : IServiceIssueClient
     {
         private Octokit.GitHubClient? _client;
-        private string _url;
+        private string? _url;
         private long? _repoId;
         private bool _isAuthenticated;
 
@@ -229,6 +229,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
         public void OpenWebBrowser(string inIssueKey)
         {
+            if (string.IsNullOrEmpty(_url))
+                return;
+
             string issueURL = $"{_url}/issues/{inIssueKey}";
             Process.Start(new ProcessStartInfo
             {

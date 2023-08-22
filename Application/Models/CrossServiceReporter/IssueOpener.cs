@@ -1,6 +1,6 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.IssueInfoCollector;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientData;
 using System;
 using System.Collections.Generic;

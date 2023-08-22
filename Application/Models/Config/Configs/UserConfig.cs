@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.ServiceClientData.Configs
+namespace BocchiTracker.Config.Configs
 {
     public class UserConfig
     {

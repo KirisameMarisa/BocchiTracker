@@ -7,6 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Config\Config.csproj" />
     <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
     <ProjectReference Include="..\ServiceClientData\ServiceClientData.csproj" />
   </ItemGroup>

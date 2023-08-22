@@ -3,7 +3,7 @@ using BocchiTracker.ApplicationInfoCollector;
 using Prism.Ioc;
 using Prism.Modularity;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.ApplicationInfoCollector
 {
     public class ApplicationInfoCollectorModule : IModule
     {

@@ -3,7 +3,7 @@ using BocchiTracker.IssueAssetCollector;
 using Prism.Ioc;
 using Prism.Modularity;
 
-namespace BocchiTracker.Client.Share.Modules
+namespace BocchiTracker.IssueAssetCollector
 {
     public class IssueAssetCollectorModule : IModule
     {

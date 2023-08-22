@@ -1,6 +1,5 @@
 ﻿using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
-using BocchiTracker.Client.Share.Events;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.IssueInfoCollector;
 using Prism.Commands;
@@ -26,6 +25,7 @@ using Reactive.Bindings;
 using System.IO.Abstractions;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.Client.Controls;
+using BocchiTracker.Config;
 
 namespace BocchiTracker.Client.ViewModels
 {

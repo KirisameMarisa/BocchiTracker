@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Data;
 

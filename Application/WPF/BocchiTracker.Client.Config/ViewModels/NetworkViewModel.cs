@@ -1,6 +1,5 @@
-﻿using BocchiTracker.Client.Share.Events;
-using BocchiTracker.ServiceClientData;
-using BocchiTracker.ServiceClientData.Configs;
+﻿using BocchiTracker.ServiceClientData;
+using BocchiTracker.Config.Configs;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -15,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BocchiTracker.Config;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.Config.ViewModels
 {

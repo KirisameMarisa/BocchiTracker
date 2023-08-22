@@ -1,5 +1,4 @@
 ﻿using BocchiTracker.Data;
-using BocchiTracker.Client.Share.Events;
 using BocchiTracker.IssueInfoCollector;
 using BocchiTracker.ServiceClientAdapters.Data;
 using Prism.Events;

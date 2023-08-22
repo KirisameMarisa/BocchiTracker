@@ -14,10 +14,10 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientData;
-using BocchiTracker.Client.Share.Events;
 using Prism.Events;
 using System.Net.Sockets;
 using System.Diagnostics;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Data
 {

@@ -8,7 +8,7 @@ using System.IO;
 using System.IO.Abstractions;
 
 
-namespace BocchiTracker.ServiceClientData
+namespace BocchiTracker.Config
 {
     public class ConfigRepository<T>
     {
