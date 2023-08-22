@@ -1,12 +1,12 @@
 ﻿using BocchiTracker.ApplicationInfoCollector.Handlers;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientAdapters;
 using Prism.Ioc;
 using Prism.Modularity;
 using System.IO;
-using BocchiTracker.Config;
+using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Client.Share.Modules
 {

@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.Client.Share.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -29,6 +29,7 @@ using Reactive.Bindings.Extensions;
 using BocchiTracker.CrossServiceUploader;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Commands;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -48,11 +49,20 @@ namespace BocchiTracker.Client.ViewModels
         private readonly IssueAssetsBundle _issueAssetsBundle;
         private readonly AppStatusBundles _appStatusBundles;
         private readonly IIssuePoster _issuePoster;
+        private readonly IIssueOpener _issueOpener;
         private readonly IIssueAssetUploader _issueAssetUploader;
         private ProjectConfig _projectConfig;
         private UserConfig _userConfig;
 
-        public UtilityViewModel(IEventAggregator inEventAggregator, IIssuePoster inIssuePoster, IIssueAssetUploader inIssueAssetUploader, ICreateActionHandler inCreateActionHandler, IssueInfoBundle inIssueInfoBundle, IssueAssetsBundle inIssueAssetsBundle, AppStatusBundles inAppStatusBundles)
+        public UtilityViewModel(
+            IEventAggregator inEventAggregator, 
+            IIssuePoster inIssuePoster, 
+            IIssueOpener inIssueOpener,
+            IIssueAssetUploader inIssueAssetUploader, 
+            ICreateActionHandler inCreateActionHandler, 
+            IssueInfoBundle inIssueInfoBundle, 
+            IssueAssetsBundle inIssueAssetsBundle, 
+            AppStatusBundles inAppStatusBundles)
         {
             TakeScreenshotCommand   = new DelegateCommand(OnTakeScreenshot);
             CaptureCoredumpCommand  = new DelegateCommand(OnCaptureCoredump);
@@ -71,6 +81,7 @@ namespace BocchiTracker.Client.ViewModels
             _issueAssetsBundle = inIssueAssetsBundle;
             _appStatusBundles = inAppStatusBundles;
             _issuePoster = inIssuePoster;
+            _issueOpener = inIssueOpener;
             _issueAssetUploader = inIssueAssetUploader;
         }
 
@@ -97,7 +108,6 @@ namespace BocchiTracker.Client.ViewModels
                         item.IsSelected.Value = true;
                 }
             }
-            _eventAggregator.GetEvent<IssuePostedEvent>().Publish();
         }
 
         public void OnChangedPostService()
@@ -110,16 +120,25 @@ namespace BocchiTracker.Client.ViewModels
 
         public async Task OnPostIssue()
         {
-            foreach(var service in _issueInfoBundle.PostServices) 
+            var eventParam = new IssueSubmittedEventParameter();
+            _eventAggregator.GetEvent<IssueSubmitPreEvent>().Publish();
             {
-                string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
-                Trace.TraceInformation($"{service}, {key}");
+                foreach (var service in _issueInfoBundle.PostServices)
+                {
+                    string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
+                    Trace.TraceInformation($"{service}, {key}");
 
-                if (key == null)
-                    continue;
+                    if (key == null)
+                        continue;
+                    eventParam.IssueIDMap.Add(service, key);
 
-                await _issueAssetUploader.Upload(service, key, _issueAssetsBundle, _projectConfig);
+                    await _issueAssetUploader.Upload(service, key, _issueAssetsBundle, _projectConfig);
+
+                    if (_userConfig.IsOpenWebBrowser)
+                        _issueOpener.Open(service, key);
+                }
             }
+            _eventAggregator.GetEvent<IssueSubmittedEvent>().Publish(eventParam);
         }
 
         public void OnCaptureCoredump()

@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Events;
 using BocchiTracker.IssueAssetCollector;
@@ -19,6 +19,8 @@ using System.Windows;
 using Slack.NetStandard.Messages.Blocks;
 using System.Diagnostics;
 using System.IO;
+using BocchiTracker.ModelEvent;
+using Prism.Services.Dialogs;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -30,15 +32,21 @@ namespace BocchiTracker.Client.ViewModels
 
         private string useProjectConfig = default!;
 
-        public TicketBasicViewModel(IEventAggregator inEventAggregator, TicketProperty inTicketProperty)
+        private IDialogService _dialogService;
+
+        public TicketBasicViewModel(IEventAggregator inEventAggregator, IDialogService inDialogService, TicketProperty inTicketProperty)
         {
             TicketProperty = inTicketProperty;
             TicketTypes = new ReactiveCollection<string>();
             RunConfigCommand = new DelegateCommand(OnRunConfig);
+            _dialogService = inDialogService;
 
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
+            inEventAggregator
+                .GetEvent<IssueSubmittedEvent>()
+                .Subscribe(OnIssueSubmittedEvent, ThreadOption.UIThread);
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -52,19 +60,18 @@ namespace BocchiTracker.Client.ViewModels
             }
         }
 
+        private void OnIssueSubmittedEvent(IssueSubmittedEventParameter inParam)
+        {
+            TicketProperty.Summary.Value = string.Empty;
+            TicketProperty.Description.Value = string.Empty;
+        }
+
         private void OnRunConfig()
         {
-            using (Process proc = new Process())
+            _dialogService.ShowDialog("UserConfigDialog", new DialogParameters(), r =>
             {
-                proc.StartInfo = new ProcessStartInfo
-                {
-                    FileName = "BocchiTracker.Client.Config.exe",
-                    UseShellExecute = false,
-                    Arguments = $"{useProjectConfig} /r"
-                };
-                proc.Start();
-                proc.WaitForExit();
-            }
+
+            });
         }
     }
 }

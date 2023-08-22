@@ -9,8 +9,7 @@ using Redmine;
 using Redmine.Net.Api;
 using System.Diagnostics;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
@@ -18,6 +17,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
     public class GithubClient : IServiceIssueClient
     {
         private Octokit.GitHubClient? _client;
+        private string _url;
         private long? _repoId;
         private bool _isAuthenticated;
 
@@ -43,7 +43,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             string? ownerRepository = null, nameRepository = null;
 
-            var uri = new Uri(inURL);
+            _url = inURL;
+            var uri = new Uri(_url);
             var segments = uri.AbsolutePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries); ;
             if (segments.Length >= 2)
             {
@@ -111,7 +112,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             try
             {
                 var issue = await _client.Issue.Create(_repoId.Value, createIssue);
-                return (issue != null, issue?.Id.ToString());
+                return (issue != null, issue?.Number.ToString());
             }
             catch
             {
@@ -224,6 +225,16 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 Trace.TraceError($"{ServiceDefinitions.Github} Cannot get users.");
                 return null;
             }
+        }
+
+        public void OpenWebBrowser(string inIssueKey)
+        {
+            string issueURL = $"{_url}/issues/{inIssueKey}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = issueURL,
+                UseShellExecute = true
+            });
         }
     }
 }

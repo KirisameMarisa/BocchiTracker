@@ -1,8 +1,8 @@
 ﻿using BocchiTracker.Client.Share.Commands;
 using BocchiTracker.Client.Share.Events;
 using BocchiTracker.Client.Share.Modules;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.IssueInfoCollector;
 using BocchiTracker.ServiceClientAdapters;

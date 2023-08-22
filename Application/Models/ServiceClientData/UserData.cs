@@ -28,5 +28,17 @@ namespace BocchiTracker.ServiceClientData
             if (Email == null) return 0;
             return Email.GetHashCode();
         }
+
+        public static UserData sUnknown
+        { 
+            get 
+            {
+                return new UserData { 
+                    Name    = string.Empty, 
+                    Email   = string.Empty, 
+                    Id      = "-1", 
+                    IconURL = string.Empty };
+            } 
+        }
     }
 }

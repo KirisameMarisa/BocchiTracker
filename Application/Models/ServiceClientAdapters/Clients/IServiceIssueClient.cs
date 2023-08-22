@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients
@@ -19,8 +19,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
 
         Task<List<IdentifierData>?>     GetPriorities();
 
-        Task<List<IdentifierData>?>      GetCustomfields();
+        Task<List<IdentifierData>?>     GetCustomfields();
          
         Task<List<UserData>?>           GetUsers();
+
+        void                            OpenWebBrowser(string inIssueKey);
     }
 }

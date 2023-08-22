@@ -26,11 +26,15 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 
             mockFilenameGenerator.Setup(f => f.Generate()).Returns("test");
             
-            var mockedEvent = new Mock<RequestQueryEvent>();
+            var mockedEvent1 = new Mock<RequestQueryEvent>();
+            var mockedEvent2 = new Mock<ReceiveScreenshotEvent>();
             var eventAggregatorMock = new Mock<IEventAggregator>();
             eventAggregatorMock
               .Setup(x => x.GetEvent<RequestQueryEvent>())
-              .Returns(mockedEvent.Object);
+              .Returns(mockedEvent1.Object);
+            eventAggregatorMock
+              .Setup(x => x.GetEvent<ReceiveScreenshotEvent>())
+              .Returns(mockedEvent2.Object);
 
             var handler = new RemoteScreenshotHandler(eventAggregatorMock.Object, mockFilenameGenerator.Object);
 
@@ -38,7 +42,7 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
             handler.Handle(1, 1, "output");
 
             // Assert
-            mockedEvent.Verify(x => x.Publish(It.Is<RequestQueryEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotData)));
+            mockedEvent1.Verify(x => x.Publish(It.Is<RequestQueryEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotData)));
         }
 
         [Fact]
@@ -66,11 +70,11 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
                       0, 255,   0, 255,
                     255, 255, 255,  255,
                 });
-            
             Directory.CreateDirectory("output");
 
             // Instantiate the handler with the mocked dependencies
             var handler = new RemoteScreenshotSaveProcess(mockEvent.Object);
+            handler.Output = "output\\test.png";
 
             // Act
             handler.Handle(dummyScreenshotData);

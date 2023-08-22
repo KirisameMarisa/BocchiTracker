@@ -1,7 +1,7 @@
 ﻿using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using BocchiTracker.ServiceClientAdapters.Clients;
-using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 {
@@ -146,7 +145,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             bool result = await _client.Authenticate(_auth_config, _project_url);
             Assert.True(result);
 
-            result = await _client.UploadFiles("29", filenames);
+            var issueKey = await _client.Post(new TicketData { Summary = "Uploading Test", TicketType = "1" });
+            Assert.True(issueKey.Item1);
+            Assert.True(!string.IsNullOrEmpty(issueKey.Item2));
+
+            result = await _client.UploadFiles(issueKey.Item2, filenames);
             Assert.True(result);
         }
     }

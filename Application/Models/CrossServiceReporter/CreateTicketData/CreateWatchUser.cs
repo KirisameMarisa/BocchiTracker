@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using BocchiTracker.IssueInfoCollector;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {

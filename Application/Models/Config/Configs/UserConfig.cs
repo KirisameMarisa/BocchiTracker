@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.Config.Configs
+namespace BocchiTracker.ServiceClientData.Configs
 {
     public class UserConfig
     {
         public string? ProjectConfigFilename { get; set; }
+
+        public bool IsOpenWebBrowser { get; set; }
 
         public List<string> SelectedService { get; set; } = new List<string>();
 

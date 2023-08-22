@@ -1,11 +1,10 @@
-﻿using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.ServiceClientAdapters.Data
 {

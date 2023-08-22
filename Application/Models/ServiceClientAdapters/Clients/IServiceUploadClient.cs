@@ -1,4 +1,4 @@
-﻿using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ServiceClientData.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

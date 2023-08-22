@@ -1,5 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
-using BocchiTracker.Config;
+﻿using BocchiTracker.ServiceClientData.Configs;
+using BocchiTracker.ServiceClientData;
 using Prism.Ioc;
 using Prism.Modularity;
 using System;

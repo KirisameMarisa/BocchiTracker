@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;

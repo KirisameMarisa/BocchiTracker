@@ -5,8 +5,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientAdapters.Data;
 

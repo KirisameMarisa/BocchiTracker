@@ -1,7 +1,7 @@
 ﻿using BocchiTracker.Client.Config.Controls;
 using BocchiTracker.Client.Share.Events;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.IssueInfoCollector;
 using Prism.Commands;
 using Prism.Events;

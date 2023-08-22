@@ -11,8 +11,8 @@ using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.CrossServiceReporter;
 using BocchiTracker.CrossServiceReporter.Converter;
 using System.IO.Abstractions;
-using BocchiTracker.Config;
-using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
+using BocchiTracker.ServiceClientData.Configs;
 using BocchiTracker.IssueInfoCollector;
 using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.ApplicationInfoCollector;
@@ -165,6 +165,7 @@ namespace BocchiTracker.Client
             containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
+            containerRegistry.RegisterDialog<UserConfigDialog, UserConfigViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
