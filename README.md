@@ -2,7 +2,7 @@
 
 BocchiTracker is a bug reporting tool that allows you to report issues to various services. 
 
-<img src="./Documents/Resources/BocchiTracker_System.png" width="70%">
+<img src="./Documents/Resources/BocchiTracker_System.png" width="85%">
 
 <br>
 BocchiTracker View!
