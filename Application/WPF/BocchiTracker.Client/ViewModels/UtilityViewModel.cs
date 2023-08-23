@@ -120,10 +120,18 @@ namespace BocchiTracker.Client.ViewModels
         public async Task OnPostIssue()
         {
             var eventParam = new IssueSubmittedEventParameter();
+            _eventAggregator.GetEvent<StartProgressEvent>().Publish(new ProgressEventParameter 
+            { 
+                Message = "Submit: started" 
+            });
             _eventAggregator.GetEvent<IssueSubmitPreEvent>().Publish();
             {
                 foreach (var service in _issueInfoBundle.PostServices)
                 {
+                    _eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter
+                    {
+                        Message = $"Submit: {service} submit started"
+                    });
                     string key = await _issuePoster.Post(service, _issueInfoBundle, _appStatusBundles.TrackerApplication, _projectConfig);
                     Trace.TraceInformation($"{service}, {key}");
 
@@ -135,9 +143,15 @@ namespace BocchiTracker.Client.ViewModels
 
                     if (_userConfig.IsOpenWebBrowser)
                         _issueOpener.Open(service, key);
+
+                    _eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter
+                    {
+                        Message = $"Submit: {service} submit finished"
+                    });
                 }
             }
             _eventAggregator.GetEvent<IssueSubmittedEvent>().Publish(eventParam);
+            _eventAggregator.GetEvent<EndProgressEvent>().Publish();
         }
 
         public void OnCaptureCoredump()

@@ -267,8 +267,8 @@ namespace BocchiTracker.Client.ViewModels
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
 
             inEventAggregator
-                .GetEvent<PopulateCbValuesEvent>()
-                .Subscribe(OnPopulateCbValuesEvent, ThreadOption.UIThread);
+                .GetEvent<PopulateUIEvent>()
+                .Subscribe(OnPopulateUI, ThreadOption.UIThread);
 
             inEventAggregator
                 .GetEvent<IssueSubmittedEvent>()
@@ -299,7 +299,7 @@ namespace BocchiTracker.Client.ViewModels
             TicketWatchers.Clear();
         }
 
-        private void OnPopulateCbValuesEvent()
+        private void OnPopulateUI()
         {
             TicketClass.Selected.Value      = TicketProperty.Class.Value;
             TicketPriority.Selected.Value   = TicketProperty.Priority.Value;

@@ -39,7 +39,8 @@ namespace BocchiTracker.Client.ViewModels
         public ICommand DropFilesCommand { get; private set; }
         public ICommand ClosedCommand { get; private set; }
 
-        public ReactiveProperty<bool> IsSubmitting { get; set; }
+        public ReactiveProperty<bool>   IsProgressing { get; set; }
+        public ReactiveCollection<string> ProgressResonMsg { get; set; }
 
         public MainWindowViewModel(IEventAggregator inEventAggregator) 
         {
@@ -51,10 +52,31 @@ namespace BocchiTracker.Client.ViewModels
             ActiveChangedCommand    = new DelegateCommand<string>(OnActiveChanged);
             LocationChangedCommand  = new DelegateCommand(OnLocationChanged);
 
-            IsSubmitting            = new ReactiveProperty<bool>(false);
+            IsProgressing           = new ReactiveProperty<bool>(false);
+            ProgressResonMsg        = new ReactiveCollection<string>();
+            ProgressResonMsg.CollectionChanged += (_, __) => 
+            {
+                if (ProgressResonMsg.Count > 3)
+                    ProgressResonMsg.RemoveAtOnScheduler(0);
+            };
 
-            _eventAggregator.GetEvent<IssueSubmitPreEvent>().Subscribe( () => { IsSubmitting.Value = true;  });
-            _eventAggregator.GetEvent<IssueSubmittedEvent>().Subscribe(  _ => { IsSubmitting.Value = false; });
+            _eventAggregator.GetEvent<StartProgressEvent>().Subscribe(
+                inParam => { 
+                    IsProgressing.Value = true; 
+                    if (!string.IsNullOrEmpty(inParam.Message)) 
+                        ProgressResonMsg.Add(inParam.Message); 
+                }, ThreadOption.UIThread);
+            
+            _eventAggregator.GetEvent<EndProgressEvent>().Subscribe(
+                () => { 
+                    IsProgressing.Value = false; 
+                }, ThreadOption.UIThread);
+            
+            _eventAggregator.GetEvent<ProgressingEvent>().Subscribe(
+                inParam => { 
+                    if(!string.IsNullOrEmpty(inParam.Message)) 
+                        ProgressResonMsg.Add(inParam.Message); 
+                }, ThreadOption.UIThread);
         }
 
         private void OnDropFiles(string[] inFiles)
