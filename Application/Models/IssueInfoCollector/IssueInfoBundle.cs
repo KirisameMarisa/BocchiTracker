@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using BocchiTracker.ServiceClientAdapters;
 using System.IO;
 using System.IO.Abstractions;
+using BocchiTracker.ModelEvent;
+using Prism.Events;
+using System.Threading;
 
 namespace BocchiTracker.IssueInfoCollector
 {
@@ -30,12 +33,21 @@ namespace BocchiTracker.IssueInfoCollector
 
         public TicketData                       TicketData              { get; set; } = new TicketData();
 
-        public async Task Initialize(IDataRepository inRepository)
+        public async Task Initialize(IDataRepository inRepository, IEventAggregator inEventAggregator)
         {
+            inEventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting Labels" });
             await LabelListService.Load(inRepository);
+
+            inEventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting Priorities" });
             await PriorityListService.Load(inRepository);
+
+            inEventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting TicketTypes" });
             await TicketTypeListService.Load(inRepository);
+
+            inEventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting Users" });
             await UserListService.Load(inRepository);
+
+            inEventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting CustomFields" });
             await CustomFieldsListService.Load(inRepository);
         }
     }

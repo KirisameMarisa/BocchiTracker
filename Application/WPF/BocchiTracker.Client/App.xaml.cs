@@ -61,6 +61,9 @@ namespace BocchiTracker.Client
 
         protected override void OnInitialized()
         {
+            var eventAggregator = Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<StartProgressEvent>().Publish(new ProgressEventParameter {});
+
             var projectConfigRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
             var userConfig = LoadUserConfig(Container);
             if (
@@ -126,17 +129,21 @@ namespace BocchiTracker.Client
             Task.Run(async () =>
             {
                 var serviceAuthenticator = new ServiceAuthenticator(serviceClientFactory, authConfigRepositoryFactory);
-                await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
-                await issueInfoBundle.Initialize(dataRepository);
-                PublishEvents(Container, projectConfig, userConfig);
-            });
-        }
 
-        private void PublishEvents(IContainerProvider inContainer, ProjectConfig inProjectConfig, UserConfig inUserConfig)
-        {
-            var eventAggregator = inContainer.Resolve<IEventAggregator>();
-            eventAggregator.GetEvent<ConfigReloadEvent>().Publish(new ConfigReloadEventParameter(inProjectConfig, inUserConfig));
-            eventAggregator.GetEvent<PopulateCbValuesEvent>().Publish();
+                eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Authentication started" });
+                await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
+                
+                eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting service infomation" });
+                await issueInfoBundle.Initialize(dataRepository, eventAggregator);
+
+                eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Config applied" });
+                eventAggregator.GetEvent<ConfigReloadEvent>().Publish(new ConfigReloadEventParameter(projectConfig, userConfig));
+
+                eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Populate UI" });
+                eventAggregator.GetEvent<PopulateUIEvent>().Publish();
+
+                eventAggregator.GetEvent<EndProgressEvent>().Publish();
+            });
         }
 
         private ProjectConfig LoadProjectConfig(IContainerProvider container)

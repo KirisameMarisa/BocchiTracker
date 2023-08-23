@@ -34,11 +34,24 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Background="{DynamicResource MaterialDesignPaper}">
-        <Grid Panel.ZIndex="1" Visibility="{Binding IsSubmitting.Value, Converter={StaticResource BoolVisibilityConverter}}">
-            <ProgressBar
-                 Height="100" Width="100" IsIndeterminate="True" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="35" />
+        <Grid Panel.ZIndex="1" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
+
+            <StackPanel Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <ProgressBar
+                 Margin="5" Height="100" Width="100" IsIndeterminate="True" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="35" />
+
+                <GroupBox Header="Message" 
+                          Style="{StaticResource MaterialDesignGroupBox}"
+                          materialDesign:ColorZoneAssist.Background="Gray"
+                          materialDesign:ColorZoneAssist.Foreground="White"
+                          materialDesign:ColorZoneAssist.Mode="Custom">
+                    <ListView FontWeight="Black" ItemsSource="{Binding ProgressResonMsg}"></ListView>
+                </GroupBox>
+            </StackPanel>
+            
+            
         </Grid>
-        <ScrollViewer Panel.ZIndex="0" IsEnabled="{Binding IsSubmitting.Value, Converter={StaticResource InvertBoolConverter}}">
+        <ScrollViewer Panel.ZIndex="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
             <i:Interaction.Behaviors>
                 <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
             </i:Interaction.Behaviors>

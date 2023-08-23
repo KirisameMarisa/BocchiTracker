@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ModelEvent
 {
-    public class PopulateCbValuesEvent : PubSubEvent {}
+    public class PopulateUIEvent : PubSubEvent {}
 }
