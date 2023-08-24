@@ -9,20 +9,16 @@
         Title="MainWindow" Height="560" Width="800">
     <Grid Background="{DynamicResource MaterialDesignPaper}">
         <TabControl>
-            <TabItem Header="Service">
-                <ContentControl Margin="3" prism:RegionManager.RegionName="ServiceRegion"/>
+            <TabItem Header="General">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="GeneralRegion"/>
             </TabItem>
 
             <TabItem Header="Ticket">
                 <ContentControl Margin="3" prism:RegionManager.RegionName="TicketRegion"/>
             </TabItem>
-            
+
             <TabItem Header="Directory">
                 <ContentControl Margin="3" prism:RegionManager.RegionName="DirectoryRegion"/>
-            </TabItem>
-            
-            <TabItem Header="Network">
-                <ContentControl Margin="3" prism:RegionManager.RegionName="NetworkRegion"/>
             </TabItem>
         </TabControl>
     </Grid>

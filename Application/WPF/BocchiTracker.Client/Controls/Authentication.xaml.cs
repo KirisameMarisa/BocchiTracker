@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Client.Config.Controls
+namespace BocchiTracker.Client.Controls
 {
     public enum AuthenticationType
     {

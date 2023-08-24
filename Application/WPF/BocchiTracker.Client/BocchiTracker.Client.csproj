@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Controls\Authentication.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\MultipleItemDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

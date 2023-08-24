@@ -10,20 +10,11 @@
     <Compile Update="Views\DirectoryView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\NetworkView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ServiceView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\TicketView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\Authentication.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Controls\DirectoryEntryListControl.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -33,19 +24,10 @@
     <Page Update="Controls\ServiceValueMappingControl.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\SetURL.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\DirectoryView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\NetworkView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ServiceView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TicketView.xaml">
