@@ -72,11 +72,16 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 
             foreach(var serviceConfig in inProjectConfigRepository.Load().ServiceConfigs)
             {
-                Authentications[serviceConfig.Service].IsEnable.Value = true;
+                Authentications[serviceConfig.Service].AuthConfig   = new ReactiveProperty<AuthConfig>(_authConfigRepositoryFactory.Load(serviceConfig.Service));
+                if (Authentications[serviceConfig.Service].AuthConfig.Value == null)
+                    Authentications[serviceConfig.Service].AuthConfig.Value = new AuthConfig();
+
                 Authentications[serviceConfig.Service].URL          = serviceConfig.URL;
                 Authentications[serviceConfig.Service].ProxyURL     = serviceConfig.ProxyURL;
                 Authentications[serviceConfig.Service].Service      = serviceConfig.Service;
-                Authentications[serviceConfig.Service].AuthConfig   = new ReactiveProperty<AuthConfig>(_authConfigRepositoryFactory.Load(serviceConfig.Service));
+
+                if(!string.IsNullOrEmpty(Authentications[serviceConfig.Service].URL))
+                    Authentications[serviceConfig.Service].IsEnable.Value = true;
             }
             Task.Run(OnCheckAuthenticationCommand);
         }
@@ -100,7 +105,7 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
             foreach (var serviceInfo in new List<AuthenticationInfo> { Redmine, Github, Slack })
             {
                 if (!serviceInfo.IsEnable.Value)
-                    return;
+                    continue;
 
                 var client = serviceClientFactory.CreateService(serviceInfo.Service);
                 if (client == null)

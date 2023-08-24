@@ -91,12 +91,16 @@ namespace BocchiTracker.Client.ViewModels
             
             foreach (var item in _projectConfig.ServiceConfigs)
             {
-                var serviceItem = new PostServiceItem { 
-                    Name = new ReactiveProperty<string>(item.Service.ToString()),
-                    IsSelected = new ReactiveProperty<bool>(false)
-                };
-                serviceItem.IsSelected.Subscribe(_ => OnChangedPostService());
-                PostServices.Add(serviceItem);
+                if(!string.IsNullOrEmpty(item.URL))
+                {
+                    var serviceItem = new PostServiceItem
+                    {
+                        Name = new ReactiveProperty<string>(item.Service.ToString()),
+                        IsSelected = new ReactiveProperty<bool>(false)
+                    };
+                    serviceItem.IsSelected.Subscribe(_ => OnChangedPostService());
+                    PostServices.Add(serviceItem);
+                }
             }
 
             foreach (var item in PostServices)

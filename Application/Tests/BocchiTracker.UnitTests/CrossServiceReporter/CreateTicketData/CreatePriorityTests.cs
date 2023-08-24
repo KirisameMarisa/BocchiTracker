@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
+using BocchiTracker.ModelEvent;
+using Prism.Events;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {
@@ -18,6 +20,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnPriority_WhenMappingExists()
         {
             // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<ProgressingEvent>())
+                .Returns(new ProgressingEvent());
             var inService = ServiceDefinitions.Redmine;
             var users = new List<IdentifierData>
             {
@@ -29,7 +35,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             mockDataRepository.Setup(repo => repo.GetPriorities(inService)).ReturnsAsync(users);
             
             var inBundle = new IssueInfoBundle();
-            await inBundle.Initialize(mockDataRepository.Object);
+            await inBundle.Initialize(mockDataRepository.Object, mockEvent.Object);
             inBundle.TicketData = new TicketData { Priority = "High" };
 
             var inConfig = new ServiceConfig();

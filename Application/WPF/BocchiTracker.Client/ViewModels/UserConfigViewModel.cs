@@ -24,6 +24,10 @@ namespace BocchiTracker.Client.ViewModels
 
         public UserConfigViewModel(CachedConfigRepository<ProjectConfig> inProjectConfigRepository, CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepository)
         {
+            var userConfig = inUserConfigRepository.Load();
+            if (userConfig == null)
+                inUserConfigRepository.Save(new UserConfig());
+
             AuthenticationParts = new UserConfigParts.AuthenticationParts(inAuthConfigRepository, inProjectConfigRepository);
             MiscParts = new UserConfigParts.MiscParts(inUserConfigRepository);
         }
