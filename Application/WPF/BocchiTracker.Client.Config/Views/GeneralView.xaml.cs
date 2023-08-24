@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BocchiTracker.Client.Config.Views
 {
     /// <summary>
-    /// NetworkView.xaml の相互作用ロジック
+    /// GeneralView.xaml の相互作用ロジック
     /// </summary>
-    public partial class NetworkView : UserControl
+    public partial class GeneralView : UserControl
     {
-        public NetworkView()
+        public GeneralView()
         {
             InitializeComponent();
         }

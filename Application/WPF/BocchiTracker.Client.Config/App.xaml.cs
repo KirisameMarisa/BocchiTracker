@@ -38,19 +38,9 @@ namespace BocchiTracker.Client.Config
         {
             var eventAggregator = Container.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<ApplicationExitEvent>().Publish();
-
-            var authConfigRepositoryFactory = (Application.Current as PrismApplication).Container.Resolve<IAuthConfigRepositoryFactory>();
-            authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
             
             var projectConfigRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
             var projectConfig = projectConfigRepo.Load();
-
-            foreach (var serviceConfig in projectConfig.ServiceConfigs)
-            {
-                var service = serviceConfig.Service;
-                var authConfig = authConfigRepositoryFactory.Load(service);
-                authConfigRepositoryFactory.Save(service, authConfig);
-            }
             projectConfigRepo.Save(projectConfig);
 
             if(NeedClientRestart)
@@ -90,15 +80,12 @@ namespace BocchiTracker.Client.Config
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion("ServiceRegion",   typeof(ServiceView));
+            regionManager.RegisterViewWithRegion("GeneralRegion",   typeof(GeneralView));
             regionManager.RegisterViewWithRegion("TicketRegion",    typeof(TicketView));
             regionManager.RegisterViewWithRegion("DirectoryRegion", typeof(DirectoryView));
-            regionManager.RegisterViewWithRegion("NetworkRegion",   typeof(NetworkView));
 
             var eventAggregator = Container.Resolve<IEventAggregator>();
             {
-                var authConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
-                authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
                 var projectConfigRepo           = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
                 var userConfigRepo              = Container.Resolve<CachedConfigRepository<UserConfig>>();
                 var variableDump                = Container.Resolve<VariableDump>();
@@ -122,15 +109,7 @@ namespace BocchiTracker.Client.Config
 
                 eventAggregator
                     .GetEvent<ConfigReloadEvent>()
-                    .Publish(new ConfigReloadEventParameter(projectConfigRepo.Load(), userConfigRepo.Load()) 
-                    {
-                        AuthConfigs = new Dictionary<ServiceDefinitions, AuthConfig> 
-                        {
-                            { ServiceDefinitions.Redmine,    authConfigRepositoryFactory.Load(ServiceDefinitions.Redmine)    },
-                            { ServiceDefinitions.Github,     authConfigRepositoryFactory.Load(ServiceDefinitions.Github)     },
-                            { ServiceDefinitions.Slack,      authConfigRepositoryFactory.Load(ServiceDefinitions.Slack)      },
-                        }
-                    });
+                    .Publish(new ConfigReloadEventParameter(projectConfigRepo.Load(), userConfigRepo.Load()));
             }
         }
 
@@ -138,7 +117,6 @@ namespace BocchiTracker.Client.Config
         {
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
-            containerRegistry.RegisterInstance(new Dictionary<ServiceDefinitions, AuthConfig>());
             containerRegistry.RegisterInstance(new VariableDump("Query.schema.json"));
         }
 
