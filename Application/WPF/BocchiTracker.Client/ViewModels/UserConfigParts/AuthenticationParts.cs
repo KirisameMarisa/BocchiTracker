@@ -65,16 +65,19 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 
         private IAuthConfigRepositoryFactory _authConfigRepositoryFactory;
 
-        public AuthenticationParts(IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, CachedConfigRepository<ProjectConfig> inProjectConfigRepository)
+        public AuthenticationParts(IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig)
         {
             _authConfigRepositoryFactory = inAuthConfigRepositoryFactory;
             CheckAuthenticationCommand = new AsyncCommand(OnCheckAuthenticationCommand);
 
-            foreach(var serviceConfig in inProjectConfigRepository.Load().ServiceConfigs)
+            foreach(var serviceConfig in inProjectConfig.ServiceConfigs)
             {
                 Authentications[serviceConfig.Service].AuthConfig   = new ReactiveProperty<AuthConfig>(_authConfigRepositoryFactory.Load(serviceConfig.Service));
                 if (Authentications[serviceConfig.Service].AuthConfig.Value == null)
+                {
                     Authentications[serviceConfig.Service].AuthConfig.Value = new AuthConfig();
+                    _authConfigRepositoryFactory.Save(serviceConfig.Service, Authentications[serviceConfig.Service].AuthConfig.Value);
+                }
 
                 Authentications[serviceConfig.Service].URL          = serviceConfig.URL;
                 Authentications[serviceConfig.Service].ProxyURL     = serviceConfig.ProxyURL;
@@ -86,12 +89,18 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
             Task.Run(OnCheckAuthenticationCommand);
         }
 
-        public void Save()
+        public void Save(ref bool outIsNeedRestart)
         {
             foreach(var (service, authenticationInfo) in Authentications)
             {
                 if (!authenticationInfo.IsEnable.Value)
                     continue;
+
+                var currentAuth = _authConfigRepositoryFactory.Load(authenticationInfo.Service);
+                if (currentAuth.APIKey != authenticationInfo.AuthConfig.Value.APIKey
+                    || currentAuth.Password != authenticationInfo.AuthConfig.Value.Password
+                    || currentAuth.Username != authenticationInfo.AuthConfig.Value.Username)
+                        outIsNeedRestart |= true;
 
                 _authConfigRepositoryFactory.Save(service, authenticationInfo.AuthConfig.Value);
             }

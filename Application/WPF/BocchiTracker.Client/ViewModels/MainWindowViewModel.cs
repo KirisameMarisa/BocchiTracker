@@ -26,6 +26,7 @@ using System.IO.Abstractions;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.Client.Controls;
 using BocchiTracker.Config;
+using System.IO;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -117,8 +118,9 @@ namespace BocchiTracker.Client.ViewModels
             var projectConfigrepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
             var userConfigrepository    = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<UserConfig>>();
 
-            UserConfig config = new UserConfig();
-            config.ProjectConfigFilename    = projectConfigrepository.GetLoadFilename();
+            UserConfig config = userConfigrepository.Load() ?? new UserConfig();
+            if(string.IsNullOrEmpty(config.ProjectConfigFilename) || !File.Exists(config.ProjectConfigFilename))
+                config.ProjectConfigFilename    =  projectConfigrepository.GetLoadFilename();
             config.DraftUploadFiles         = issueAssetsBundle.Bundle.Select(x => x.FullName).ToList();
             config.DraftTicketData          = issueInfoBundle.TicketData;
             config.SelectedService          = issueInfoBundle.PostServices.Select(x => x.ToString()).ToList();

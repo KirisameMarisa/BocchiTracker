@@ -8,6 +8,6 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 {
     public interface IConfig
     {
-        public void Save();
+        public void Save(ref bool outIsNeedRestart);
     }
 }

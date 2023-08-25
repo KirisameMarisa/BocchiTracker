@@ -16,21 +16,20 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
     {
         public ReactiveProperty<bool> EnableOpenWebBrowser { get; set; } = new ReactiveProperty<bool>();
 
-        private CachedConfigRepository<UserConfig> _userConfigRepository;
+        private UserConfig _userConfig;
 
         public MiscParts(CachedConfigRepository<UserConfig> inUserConfigRepository)
         {
-            _userConfigRepository = inUserConfigRepository;
-            Debug.Assert(_userConfigRepository.Load() != null);
+            Debug.Assert(inUserConfigRepository.Load() != null);
 
-            EnableOpenWebBrowser.Value = _userConfigRepository.Load().IsOpenWebBrowser;
+            _userConfig = inUserConfigRepository.Load();
+            EnableOpenWebBrowser.Value = _userConfig.IsOpenWebBrowser;
         }
 
-        public void Save()
+        public void Save(ref bool outIsNeedRestart)
         {
-            var userConfig = _userConfigRepository.Load();
-            userConfig.IsOpenWebBrowser = EnableOpenWebBrowser.Value;
-            _userConfigRepository.Save(userConfig);
+            _userConfig.IsOpenWebBrowser = EnableOpenWebBrowser.Value;
+            outIsNeedRestart |= false;
         }
     }
 }
