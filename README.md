@@ -47,7 +47,7 @@ Currently supported upload service include:
 
 ## Getting Started
 
-1. [Download BocchiTracker](#)
+1. [Download BocchiTracker](https://github.com/KirisameMarisa/BocchiTracker/releases)
 2. Setup Config 
    - ProjectConfig - [JP](/Documents/JP/ProjectConfigurationGuide.md)/[EN](/Documents/EN/ProjectConfigurationGuide.md)
    - UserConfig - [JP](/Documents/JP/UserConfigurationGuide.md)/[EN](/Documents/EN/UserConfigurationGuide.md)
