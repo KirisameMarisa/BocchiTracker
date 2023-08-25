@@ -21,7 +21,7 @@ namespace BocchiTracker.Client.ViewModels
         public event Action<IDialogResult> RequestClose;
 
         public UserConfigParts.AuthenticationParts AuthenticationParts { get; set; }
-        public UserConfigParts.ChoiceProjectConfigParts ChoiceProjectConfigParts  { get; set;}
+        public UserConfigParts.ChoiceProjectConfigParts ChoiceProjectConfigParts  { get; set; }
         public UserConfigParts.MiscParts MiscParts { get; set; }
 
         private IAuthConfigRepositoryFactory _authConfigRepository;
@@ -51,7 +51,6 @@ namespace BocchiTracker.Client.ViewModels
         public void OnDialogClosed()
         {
             bool isNeedRestart = false;
-
 
             AuthenticationParts.Save(ref isNeedRestart);
             ChoiceProjectConfigParts.Save(ref isNeedRestart);
