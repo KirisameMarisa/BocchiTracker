@@ -75,7 +75,10 @@ namespace BocchiTracker.Client
             }
             else
             {
-                if(Directory.GetFiles(ProjectConfigDirectory, "*.yaml").Count() == 0)
+                if(!Directory.Exists(ProjectConfigDirectory))
+                    Directory.CreateDirectory(ProjectConfigDirectory);
+
+                if (Directory.GetFiles(ProjectConfigDirectory, "*.yaml").Count() == 0)
                 {
                     using (Process proc = new Process())
                     {
@@ -107,12 +110,16 @@ namespace BocchiTracker.Client
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
             
             var projectConfig               = LoadProjectConfig(Container);
-            //!< force exit?
-            if (projectConfig == null)
-                return;
 
-            if (!CreateWorkingDirectory(projectConfig))
-                return;
+            Debug.Assert(projectConfig != null, "Requried ProjectConfig!");
+            if (projectConfig == null)
+            {
+                MessageBox.Show("not fouund ProjectConfig, Crtical Error.");
+                Current.Shutdown();
+            }
+
+            if(!Directory.Exists(projectConfig.FileSaveDirectory))
+                Directory.CreateDirectory(projectConfig.FileSaveDirectory);
 
             var cacheProvider               = Container.Resolve<ICacheProvider>();
             var connection                  = Container.Resolve<Connection>();
@@ -156,16 +163,6 @@ namespace BocchiTracker.Client
         {
             var configRepo = container.Resolve<CachedConfigRepository<UserConfig>>();
             return configRepo.Load();
-        }
-
-        public bool CreateWorkingDirectory(ProjectConfig inProjectConfig)
-        {
-            try
-            {
-                Directory.CreateDirectory(inProjectConfig.FileSaveDirectory);
-                return Directory.Exists(inProjectConfig.FileSaveDirectory);
-            }
-            catch { return false; }
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
