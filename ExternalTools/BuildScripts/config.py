@@ -1,5 +1,6 @@
 from pathlib import Path
 
-cPluginsPath = "../Plugins/"
+cFlatBuffersPath = Path("ExternalTools") / "flatbuffers"
+cPluginsPath = "Plugins/"
 cUnrealEnginePath = Path(cPluginsPath) / "UnrealEngine"
 cUnityPath = Path(cPluginsPath) / "Unity"

@@ -26,6 +26,7 @@ using System.IO.Abstractions;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.Client.Controls;
 using BocchiTracker.Config;
+using System.IO;
 
 namespace BocchiTracker.Client.ViewModels
 {
@@ -54,17 +55,14 @@ namespace BocchiTracker.Client.ViewModels
 
             IsProgressing           = new ReactiveProperty<bool>(false);
             ProgressResonMsg        = new ReactiveCollection<string>();
-            ProgressResonMsg.CollectionChanged += (_, __) => 
-            {
-                if (ProgressResonMsg.Count > 3)
-                    ProgressResonMsg.RemoveAtOnScheduler(0);
-            };
 
             _eventAggregator.GetEvent<StartProgressEvent>().Subscribe(
                 inParam => { 
                     IsProgressing.Value = true; 
                     if (!string.IsNullOrEmpty(inParam.Message)) 
-                        ProgressResonMsg.Add(inParam.Message); 
+                        ProgressResonMsg.AddOnScheduler(inParam.Message);
+                    if (ProgressResonMsg.Count > 3)
+                        ProgressResonMsg.RemoveAt(0);
                 }, ThreadOption.UIThread);
             
             _eventAggregator.GetEvent<EndProgressEvent>().Subscribe(
@@ -75,7 +73,9 @@ namespace BocchiTracker.Client.ViewModels
             _eventAggregator.GetEvent<ProgressingEvent>().Subscribe(
                 inParam => { 
                     if(!string.IsNullOrEmpty(inParam.Message)) 
-                        ProgressResonMsg.Add(inParam.Message); 
+                        ProgressResonMsg.AddOnScheduler(inParam.Message);
+                    if (ProgressResonMsg.Count > 3)
+                        ProgressResonMsg.RemoveAt(0);
                 }, ThreadOption.UIThread);
         }
 
@@ -118,8 +118,9 @@ namespace BocchiTracker.Client.ViewModels
             var projectConfigrepository = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<ProjectConfig>>();
             var userConfigrepository    = (Application.Current as PrismApplication).Container.Resolve<CachedConfigRepository<UserConfig>>();
 
-            UserConfig config = new UserConfig();
-            config.ProjectConfigFilename    = projectConfigrepository.GetLoadFilename();
+            UserConfig config = userConfigrepository.Load() ?? new UserConfig();
+            if(string.IsNullOrEmpty(config.ProjectConfigFilename) || !File.Exists(config.ProjectConfigFilename))
+                config.ProjectConfigFilename    =  projectConfigrepository.GetLoadFilename();
             config.DraftUploadFiles         = issueAssetsBundle.Bundle.Select(x => x.FullName).ToList();
             config.DraftTicketData          = issueInfoBundle.TicketData;
             config.SelectedService          = issueInfoBundle.PostServices.Select(x => x.ToString()).ToList();

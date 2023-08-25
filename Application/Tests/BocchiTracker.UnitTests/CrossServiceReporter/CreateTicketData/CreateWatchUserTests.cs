@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Moq;
 using System.Collections.ObjectModel;
 using Redmine.Net.Api.Types;
+using BocchiTracker.ModelEvent;
+using Prism.Events;
 
 namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 {
@@ -20,6 +22,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnWatchUserIds_WhenWatchersExist()
         {
             // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<ProgressingEvent>())
+                .Returns(new ProgressingEvent());
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
@@ -30,7 +36,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             mockDataRepository.Setup(repo => repo.GetUsers(inService)).ReturnsAsync(users);
 
             var inBundle = new IssueInfoBundle();
-            await inBundle.Initialize(mockDataRepository.Object);
+            await inBundle.Initialize(mockDataRepository.Object, mockEvent.Object);
             inBundle.TicketData = new TicketData { Watchers = new List<UserData> { 
                     new UserData { Name = "John", Email = "John@exampl.com" }, 
                     new UserData { Name = "Jane", Email = "Jane@exampl.com" } 
@@ -55,6 +61,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenWatchersDoNotExist()
         {
             // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<ProgressingEvent>())
+                .Returns(new ProgressingEvent());
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
@@ -66,7 +76,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             mockDataRepository.Setup(repo => repo.GetUsers(inService)).ReturnsAsync(users);
 
             var inBundle = new IssueInfoBundle();
-            await inBundle.Initialize(mockDataRepository.Object);
+            await inBundle.Initialize(mockDataRepository.Object, mockEvent.Object);
             inBundle.TicketData = new TicketData {
                 Watchers = new List<UserData> {
                     new UserData { Name = "Erecto", Email = "Erecto@exampl.com" },
@@ -113,6 +123,10 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         public async Task Create_ShouldReturnNull_WhenWatchersAreNull()
         {
             // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<ProgressingEvent>())
+                .Returns(new ProgressingEvent());
             var inService = ServiceDefinitions.Redmine;
             var users = new List<UserData>
             {
@@ -124,7 +138,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             mockDataRepository.Setup(repo => repo.GetUsers(inService)).ReturnsAsync(users);
 
             var inBundle = new IssueInfoBundle();
-            await inBundle.Initialize(mockDataRepository.Object);
+            await inBundle.Initialize(mockDataRepository.Object, mockEvent.Object);
             inBundle.TicketData = new TicketData { Watchers = null };
 
             var inConfig = new ServiceConfig();

@@ -6,13 +6,21 @@
         xmlns:local="clr-namespace:BocchiTracker.Client.Views"
         xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
         mc:Ignorable="d"
-        Height="450" Width="800">
+        Height="500" Width="800">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
     </UserControl.Resources>
     
     <StackPanel  Background="{DynamicResource MaterialDesignPaper}">
+        <GroupBox Margin="10" Header="Choise ProjectConfig">
+            <StackPanel Margin="15, 5, 15, 0">
+                <ComboBox ItemsSource="{Binding ChoiceProjectConfigParts.ProjectConfigs}" 
+                          SelectedItem="{Binding ChoiceProjectConfigParts.UseProjectConfig.Value}"
+                          FontSize="16"
+                          Foreground="White"></ComboBox>
+            </StackPanel>
+        </GroupBox>
 
         <GroupBox Margin="10" Header="Authentication">
             <StackPanel Margin="15, 5, 15, 0" >
@@ -51,7 +59,7 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Margin="10" Header="Misc">
-            <StackPanel>
+            <StackPanel Margin="15, 5, 15, 0">
                 <CheckBox FontSize="16" Foreground="White" VerticalContentAlignment="Bottom" Content="Enable Open WebBrowser" IsChecked="{Binding MiscParts.EnableOpenWebBrowser.Value}"></CheckBox>
             </StackPanel>
         </GroupBox>

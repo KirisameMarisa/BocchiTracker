@@ -1,4 +1,4 @@
-# Config設定
+# ProjectConfig設定
 
 BocchiTrackerを使用するためには、プロジェクトの設定ファイル（Config）を作成する必要があります。<br>
 作成したConfigは、プロジェクトに参加しているユーザーに配布してください。
@@ -12,29 +12,24 @@ BocchiTrackerを使用するためには、プロジェクトの設定ファイ�
 
 ![ChoiceProjectConfig](/Documents/Resources/ChoiceProjectConfig.png)
 
-## 認証設定(必須)
+## レポート発行サービスのURL設定(必須)
 
-チケット作成のために、それぞれのサービスへの認証設定が必要です。各サービスごとに異なる入力設定が必要です。
+チケット作成のために、それぞれのサービスへの認証設定が必要です。
 
-認証チェックを行うには、"Check Authentication" ボタンをクリックします。成功すると、緑色に色が変わります。
-
-![Authentication](./../Resources/ConfigTabs/Service.png)
+![General](./../Resources/ConfigTabs/General.png)
 
 ### Redmine
 
-1. Redmineの管理画面から「RESTによるWebサービスを有効にする」にチェックを入れてください。
+1. Redmineの管理画面から「RESTによるWebサービスを有効にする」にチェックを入れてください
 2. ConfigツールのRedmine設定タブに以下のパラメータを入力します。
-    - URL: プロジェクトを含んだURLを入力します（例：http://localhost:3000/projects/bocchitracker）。
-    - Proxyが必要な場合は、その情報も入力します。
-    - UsernameとPassword: Redmineに登録したアカウント情報を入力します。
+    - Proxyが必要な場合は、その情報も入力します
+    - URL: プロジェクトを含んだURLを入力します（例：http://localhost:3000/projects/bocchitracker）
 
 ### Github
 
-1. [GithubのTokenを作成](https://github.com/settings/tokens)してください。
-2. ConfigツールのGithub設定タブに以下のパラメータを入力します。
-    - URL: リポジトリのURLを入力します（例：https://github.com/KirisameMarisa/BocchiTracker)。
-    - 1で取得したTokenを入力します。
-
+1. ConfigツールのGithub設定タブに以下のパラメータを入力します。
+    - URL: リポジトリのURLを入力します（例：https://github.com/KirisameMarisa/BocchiTracker)
+    
 ### Slack
 
 1. [Slackアプリを作成](https://api.slack.com/apps)します。必要な権限を与えます。
@@ -44,8 +39,12 @@ BocchiTrackerを使用するためには、プロジェクトの設定ファイ�
     - Socket Modeを有効にし、Tokenを取得します。
 2. 作成したSlackアプリをSlackワークスペースに追加し、投稿したいチャンネルに招待します。
 3. ConfigツールのSlack設定タブに以下のパラメータを入力します。
-    - URL: 招待したチャンネルを入力します（例：#bocchitracker-api-test)。
-    - 1で取得したTokenを入力します。
+    - URL: 招待したチャンネルを入力します（例：#bocchitracker-api-test)
+
+## ゲーム通信ポート(任意)
+
+組み込んだプラグインと通信ポート番号を合わせてください。<br>
+デフォルトは「8888」です
 
 ## チケット設定(任意)
 
@@ -93,8 +92,4 @@ BocchiTrackerを使用するためには、プロジェクトの設定ファイ�
 ##### Procdump
 
 このアプリケーションパスを指定することでWindowsアプリケーションのコアダンプの取得が可能になります
-
-## ネットワーク設定(任意)
-
-In Progress...
 

@@ -48,7 +48,10 @@ Currently supported upload service include:
 ## Getting Started
 
 1. [Download BocchiTracker](#)
-2. Setup Config - [JP](/Documents/JP/ConfigurationGuide.md)/[EN](/Documents/EN/ConfigurationGuide.md)
+2. Setup Config 
+  - ProjectConfig - [JP](/Documents/JP/ProjectConfigurationGuide.md)/[EN](/Documents/EN/ProjectConfigurationGuide.md)
+  - UserConfig - [JP](/Documents/JP/UserConfigurationGuide.md)/[EN](/Documents/EN/UserConfigurationGuide.md)
+
 3. Integrat your project - [JP](/Documents/JP/IntegrateYourAppGuide.md)/[EN](/Documents/EN/IntegrateYourAppGuide.md)
 4. Read UserGuide - [JP](/Documents/JP/UserGuide.md)/[EN](/Documents/EN/UserGuide.md)
 

@@ -9,28 +9,23 @@ The following is the procedure for creating a configuration file:
     - To edit a config, select the config to edit in the drop-down.
     - To create a config, enter the config name directly.
 
-## Authentication(Require)
+## Report Issuance Service URL Configuration (Required)
 
 You have to set Authentication for creating ticket. Each service requires a different input setup
 
-To check authentication, click "Check Authentication". If it turns green, it was successful.
-
-![Authentication](./../Resources/ConfigTabs/Service.png)
+![General](./../Resources/ConfigTabs/General.png)
 
 ### Redmine
 
 1. Please check "Enable REST web service" on the manager of redmine
 2. Input parameter in the Redmine Settings tab of the Config tool
-    - URL: Input URL that include project name (ex:http://localhost:3000/projects/bocchitracker)
     - If ProxyURL is required, please enter that information as well.
-    - Username and Password: Input Registered of redmine account.
+    - URL: Input URL that include project name (ex:http://localhost:3000/projects/bocchitracker)
 
 ### Github
 
-1. [Please create Github token](https://github.com/settings/tokens)
-2. Input parameter in the Redmine Github tab of the Config tool
+1. Input parameter in the Redmine Github tab of the Config tool
     - URL: Input repository of URL(ex:https://github.com/KirisameMarisa/BocchiTracker)
-    - Input the Token got in 1.
 
 ### Slack
 
@@ -41,8 +36,12 @@ To check authentication, click "Check Authentication". If it turns green, it was
     - Enable socket mode and get token
 2. Join your slack workspace and add your channel that you want to post.
 3. Input parameter in the Slack Settings tab of the Config tool
-    - URL: Input joined channel name
     - Enter the Token got in 1.
+
+## Game Communication Port (Optional)
+
+Match the communication port number with the integrated plugin.
+The default is "8888".
 
 ## Ticket setting(Optional)
 
@@ -89,7 +88,3 @@ By specifying the path to an external tool, you can access the functionality of 
 ##### Procdump
 
 Specify this application path to get a core dump of your Windows application
-
-## Network Setting(任意)
-
-In Progress...
