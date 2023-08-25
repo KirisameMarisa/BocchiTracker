@@ -64,8 +64,9 @@ namespace BocchiTracker.Client
             var eventAggregator = Container.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<StartProgressEvent>().Publish(new ProgressEventParameter {});
 
+            var userConfigRepo = Container.Resolve<CachedConfigRepository<UserConfig>>();
             var projectConfigRepo = Container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            var userConfig = LoadUserConfig(Container);
+            var userConfig = userConfigRepo.Load();
             if (
                     userConfig != null 
                 &&  !string.IsNullOrEmpty(userConfig.ProjectConfigFilename) 
@@ -98,6 +99,9 @@ namespace BocchiTracker.Client
                 {
                     var filename = r.Parameters.GetValue<string>("Config");
                     projectConfigRepo.SetLoadFilename(filename);
+
+                    userConfig = new UserConfig { ProjectConfigFilename = filename };
+                    userConfigRepo.Save(userConfig);
                 });
             }
             
@@ -156,12 +160,6 @@ namespace BocchiTracker.Client
         private ProjectConfig LoadProjectConfig(IContainerProvider container)
         {
             var configRepo = container.Resolve<CachedConfigRepository<ProjectConfig>>();
-            return configRepo.Load();
-        }
-
-        private UserConfig LoadUserConfig(IContainerProvider container)
-        {
-            var configRepo = container.Resolve<CachedConfigRepository<UserConfig>>();
             return configRepo.Load();
         }
 
