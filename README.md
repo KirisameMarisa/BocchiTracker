@@ -44,6 +44,7 @@ Currently supported upload service include:
 - Add to feature file upload functionality.
   - Dropbox
   - Explorer (Your file servers)
+- [Assist in traking issues](https://github.com/KirisameMarisa/BocchiTracker/milestone/2)
 
 ## Getting Started
 
