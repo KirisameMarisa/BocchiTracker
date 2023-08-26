@@ -87,7 +87,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="5">
-                    <ContentControl Margin="3" prism:RegionManager.RegionName="IssuesRegion" />
+                    
                 </Grid>
             </TabItem>
         </TabControl>
