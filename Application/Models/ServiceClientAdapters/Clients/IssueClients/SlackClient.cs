@@ -62,7 +62,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             var text = string.Empty;
             text += $"{inTicketData.Summary}\n{inTicketData.Description}";
-            if(!string.IsNullOrEmpty(inTicketData.Assign?.Id))
+            if (!string.IsNullOrEmpty(inTicketData.Assign?.Id))
             {
                 text += $"\n\n <@{inTicketData.Assign?.Id}>";
             }
@@ -70,10 +70,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             var response = await _client.Chat.Post(new PostMessageRequest
             {
                 Channel = _channel,
-                Text    = text
+                Text = text
             });
 
-            if(!response.OK)
+            if (!response.OK)
                 return (false, string.Empty);
 
             return (true, response.Timestamp.RawValue);
@@ -94,7 +94,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             bool has_error = false;
             Timestamp timestamp = inIssueKey;
-            foreach(var file in inFilenames)
+            foreach (var file in inFilenames)
             {
                 using (FileStream fileStream = new FileStream(file, FileMode.Open))
                 {
@@ -104,7 +104,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                         Filename = Path.GetFileName(fullPath),
                         Channels = _channel,
                         ThreadTimestamp = timestamp,
-                        File = new MultipartFile (fileStream, fullPath),
+                        File = new MultipartFile(fileStream, fullPath),
                     });
                     if (!responce.OK)
                     {
@@ -121,27 +121,25 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         {
             return null;
         }
-#pragma warning restore CS1998
 
-#pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetLabels()
         {
             return null;
         }
-#pragma warning restore CS1998
 
-
-#pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetPriorities()
         {
             return null;
         }
-#pragma warning restore CS1998
 
-#pragma warning disable CS1998
         public async Task<List<IdentifierData>?> GetCustomfields()
         {
             return null;
+        }
+
+        public async IAsyncEnumerable<TicketData> GetIssues()
+        {
+            yield break;
         }
 #pragma warning restore CS1998
 

@@ -142,5 +142,27 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             var users = await _client.GetUsers();
             Assert.NotNull(users);
         }
+
+        [Fact]
+        public async Task Test_GetTickets()
+        {
+            Assert.NotNull(_project_url);
+            Assert.NotNull(_auth_config);
+            Assert.NotNull(_client);
+
+            bool result = await _client.Authenticate(_auth_config, _project_url);
+            Assert.True(result);
+
+            var issues = _client.GetIssues();
+            Assert.NotNull(issues);
+
+            List<TicketData> tickets = new List<TicketData>();
+            await foreach (var issue in issues)
+            {
+                if (issue == null) continue;
+                tickets.Add(issue);
+            }
+            Assert.True(tickets.Count > 0);
+        }
     }
 }
