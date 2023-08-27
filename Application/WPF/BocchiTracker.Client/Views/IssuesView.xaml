@@ -4,106 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BocchiTracker.Client.Views"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <Style x:Key="CenteredContentPresenterStyle" TargetType="ContentPresenter">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-    </UserControl.Resources>
-
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="450"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-    
-        <StackPanel Grid.Row="0">
-            <StackPanel Orientation="Horizontal" Margin="5">
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                    <ComboBox 
-                        MinWidth="100"
-                        Foreground="White"
-                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                        materialDesign:HintAssist.Hint="Service"
-                        FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                    </ComboBox>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                    <ComboBox 
-                        MinWidth="100"
-                        Foreground="White"
-                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                        materialDesign:HintAssist.Hint="Filter"
-                        FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                    </ComboBox>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                    <ComboBox 
-                        MinWidth="100"
-                        ItemsSource="{Binding ConnectTo.Items}"
-                        SelectedItem="{Binding ConnectTo.Selected.Value, Mode=TwoWay}"
-                        Foreground="White"
-                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                        materialDesign:HintAssist.Hint="{Binding ConnectTo.HintText.Value}"
-                        FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                        <ComboBox.Resources>
-                            <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
-                        </ComboBox.Resources>
-                    </ComboBox>
-                </StackPanel>
-
-                <TextBox materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"></TextBox>
-            </StackPanel>
-
-            <ListView MaxHeight="400" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding Issus}" Height="Auto">
-                <i:Interaction.Behaviors>
-                    <behaviors:SelectedItemsBehavior SelectedItems="{Binding SelectedIssues}" />
-                </i:Interaction.Behaviors>
-
-                <ListView.ContextMenu>
-                    <ContextMenu StaysOpen="true">
-                        <MenuItem Header="Jump player location" 
-                            Command="{Binding Path=JumpPlayerLocationCommand}" 
-                            CommandParameter="{Binding SelectedIssues}"/>
-                        <MenuItem Header="Open in Browser" 
-                            Command="{Binding OpenInBrowserCommand}" 
-                            CommandParameter="{Binding SelectedIssues}"/>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Right">
-                                <Hyperlink 
-                                    NavigateUri="{Binding Id}"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:IssuesView}}, Path=DataContext.HyperlinkCommand}"
-                                    CommandParameter="{Binding Id}">
-                                        <TextBlock Text="{Binding Id}" />
-                                </Hyperlink>
-                            </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Summary">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Summary}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
+        <ListView ItemsSource="{Binding Issus}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Id}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Summary">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Summary}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+            
     </Grid>
-
 </UserControl>
