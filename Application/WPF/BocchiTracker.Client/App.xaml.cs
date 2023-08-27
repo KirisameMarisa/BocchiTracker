@@ -112,7 +112,8 @@ namespace BocchiTracker.Client
             regionManager.RegisterViewWithRegion("TicketDetailsRegion", typeof(TicketDetailsView));
             regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
-            
+            regionManager.RegisterViewWithRegion("IssuesRegion", typeof(IssuesView));
+
             var projectConfig               = LoadProjectConfig(Container);
 
             Debug.Assert(projectConfig != null, "Requried ProjectConfig!");

@@ -42,8 +42,8 @@ namespace BocchiTracker.ApplicationInfoCollector
         public Dictionary<string, string> ToDict()
         {
             return new Dictionary<string, string> { 
-                { GetVarName(nameof(ClientID)), Pid         },
-                { GetVarName(nameof(AppName )), AppName     },
+                { GetVarName(nameof(Pid)),      Pid         },
+                { GetVarName(nameof(AppName)),  AppName     },
                 { GetVarName(nameof(Version)),  Version     },
                 { GetVarName(nameof(Args)),     Args        },
                 { GetVarName(nameof(Platform)), Platform    },
