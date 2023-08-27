@@ -227,6 +227,35 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             }
         }
 
+        public async IAsyncEnumerable<TicketData> GetIssues()
+        {
+            if (_client == null)
+            {
+                Trace.TraceError($"{ServiceDefinitions.Github} _client is null.");
+                yield break;
+            }
+
+            if (_repoId == null)
+            {
+                Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
+                yield break;
+            }
+
+            var issues = await _client.Issue.GetAllForRepository(_repoId.Value);
+
+            foreach(var issue in issues)
+            {
+                yield return new TicketData
+                {
+                    Id = issue.Number.ToString(),
+                    Summary = issue.Title,
+                    Description = issue.Body,
+                    Assign = new UserData { Name = issue.Assignee?.Login },
+                    Lables = issue.Labels.Select(x => x.Name).ToList()
+                };
+            }
+        }
+
         public void OpenWebBrowser(string inIssueKey)
         {
             if (string.IsNullOrEmpty(_url))

@@ -17,6 +17,8 @@ using System.Xml.Linq;
 using BocchiTracker.ServiceClientAdapters.Data;
 using BocchiTracker.ServiceClientData;
 using BocchiTracker.Config.Configs;
+using System.Windows.Documents;
+using YamlDotNet.Core.Tokens;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -367,6 +369,47 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 FileName = issueURL,
                 UseShellExecute = true
             });
+        }
+
+        public async IAsyncEnumerable<TicketData> GetIssues()
+        {
+            if (_client == null)
+                yield break;
+
+            var parameters = new NameValueCollection();
+            var issues = await _client.GetObjectsAsync<Issue>(parameters);
+
+            foreach(var issue in issues)
+            {
+                Dictionary<string, List<string>> customFields = new Dictionary<string, List<string>>();
+                foreach(var issueCustomField in issue.CustomFields)
+                {
+                    if(issueCustomField.Multiple)
+                    {
+                        customFields.Add(issueCustomField.Id.ToString(), new List<string>());
+                        foreach (var value in issueCustomField.Values)
+                            customFields[issueCustomField.Id.ToString()].Add(value.Info);
+                    }
+                    customFields.Add(issueCustomField.Id.ToString(), new List<string> { issueCustomField.Value });
+                }
+
+                yield return new TicketData
+                {
+                    Id = issue.Id.ToString(),
+                    Summary = issue.Subject,
+                    Description = issue.Description,
+                    Assign = new UserData { Name = issue.AssignedTo?.Name },
+                    Priority = issue.Priority.Name,
+                    CustomFields = issue.CustomFields.Select(x =>
+                    {
+                        var values = new List<string>();
+                        if(x.Values != null)
+                            foreach (var value in x.Values)
+                                values.Add(value.Info);
+                        return (x.Id.ToString(), values);
+                    }).ToDictionary(x => x.Item1, x => x.Item2)
+                };
+            }
         }
     }
 }
