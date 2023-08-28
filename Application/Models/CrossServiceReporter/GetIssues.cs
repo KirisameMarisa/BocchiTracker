@@ -12,11 +12,12 @@ namespace BocchiTracker.CrossServiceReporter
 {
     public interface IGetIssues
     {
-        IAsyncEnumerable<TicketData> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService);
+        Task<List<TicketData>> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService);
     }
 
     public class GetIssues : IGetIssues
     {
+        private readonly Dictionary<ServiceDefinitions, List<TicketData>> _issuesCache = new Dictionary<ServiceDefinitions, List<TicketData>>();
         private readonly ICustomFieldsToAppInfoConverter _conveter;
         private readonly IServiceClientFactory _clientFactory;
 
@@ -26,18 +27,25 @@ namespace BocchiTracker.CrossServiceReporter
             _clientFactory = inClientFactory;
         }
 
-        public async IAsyncEnumerable<TicketData> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService)
+        public async Task<List<TicketData>> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService)
         {
+            if(!_issuesCache.ContainsKey(inService))
+                _issuesCache.Add(inService, new List<TicketData>());
+
+            if (_issuesCache[inService].Count > 0)
+                return _issuesCache[inService];
+
             var client = _clientFactory.CreateIssueService(inService);
             if (client == null)
-                yield break;
+                return _issuesCache[inService];
 
             await foreach (var issue in client.GetIssues())
             {
                 if(issue.CustomFields != null)
                     issue.CustomFields = _conveter.Convert(inService, issue.CustomFields, inCustomFieldListService);
-                yield return issue;
+                _issuesCache[inService].Add(issue);
             }
+            return _issuesCache[inService];
         }
     }
 }
