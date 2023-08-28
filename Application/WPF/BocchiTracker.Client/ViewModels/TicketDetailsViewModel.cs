@@ -138,8 +138,8 @@ namespace BocchiTracker.Client.ViewModels
         public ConnectTo(TicketProperty ticketProperty)
         { 
             _ticketProperty = ticketProperty;
-            _ticketProperty.AppStatusBundles.AppConnected       = this.Connected;
-            _ticketProperty.AppStatusBundles.AppDisconnected    = this.Disconnected;
+            _ticketProperty.AppStatusBundles.AppConnected       += this.Connected;
+            _ticketProperty.AppStatusBundles.AppDisconnected    += this.Disconnected;
 
             Selected.Subscribe(x => { _ticketProperty.AppStatusBundles.TrackerApplication = x as AppStatusBundle; });
         }
@@ -153,6 +153,9 @@ namespace BocchiTracker.Client.ViewModels
                 {
                     Items.Add(inAppStatusBundle);
                 }
+
+                if(Items.Count() == 1)
+                    Selected.Value = Items[0];
             });
         }
 
