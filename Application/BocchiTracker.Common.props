@@ -19,4 +19,10 @@
     <UseMaui>false</UseMaui>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(SolutionName)' == 'BocchiTracker.UnitTests'">
+    <TargetFramework>net7.0</TargetFramework>
+    <UseWPF>false</UseWPF>
+    <UseMaui>false</UseMaui>
+  </PropertyGroup>
+
 </Project>
