@@ -23,6 +23,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 
         public GithubClientTests()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
             {
                 var factory = new AuthConfigRepositoryFactory(new PasswordService());
                 factory.Initialize(Path.Combine("Resources", "Configs", "AuthConfigs"));
