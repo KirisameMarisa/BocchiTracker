@@ -42,9 +42,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             }
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_Authenticate()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -52,9 +54,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.True(result);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_Post()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -72,9 +76,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.NotNull(post_result.Item2);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_GetTicketTypes()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -85,9 +91,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.Null(ticket_types);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_GetLabels()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -98,9 +106,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.Null(labels);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_GetPriorities()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -111,9 +121,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.Null(priorities);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_GetUsers()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
 
@@ -124,9 +136,11 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.NotNull(users);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_UploadFile()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             List<string> filenames = new List<string>()
             {
                 Path.Combine("Resources", "UploadFiles", "TestPic.png"),
