@@ -32,6 +32,9 @@ namespace BocchiTracker.CrossServiceReporter
             if (client == null)
                 yield break;
 
+            if (!client.IsAuthenticated())
+                return _issuesCache[inService];
+
             await foreach (var issue in client.GetIssues())
             {
                 if(issue.CustomFields != null)

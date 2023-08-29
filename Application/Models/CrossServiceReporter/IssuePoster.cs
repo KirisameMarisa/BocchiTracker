@@ -37,6 +37,9 @@ namespace BocchiTracker.CrossServiceReporter
             if (ticket == null)
                 return null;
 
+            if (!client.IsAuthenticated())
+                return null;
+
             var postResult = await client.Post(ticket);
             if (!postResult.Item1 || postResult.Item2 == null)
                 return null;
