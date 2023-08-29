@@ -26,6 +26,8 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
                     <ComboBox 
+                        ItemsSource="{Binding ServiceDefinitions}"
+                        SelectedItem="{Binding SelectedService.Value}"
                         MinWidth="100"
                         Foreground="White"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}"
@@ -59,10 +61,10 @@
                     </ComboBox>
                 </StackPanel>
 
-                <TextBox materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"></TextBox>
+                <TextBox Text="{Binding SearchText.Value, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"></TextBox>
             </StackPanel>
 
-            <ListView MaxHeight="400" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding Issus}" Height="Auto">
+            <ListView MaxHeight="400" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding Issues}" Height="Auto">
                 <i:Interaction.Behaviors>
                     <behaviors:SelectedItemsBehavior SelectedItems="{Binding SelectedIssues}" />
                 </i:Interaction.Behaviors>
@@ -93,10 +95,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Summary">
+                        <GridViewColumn Header="Summary" Width="500">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding Summary}"/>
+                                    <TextBlock Text="{Binding Summary}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
