@@ -1,3 +1,5 @@
+[![Build and unit tests](https://github.com/KirisameMarisa/BocchiTracker/actions/workflows/main.yml/badge.svg)](https://github.com/KirisameMarisa/BocchiTracker/actions/workflows/main.yml)
+
 # What's this BocchiTracker?
 
 BocchiTracker is a bug reporting tool that allows you to report issues to various services. 
