@@ -1,3 +1,6 @@
 [submodule "ExternalTools/flatbuffers"]
 	path = ExternalTools/flatbuffers
 	url = https://github.com/google/flatbuffers
+[submodule "ExternalTools/godot-cpp"]
+	path = ExternalTools/godot-cpp
+	url = https://github.com/godotengine/godot-cpp
