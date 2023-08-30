@@ -1,8 +1,10 @@
-﻿using BocchiTracker.CrossServiceReporter.Converter;
+﻿using BocchiTracker.Config.Configs;
+using BocchiTracker.CrossServiceReporter.Converter;
 using BocchiTracker.IssueInfoCollector.MetaData;
 using BocchiTracker.ServiceClientAdapters;
 using BocchiTracker.ServiceClientData;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +14,12 @@ namespace BocchiTracker.CrossServiceReporter
 {
     public interface IGetIssues
     {
-        IAsyncEnumerable<TicketData> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService);
+        Task<List<TicketData>> Get(ServiceConfig inServiceConfig);
     }
 
     public class GetIssues : IGetIssues
     {
+        private readonly ConcurrentDictionary<ServiceDefinitions, List<TicketData>> _issuesCache = new ConcurrentDictionary<ServiceDefinitions, List<TicketData>>();
         private readonly ICustomFieldsToAppInfoConverter _conveter;
         private readonly IServiceClientFactory _clientFactory;
 
@@ -26,21 +29,42 @@ namespace BocchiTracker.CrossServiceReporter
             _clientFactory = inClientFactory;
         }
 
-        public async IAsyncEnumerable<TicketData> Get(ServiceDefinitions inService, CustomFieldListService inCustomFieldListService)
+        public async Task<List<TicketData>> Get(ServiceConfig? inServiceConfig)
         {
-            var client = _clientFactory.CreateIssueService(inService);
+            var sEmpty = new List<TicketData>();
+
+            if (inServiceConfig == null)
+                return sEmpty;
+
+            var client = _clientFactory.CreateIssueService(inServiceConfig.Service);
             if (client == null)
-                yield break;
+                return sEmpty;
 
             if (!client.IsAuthenticated())
-                return _issuesCache[inService];
+                return sEmpty;
+
+            if (!_issuesCache.ContainsKey(inServiceConfig.Service))
+            {
+                if (!_issuesCache.TryAdd(inServiceConfig.Service, new List<TicketData>()))
+                    return sEmpty;
+            }
+
+            if (_issuesCache.TryGetValue(inServiceConfig.Service, out List<TicketData>? outTickets) 
+                && outTickets != null 
+                && outTickets.Count > 0)
+                return outTickets;
 
             await foreach (var issue in client.GetIssues())
             {
                 if(issue.CustomFields != null)
-                    issue.CustomFields = _conveter.Convert(inService, issue.CustomFields, inCustomFieldListService);
-                yield return issue;
+                    issue.CustomFields = _conveter.Convert(inServiceConfig, issue.CustomFields);
+                _issuesCache[inServiceConfig.Service].Add(issue);
             }
+
+            if (_issuesCache.TryGetValue(inServiceConfig.Service, out List<TicketData>? outResult) && outResult != null)
+                return outResult;
+
+            return sEmpty;
         }
     }
 }
