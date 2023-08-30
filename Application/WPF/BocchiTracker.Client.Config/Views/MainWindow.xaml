@@ -20,6 +20,11 @@
             <TabItem Header="Directory">
                 <ContentControl Margin="3" prism:RegionManager.RegionName="DirectoryRegion"/>
             </TabItem>
+
+            <TabItem Header="Description Format">
+                <ContentControl Margin="3" prism:RegionManager.RegionName="DescriptionFormatRegion"/>
+            </TabItem>
+            
         </TabControl>
     </Grid>
 </Window>

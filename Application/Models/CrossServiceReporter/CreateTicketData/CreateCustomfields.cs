@@ -19,6 +19,9 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
             foreach (var mapping in inConfig.QueryFieldMappings)
             {
+                if (string.IsNullOrEmpty(mapping.Name))
+                    continue;
+
                 var key = mapping.Definition;
                 var customFieldName = mapping.Name;
                 if (!inBundle.TicketData.CustomFields.ContainsKey(key))
