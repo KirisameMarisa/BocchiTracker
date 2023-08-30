@@ -104,9 +104,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if(!string.IsNullOrEmpty(inTicketData.Assign?.Name)) 
                 createIssue.Assignees.Add(inTicketData.Assign?.Name);
 
-            if (inTicketData.Lables != null)
+            if (inTicketData.Labels != null)
             {
-                foreach (var value in inTicketData.Lables)
+                foreach (var value in inTicketData.Labels)
                     createIssue.Labels.Add(value);
             }
             try
@@ -251,7 +251,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     Summary = issue.Title,
                     Description = issue.Body,
                     Assign = new UserData { Name = issue.Assignee?.Login },
-                    Lables = issue.Labels.Select(x => x.Name).ToList()
+                    Labels = issue.Labels.Select(x => x.Name).ToList()
                 };
             }
         }

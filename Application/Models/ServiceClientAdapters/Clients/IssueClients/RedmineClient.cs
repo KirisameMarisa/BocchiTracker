@@ -142,9 +142,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 }
             }
 
-            if (inTicketData.Lables != null && inTicketData.Lables.Count != 0)
+            if (inTicketData.Labels != null && inTicketData.Labels.Count != 0)
             {
-                string? category = inTicketData.Lables.First() ?? null;
+                string? category = inTicketData.Labels.First() ?? null;
                 if(category != null)
                 {
                     if (int.TryParse(category, out id))

@@ -72,7 +72,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             {
                 Summary = "Test Summary",
                 Description = "Test Description",
-                Lables = new List<string> { "Label1", "Label2", "Label3" }
+                Labels = new List<string> { "Label1", "Label2", "Label3" }
             };
             var post_result = await _client.Post(ticket);
             Assert.True(post_result.Item1);

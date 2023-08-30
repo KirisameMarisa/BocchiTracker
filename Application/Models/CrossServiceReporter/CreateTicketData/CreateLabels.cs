@@ -14,8 +14,8 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
     {
         public List<string>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            if(inBundle.TicketData?.Lables != null && inBundle.TicketData.Lables.Count != 0)
-                return inBundle.TicketData.Lables;
+            if(inBundle.TicketData?.Labels != null && inBundle.TicketData.Labels.Count != 0)
+                return inBundle.TicketData.Labels;
             return null;
         }
     }

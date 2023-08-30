@@ -22,7 +22,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData
             {
-                Lables = new List<string> { "Label1", "Label2", "Label3" }
+                Labels = new List<string> { "Label1", "Label2", "Label3" }
             };
 
             var inConfig = new ServiceConfig();
