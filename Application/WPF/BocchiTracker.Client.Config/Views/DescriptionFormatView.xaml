@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Config.Views.DescriptionFormatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BocchiTracker.Client.Config.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BocchiTracker.Client.Share;component/Controls/Resoruce.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="CenteredContentPresenterStyle" TargetType="ContentPresenter">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.18*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.2*"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox 
+                Margin="10"
+                Width="200"
+                ItemsSource="{Binding ServiceDefinitions}"
+                SelectedItem="{Binding SelectedService.Value}"
+                Foreground="White"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                materialDesign:HintAssist.Hint="Service"
+                FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left">
+                <ComboBox.Resources>
+                    <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
+                </ComboBox.Resources>
+            </ComboBox>
+
+            <StackPanel Grid.Column="1">
+                <Label Content="Template format" HorizontalAlignment="Center" Margin="5"></Label>
+                
+                <materialDesign:PopupBox
+                    Width="35" Height="35"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    PlacementMode="BottomAndAlignCentres"
+                    Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                    ToolTip="Set description format"
+                    ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding BuiltinFormats}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding}" Command="{Binding DataContext.SelectedBuiltinFormatButton, RelativeSource={RelativeSource AncestorType=local:DescriptionFormatView}}" CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </materialDesign:PopupBox>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1">
+            <TextBox Margin="10"
+            Foreground="White"
+            FontSize="15"
+            Text="{Binding DescriptionFormat.Value}"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Auto"
+            FontFamily="Segoe UI"
+            BorderThickness="0"
+            Background="#1E1E1E"
+            CaretBrush="White"
+            Padding="10"/>
+        </Border>
+
+
+    </Grid>
+</UserControl>

@@ -83,6 +83,7 @@ namespace BocchiTracker.Client.Config
             regionManager.RegisterViewWithRegion("GeneralRegion",   typeof(GeneralView));
             regionManager.RegisterViewWithRegion("TicketRegion",    typeof(TicketView));
             regionManager.RegisterViewWithRegion("DirectoryRegion", typeof(DirectoryView));
+            regionManager.RegisterViewWithRegion("DescriptionFormatRegion", typeof(DescriptionFormatView));
 
             var eventAggregator = Container.Resolve<IEventAggregator>();
             {

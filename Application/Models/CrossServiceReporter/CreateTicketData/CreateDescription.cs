@@ -19,11 +19,21 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
             string description = inConfig.DescriptionFormat;
 
             Dictionary<string, string> variables = new Dictionary<string, string>();
+            
+            if (!string.IsNullOrEmpty(inBundle.TicketData.TicketType))
+                variables.Add(nameof(inBundle.TicketData.TicketType), inBundle.TicketData.TicketType);
+
             if (!string.IsNullOrEmpty(inBundle.TicketData.Summary))
                 variables.Add(nameof(inBundle.TicketData.Summary), inBundle.TicketData.Summary);
 
-            if (!string.IsNullOrEmpty(inBundle.TicketData.Description))
+            if (string.IsNullOrEmpty(inBundle.TicketData.Description))
+            {
+                variables.Add(nameof(inBundle.TicketData.Description), "");
+            }
+            else
+            {
                 variables.Add(nameof(inBundle.TicketData.Description), inBundle.TicketData.Description);
+            }
 
             if (inBundle.TicketData.Assign != null && !string.IsNullOrEmpty(inBundle.TicketData.Assign.Name))
                 variables.Add(nameof(inBundle.TicketData.Assign), string.Format($"{nameof(inBundle.TicketData.Assign)}: {inBundle.TicketData.Assign.Name}"));
