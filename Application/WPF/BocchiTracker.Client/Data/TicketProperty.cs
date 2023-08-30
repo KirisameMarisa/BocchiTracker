@@ -70,7 +70,7 @@ namespace BocchiTracker.Data
             Assign.Subscribe(value => inIssueInfoBundle.TicketData.Assign = value);
 
             Labels = new ReactiveCollection<string>(/*inIssueInfoBundle.TicketData.Lables*/);
-            Labels.CollectionChanged += (_, __) => { inIssueInfoBundle.TicketData.Lables = Labels.ToList(); };
+            Labels.CollectionChanged += (_, __) => { inIssueInfoBundle.TicketData.Labels = Labels.ToList(); };
 
             Watchers = new ReactiveCollection<UserData>(/*inIssueInfoBundle.TicketData.Lables*/);
             Watchers.CollectionChanged += (_, __) => { inIssueInfoBundle.TicketData.Watchers = Watchers.ToList(); };
@@ -91,7 +91,7 @@ namespace BocchiTracker.Data
                 Priority.Value      = inParam.UserConfig.DraftTicketData.Priority;
                 Assign.Value        = inParam.UserConfig.DraftTicketData.Assign;
 
-                foreach (var value in inParam.UserConfig.DraftTicketData.Lables)
+                foreach (var value in inParam.UserConfig.DraftTicketData.Labels)
                 {
                     if (value == null)
                         continue;

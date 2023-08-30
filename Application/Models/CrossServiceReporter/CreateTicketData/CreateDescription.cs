@@ -26,19 +26,19 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
                 variables.Add(nameof(inBundle.TicketData.Description), inBundle.TicketData.Description);
 
             if (inBundle.TicketData.Assign != null && !string.IsNullOrEmpty(inBundle.TicketData.Assign.Name))
-                variables.Add(nameof(inBundle.TicketData.Assign), inBundle.TicketData.Assign.Name);
+                variables.Add(nameof(inBundle.TicketData.Assign), string.Format($"{nameof(inBundle.TicketData.Assign)}: {inBundle.TicketData.Assign.Name}"));
 
-            if (inBundle.TicketData.Lables != null && inBundle.TicketData.Lables.Count != 0)
-                variables.Add(nameof(inBundle.TicketData.Lables), string.Join(", ", inBundle.TicketData.Lables));
+            if (inBundle.TicketData.Labels != null && inBundle.TicketData.Labels.Count != 0)
+                variables.Add(nameof(inBundle.TicketData.Labels), string.Format($"{nameof(inBundle.TicketData.Labels)}: {string.Join(", ", inBundle.TicketData.Labels)}"));
 
             if (!string.IsNullOrEmpty(inBundle.TicketData.Priority))
-                variables.Add(nameof(inBundle.TicketData.Priority), inBundle.TicketData.Priority);
+                variables.Add(nameof(inBundle.TicketData.Priority), string.Format($"{nameof(inBundle.TicketData.Priority)}: {inBundle.TicketData.Priority}"));
 
             if (inBundle.TicketData.CustomFields != null && inBundle.TicketData.CustomFields.Count != 0)
             {
                 foreach (var (key, value) in inBundle.TicketData.CustomFields)
                 {
-                    string value_str = string.Join(", ", value);
+                    string value_str = string.Format($"{key}: {string.Join(", ", value)}");
                     variables.Add(key, value_str);
                 }
             }
