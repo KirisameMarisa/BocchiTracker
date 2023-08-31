@@ -9,7 +9,7 @@ using BocchiTracker.ServiceClientData;
 using Moq;
 using Xunit;
 
-namespace BocchiTracker.BocchiTracker.UnitTests.CrossServiceReporter.Converter
+namespace BocchiTracker.Tests.CrossServiceReporter.Converter
 {
     public class CustomFieldsToAppInfoConverterTests
     {

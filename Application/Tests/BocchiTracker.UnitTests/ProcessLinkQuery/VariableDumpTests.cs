@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BocchiTracker.ProcessLinkQuery;
 using BocchiTracker.ProcessLinkQuery.Queries;
 
-namespace BocchiTracker.BocchiTracker.UnitTests.ProcessLinkQuery
+namespace BocchiTracker.Tests.ProcessLinkQuery
 {
     public class VariableDumpTests
     {
