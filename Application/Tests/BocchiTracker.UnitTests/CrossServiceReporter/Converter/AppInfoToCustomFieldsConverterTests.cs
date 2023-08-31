@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BocchiTracker.BocchiTracker.UnitTests.CrossServiceReporter.Converter
+namespace BocchiTracker.Tests.CrossServiceReporter.Converter
 {
     public class AppInfoToCustomFieldsConverterTests
     {

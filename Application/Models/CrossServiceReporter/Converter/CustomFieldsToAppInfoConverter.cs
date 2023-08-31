@@ -24,12 +24,15 @@ namespace BocchiTracker.CrossServiceReporter.Converter
             var queryFieldMappings = inServiceConfig.QueryFieldMappings;
             foreach (var m in queryFieldMappings)
             {
-                if (string.IsNullOrEmpty(m.Definition) || string.IsNullOrEmpty(m.Name))
+                string definition = m.Definition;
+                string name = string.IsNullOrEmpty(m.Name) ? definition : m.Name;
+
+                if (string.IsNullOrEmpty(definition))
                     continue;
 
-                if(inCustomFieldLists.TryGetValue(m.Name, out var outValues))
+                if(inCustomFieldLists.TryGetValue(name, out var outValues))
                 {
-                    result.Add(m.Definition, outValues);
+                    result.Add(definition, outValues);
                 }
             }
             return result;
