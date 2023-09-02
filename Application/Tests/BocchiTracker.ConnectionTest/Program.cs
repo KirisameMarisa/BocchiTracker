@@ -13,6 +13,8 @@ using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using System.Data.Common;
 using Prism.Events;
+using BocchiTracker.ProcessLink.CreateRequest;
+using BocchiTracker.ModelEvent;
 
 namespace BocchiTracker.ProcessLink.Test
 {
@@ -34,17 +36,25 @@ namespace BocchiTracker.ProcessLink.Test
         }
     }
 
+    public class CreateRequestConnectionTest : ICreateRequest
+    {
+        public byte[]? Create(RequestEventParameterBase inRequest)
+        {
+            //TODO::
+            return null;
+        }
+    }
+
     class Program
     {
         static async Task Main(string[] args)
         {
-            var services = new ServiceCollection();
-
             int port = 12345;
             var mediator = new EventAggregator();
             var serviceProcessData = BuildServiceProcessData();
+            var serviceCreateRequest = BuildServiceCreateReuqest();
 
-            var connection = new Connection(mediator, serviceProcessData);
+            var connection = new Connection(mediator, serviceProcessData, serviceCreateRequest);
 
             var connectionTask = connection.StartAsync(port);
 
@@ -74,6 +84,13 @@ namespace BocchiTracker.ProcessLink.Test
         {
             var service = new ServiceProcessData();
             service.Register(QueryID.PlayerPosition, new ProcessDataConnectionTest());
+            return service;
+        }
+
+        private static IServiceCreateRequest BuildServiceCreateReuqest()
+        {
+            var service = new ServiceCreateRequest();
+            service.Register(QueryID.ScreenshotRequest, new CreateRequestConnectionTest());
             return service;
         }
     }

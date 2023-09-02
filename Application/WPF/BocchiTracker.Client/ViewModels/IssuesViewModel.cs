@@ -1,4 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ApplicationInfoCollector;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.CrossServiceReporter;
 using BocchiTracker.Data;
 using BocchiTracker.IssueInfoCollector;
@@ -16,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -95,27 +97,47 @@ namespace BocchiTracker.Client.ViewModels
 
         private void OnJumpPlayerLocation()
         {
-            var selectedTickets = SelectedIssues.Cast<TicketData>();
+            var connectApplication = ConnectTo.Selected.Value as AppStatusBundle;
+            if (connectApplication == null)
+                return;
 
+            var selectedTickets = SelectedIssues.Cast<TicketData>();
             var ticket = selectedTickets.FirstOrDefault() ?? null;
             if (ticket == null)
                 return;
             
-            string x, y, z;
+            float x = float.NaN, y = float.NaN, z = float.NaN;
             if (ticket.CustomFields.TryGetValue("PlayerPosition.x", out List<string> outX))
             {
-                x = outX.Count > 0 && !string.IsNullOrEmpty(outX[0]) ? outX[0] : null;
+                if(outX.Count > 0 && !string.IsNullOrEmpty(outX[0]) && float.TryParse(outX[0], out float x_))
+                {
+                    x = x_;
+                }
             }
 
             if (ticket.CustomFields.TryGetValue("PlayerPosition.y", out List<string> outY))
             {
-                y = outY.Count > 0 && !string.IsNullOrEmpty(outY[0]) ? outY[0] : null;
+                if (outY.Count > 0 && !string.IsNullOrEmpty(outY[0]) && float.TryParse(outY[0], out float y_))
+                {
+                    y = y_;
+                }
             }
 
             if (ticket.CustomFields.TryGetValue("PlayerPosition.z", out List<string> outZ))
             {
-                z = outZ.Count > 0 && !string.IsNullOrEmpty(outZ[0]) ? outZ[0] : null;
+                if (outZ.Count > 0 && !string.IsNullOrEmpty(outZ[0]) && float.TryParse(outZ[0], out float z_))
+                {
+                    z = z_;
+                }
             }
+
+            string stage = string.Empty;
+            if (ticket.CustomFields.TryGetValue("PlayerPosition.stage", out List<string> outstage))
+            {
+                stage = outstage.Count > 0 && !string.IsNullOrEmpty(outstage[0]) ? outstage[0] : null;
+            }
+
+            _eventAggregator.GetEvent<RequestQueryEvent>().Publish(new JumpRequestEventParameter(connectApplication.AppBasicInfo.ClientID, x, y, z, stage));
         }
 
         private void OnOpenInBrowser()

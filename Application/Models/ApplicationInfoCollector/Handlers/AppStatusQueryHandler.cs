@@ -7,11 +7,13 @@ using BocchiTracker.ModelEvent;
 using System.Threading;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Prism.Events;
+using System.Diagnostics;
 
 namespace BocchiTracker.ApplicationInfoCollector.Handlers
 {
     public class AppStatusQueryHandler
     {
+        private object mutex = new object();
         private AppStatusBundles _bundles;
 
         public AppStatusQueryHandler(IEventAggregator inEventAggregator, AppStatusBundles inBundles)
@@ -37,26 +39,30 @@ namespace BocchiTracker.ApplicationInfoCollector.Handlers
 
         private void ProcessAppBasicInfo(int inClientID, Dictionary<string, string>? inData)
         {
-            _bundles.Add(inClientID);
-            
-            if (inData is not null)
+            lock(mutex)
             {
-                foreach(var (key, value) in inData)
+                Trace.TraceInformation($"ProcessAppBasicInfo(...) _bundles has ClientID = ({_bundles.Contains(inClientID)}) ClientID:{inClientID}");
+                if (inData is not null)
                 {
-                    _bundles[inClientID].AppBasicInfo.Set(key, value);
+                    _bundles.Add(inClientID, inData);
                 }
             }
         }
 
         private void ProcessAppStatusDynamic(int inClientID, Dictionary<string, string>? inData)
         {
-            _bundles.Add(inClientID);
-
-            if (inData is not null)
+            lock (mutex)
             {
-                foreach(var item in inData)
+                Trace.TraceInformation($"ProcessAppStatusDynamic(...) _bundles has ClientID = ({_bundles.Contains(inClientID)}) ClientID:{inClientID}");
+                if (!_bundles.Contains(inClientID))
+                    return;
+
+                if (inData is not null)
                 {
-                    _bundles[inClientID].AppStatusDynamics[item.Key] = item.Value;
+                    foreach (var item in inData)
+                    {
+                        _bundles[inClientID].AppStatusDynamics[item.Key] = item.Value;
+                    }
                 }
             }
         }

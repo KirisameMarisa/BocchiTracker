@@ -10,6 +10,9 @@
     <Compile Update="Controls\ComboboxWithFilter.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\IssueTrackerMap.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\PickerDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\ComboboxWithFilter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\IssueTrackerMap.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\PickerDialog.xaml">
