@@ -42,7 +42,7 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
             handler.Handle(1, 1, "output");
 
             // Assert
-            mockedEvent1.Verify(x => x.Publish(It.Is<RequestQueryEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotData)));
+            mockedEvent1.Verify(x => x.Publish(It.Is<ScreenshotRequestEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotRequest)));
         }
 
         [Fact]

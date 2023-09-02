@@ -376,7 +376,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if (_client == null)
                 yield break;
 
-            var parameters = new NameValueCollection();
+            var parameters = new NameValueCollection { { "include", "attachments" } };
             var issues = await _client.GetObjectsAsync<Issue>(parameters);
 
             foreach(var issue in issues)
@@ -400,6 +400,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     Description = issue.Description,
                     Assign = new UserData { Name = issue.AssignedTo?.Name },
                     Priority = issue.Priority.Name,
+                    Status = issue.Status.Name,
                     CustomFields = issue.CustomFields.Select(x =>
                     {
                         var values = new List<string>();

@@ -23,5 +23,7 @@ namespace BocchiTracker.ServiceClientData
         public Dictionary<string, List<string>>? CustomFields { get; set; } = new Dictionary<string, List<string>>();
 
         public List<string>? Labels { get; set; } = new List<string>();
+
+        public string Status { get; set; } = string.Empty;
     }
 }

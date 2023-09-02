@@ -66,7 +66,9 @@ namespace BocchiTracker.ApplicationInfoCollector
 
         public AppStatusBundle(int inClientID) { AppBasicInfo.ClientID = inClientID; }
 
-        public override string ToString() { return $"{AppBasicInfo.AppName} Ver:{AppBasicInfo.Version} Platform:{AppBasicInfo.Platform}"; }
+        public override string ToString() { 
+            return $"{AppBasicInfo.AppName} Ver:{AppBasicInfo.Version} Platform:{AppBasicInfo.Platform}"; 
+        }
     }
 
     public class AppStatusBundles 
@@ -86,11 +88,16 @@ namespace BocchiTracker.ApplicationInfoCollector
             return null;
         }
 
-        public void Add(int inClientID)
+        public void Add(int inClientID, Dictionary<string, string> inAppBasicInfo)
         {
             if (!Bundles.ContainsKey(inClientID))
             {
                 var item = new AppStatusBundle(inClientID);
+                foreach (var (key, value) in inAppBasicInfo)
+                {
+                    item.AppBasicInfo.Set(key, value);
+                }
+
                 Bundles.Add(inClientID, item);
                 AppConnected?.Invoke(item);
             }
@@ -104,6 +111,11 @@ namespace BocchiTracker.ApplicationInfoCollector
                 AppDisconnected?.Invoke(item);
                 Bundles.Remove(inClientID);
             }
+        }
+
+        public bool Contains(int inClientID)
+        {
+            return Bundles.ContainsKey(inClientID);
         }
 
         public AppStatusBundle this[int inClientID]

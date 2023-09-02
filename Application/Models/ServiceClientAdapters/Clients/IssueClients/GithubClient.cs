@@ -20,7 +20,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private string? _url;
         private long? _repoId;
         private bool _isAuthenticated;
-        private IDescriptionParser descriptionParser = new DescriptionParser();
+        private IDescriptionParser _descriptionParser = new DescriptionParser();
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
@@ -246,7 +246,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             foreach(var issue in issues)
             {
-                var customFields = descriptionParser.Parse(issue.Body);
+                var customFields = _descriptionParser.Parse(issue.Body);
 
                 yield return new TicketData
                 {
@@ -255,7 +255,8 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     Description = issue.Body,
                     CustomFields = customFields,
                     Assign = new UserData { Name = issue.Assignee?.Login },
-                    Labels = issue.Labels.Select(x => x.Name).ToList()
+                    Labels = issue.Labels.Select(x => x.Name).ToList(),
+                    Status = issue.State.StringValue
                 };
             }
         }
