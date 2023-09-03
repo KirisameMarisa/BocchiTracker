@@ -43,17 +43,32 @@ void ABocchiTrackerActor::Tick(float DeltaSeconds)
 
         ProcessSendPlayerPosition();
        
-        uint8 OutQueryID;
-        if(PendingProcessRequest.Dequeue(OutQueryID))
+        TArray<uint8> outPacket;
+        if(PendingProcessRequest.Dequeue(outPacket))
         {
-            switch(OutQueryID)
+            const BocchiTracker::ProcessLinkQuery::Queries::Packet* packet 
+                = BocchiTracker::ProcessLinkQuery::Queries::GetPacket(outPacket.GetData());
+            
+            switch (packet->query_id_type())
             {
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_ScreenshotData:
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_ScreenshotRequest:
                     ProcessSendScreenshot(); break;
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_AppBasicInfo:
-                    ProcessSendAppBasicInfo(); break;
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_PlayerPosition:
-                    ProcessSendPlayerPosition(); break;
+                
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_IssueesRequest:
+                    break;
+
+                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_JumpRequest:
+                    {
+                        const BocchiTracker::ProcessLinkQuery::Queries::JumpRequest* jumpRequest = packet->query_id_as_JumpRequest();
+                        BocchiTrackerLocation data;
+                        data.Location = FVector(jumpRequest->location()->x(), jumpRequest->location()->y(), jumpRequest->location()->z());
+                        data.Stage = FString(jumpRequest->stage()->c_str());  
+                        PendingJumpRequest.Enqueue(data);
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -61,27 +76,7 @@ void ABocchiTrackerActor::Tick(float DeltaSeconds)
 
 void ABocchiTrackerActor::OnReciveData(TArray<uint8> inData)
 {
-    const BocchiTracker::ProcessLinkQuery::Queries::Packet* packet 
-        = BocchiTracker::ProcessLinkQuery::Queries::GetPacket(inData.GetData());
-
-    if (packet)
-    {
-        BocchiTracker::ProcessLinkQuery::Queries::QueryID queryID = packet->query_id_type();
-        switch (queryID)
-        {
-            case BocchiTracker::ProcessLinkQuery::Queries::QueryID_RequestQuery:
-            {
-                const BocchiTracker::ProcessLinkQuery::Queries::RequestQuery* requestQuery = packet->query_id_as_RequestQuery();
-                if (requestQuery)
-                {
-                    PendingProcessRequest.Enqueue(requestQuery->query_id());
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
+    PendingProcessRequest.Enqueue(inData);
 }
 
 void ABocchiTrackerActor::ProcessSendPlayerPosition()
@@ -142,4 +137,17 @@ void ABocchiTrackerActor::SetPlayerPosition(const FVector &InTrackedPosition, co
 {
     TrackedPosition = InTrackedPosition;
     Stage = InStage;
+}
+
+void ABocchiTrackerActor::JumpIssueLocation(AActor* inActor)
+{
+    BocchiTrackerLocation outLocation;
+    if(PendingJumpRequest.Dequeue(outLocation))
+    {
+        if (inActor)
+        {
+            FVector NewLocation = outLocation.Location;
+            inActor->SetActorLocation(NewLocation);
+        }
+    }
 }
