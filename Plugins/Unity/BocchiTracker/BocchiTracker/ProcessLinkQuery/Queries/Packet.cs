@@ -23,9 +23,11 @@ public struct Packet : IFlatbufferObject
   public BocchiTracker.ProcessLinkQuery.Queries.QueryID QueryIdType { get { int o = __p.__offset(4); return o != 0 ? (BocchiTracker.ProcessLinkQuery.Queries.QueryID)__p.bb.Get(o + __p.bb_pos) : BocchiTracker.ProcessLinkQuery.Queries.QueryID.NONE; } }
   public TTable? QueryId<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(6); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
   public BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo QueryIdAsAppBasicInfo() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo>().Value; }
-  public BocchiTracker.ProcessLinkQuery.Queries.RequestQuery QueryIdAsRequestQuery() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.RequestQuery>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.PlayerPosition QueryIdAsPlayerPosition() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.PlayerPosition>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.ScreenshotData QueryIdAsScreenshotData() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.ScreenshotData>().Value; }
+  public BocchiTracker.ProcessLinkQuery.Queries.ScreenshotRequest QueryIdAsScreenshotRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.ScreenshotRequest>().Value; }
+  public BocchiTracker.ProcessLinkQuery.Queries.JumpRequest QueryIdAsJumpRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.JumpRequest>().Value; }
+  public BocchiTracker.ProcessLinkQuery.Queries.IssueesRequest QueryIdAsIssueesRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.IssueesRequest>().Value; }
 
   public static Offset<BocchiTracker.ProcessLinkQuery.Queries.Packet> CreatePacket(FlatBufferBuilder builder,
       BocchiTracker.ProcessLinkQuery.Queries.QueryID query_id_type = BocchiTracker.ProcessLinkQuery.Queries.QueryID.NONE,

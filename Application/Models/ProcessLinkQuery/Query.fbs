@@ -9,7 +9,7 @@ union QueryID {
     IssueesRequest 
 }
 
-struct Vector3 {
+struct Vec3 {
     x:          float;
     y:          float;
     z:          float;
@@ -21,7 +21,7 @@ table Issue {
     assign:     string;
     status:     string;
     stage:      string;
-    location:   Vector3;
+    location:   Vec3;
 }
 
 table ScreenshotData {
@@ -49,7 +49,7 @@ table ScreenshotRequest {
 }
 
 table JumpRequest {
-    location:   Vector3;
+    location:   Vec3;
     stage:      string;
 }
 
