@@ -19,7 +19,7 @@ namespace BocchiTracker.ProcessLink.CreateRequest
 
             var fbb = new FlatBufferBuilder(1024);
             var stage = fbb.CreateString(jumpRequestQuery.Stage);
-            var location = Vector3.CreateVector3(fbb, jumpRequestQuery.PosX, jumpRequestQuery.PosY, jumpRequestQuery.PosZ);
+            var location = Vec3.CreateVec3(fbb, jumpRequestQuery.PosX, jumpRequestQuery.PosY, jumpRequestQuery.PosZ);
             JumpRequest.StartJumpRequest(fbb);
             JumpRequest.AddLocation(fbb, location);
             JumpRequest.AddStage(fbb, stage);

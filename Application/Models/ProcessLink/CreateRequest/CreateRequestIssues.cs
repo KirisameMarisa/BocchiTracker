@@ -54,7 +54,7 @@ namespace BocchiTracker.ProcessLink.CreateRequest
                 var assigneOffset = fbb.CreateString(ticket.Assign?.Name);
                 var statusOffset = fbb.CreateString(ticket.Status);
                 var stageOffset = fbb.CreateString(stage);
-                var locationOffset = Vector3.CreateVector3(fbb, x, y, z);
+                var locationOffset = Vec3.CreateVec3(fbb, x, y, z);
                 Issue.StartIssue(fbb);
                 Issue.AddId(fbb, idOffset);
                 Issue.AddSummary(fbb, summaryOffset);

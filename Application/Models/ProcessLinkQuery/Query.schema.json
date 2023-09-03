@@ -5,7 +5,7 @@
       "type" : "string",
       "enum": ["NONE", "AppBasicInfo", "PlayerPosition", "ScreenshotData", "ScreenshotRequest", "JumpRequest", "IssueesRequest"]
     },
-    "BocchiTracker_ProcessLinkQuery_Queries_Vector3" : {
+    "BocchiTracker_ProcessLinkQuery_Queries_Vec3" : {
       "type" : "object",
       "properties" : {
         "x" : {
@@ -39,7 +39,7 @@
                 "type" : "string"
               },
         "location" : {
-                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vector3"
+                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vec3"
               }
       },
       "additionalProperties" : false
@@ -105,7 +105,7 @@
       "type" : "object",
       "properties" : {
         "location" : {
-                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vector3"
+                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vec3"
               },
         "stage" : {
                 "type" : "string"
