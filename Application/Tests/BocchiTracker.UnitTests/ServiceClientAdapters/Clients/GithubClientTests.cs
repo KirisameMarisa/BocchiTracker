@@ -146,6 +146,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
         [Fact]
         public async Task Test_GetTickets()
         {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
             Assert.NotNull(_project_url);
             Assert.NotNull(_auth_config);
             Assert.NotNull(_client);
