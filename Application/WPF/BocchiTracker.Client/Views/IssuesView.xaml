@@ -20,10 +20,10 @@
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="5">
+        <StackPanel Orientation="Horizontal">
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                <ComboBox 
+            <ComboBox 
+                    Margin="5"
                     ItemsSource="{Binding ServiceDefinitions}"
                     SelectedItem="{Binding SelectedService.Value}"
                     MinWidth="100"
@@ -31,21 +31,12 @@
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                     materialDesign:HintAssist.Hint="Service"
                     FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                </ComboBox>
-            </StackPanel>
+            </ComboBox>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                <ComboBox 
-                    MinWidth="100"
-                    Foreground="White"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    materialDesign:HintAssist.Hint="Filter"
-                    FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                </ComboBox>
-            </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                <ComboBox 
+
+            <ComboBox 
+                    Margin="5"
                     MinWidth="100"
                     ItemsSource="{Binding ConnectTo.Items}"
                     SelectedItem="{Binding ConnectTo.Selected.Value, Mode=TwoWay}"
@@ -53,13 +44,18 @@
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                     materialDesign:HintAssist.Hint="{Binding ConnectTo.HintText.Value}"
                     FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                    <ComboBox.Resources>
-                        <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
-                    </ComboBox.Resources>
-                </ComboBox>
-            </StackPanel>
+                <ComboBox.Resources>
+                    <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
+                </ComboBox.Resources>
+            </ComboBox>
 
-            <TextBox Margin="0,0,0,11" Text="{Binding SearchText.Value, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"/>
+            <TextBox Margin="5, 0, 0, 15" Text="{Binding SearchText.Value, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"/>
+
+            <CheckBox
+                Margin="5, 0, 0, -10"
+                materialDesign:CheckBoxAssist.CheckBoxSize="30"
+                Content="Show With Location"
+                IsChecked="{Binding ShowItemsWithLocation.Value}"/>
         </StackPanel>
 
         <ListView Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding Issues}" Height="Auto" >
@@ -69,48 +65,47 @@
 
             <ListView.ContextMenu>
                 <ContextMenu StaysOpen="true">
-                    <MenuItem Header="Jump player location" 
-                    Command="{Binding Path=JumpPlayerLocationCommand}" 
-                    CommandParameter="{Binding SelectedIssues}"/>
-                    <MenuItem Header="Open in Browser" 
-                    Command="{Binding OpenInBrowserCommand}" 
-                    CommandParameter="{Binding SelectedIssues}"/>
+                    <MenuItem Header="Open in Browser" Command="{Binding OpenInBrowserCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="ID">
+                    <GridViewColumn Header="">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock HorizontalAlignment="Right">
-                        <Hyperlink 
-                            NavigateUri="{Binding Id}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:IssuesView}}, Path=DataContext.HyperlinkCommand}"
-                            CommandParameter="{Binding Id}">
-                                <TextBlock Text="{Binding Id}" />
-                        </Hyperlink>
-                    </TextBlock>
+                                    <Hyperlink NavigateUri="{Binding TicketData.Id}" Command="{Binding HyperlinkCommand}">
+                                        <TextBlock Text="{Binding TicketData.Id}" />
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Jump!" Command="{Binding JumpPlayerLocationCommand}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Assign" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Assign.Name}"/>
+                                <TextBlock Text="{Binding TicketData.Assign.Name}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Status" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Status}"/>
+                                <TextBlock Text="{Binding TicketData.Status}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Summary" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Summary}"/>
+                                <TextBlock Width="Auto" Text="{Binding TicketData.Summary}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
