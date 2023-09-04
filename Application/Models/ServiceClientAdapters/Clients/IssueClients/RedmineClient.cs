@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Redmine;
+﻿using BocchiTracker.Config.Configs;
+using BocchiTracker.ServiceClientData;
 using Redmine.Net.Api;
-using Redmine.Net.Api.Types;
 using Redmine.Net.Api.Async;
-using Redmine.Net.Api.Exceptions;
+using Redmine.Net.Api.Types;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Linq;
-using BocchiTracker.ServiceClientAdapters.Data;
-using BocchiTracker.ServiceClientData;
-using BocchiTracker.Config.Configs;
-using System.Windows.Documents;
-using YamlDotNet.Core.Tokens;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 {
@@ -57,10 +48,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             if (inAuthConfig.APIKey != null)
             {
-                _client = new RedmineManager(host: _url, apiKey:inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: webProxy);
+                _client = new RedmineManager(host: _url, apiKey: inAuthConfig.APIKey, mimeFormat: MimeFormat.Json, proxy: webProxy);
 
             }
-            else if(inAuthConfig.Username != null && inAuthConfig.Password != null)
+            else if (inAuthConfig.Username != null && inAuthConfig.Password != null)
             {
                 _client = new RedmineManager(host: _url, login: inAuthConfig.Username, password: inAuthConfig.Password, mimeFormat: MimeFormat.Json, proxy: webProxy);
             }
@@ -97,20 +88,20 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             Issue newIssue = new Issue
             {
-                Subject         = inTicketData.Summary,
-                Description     = inTicketData.Description,
-                Project         = IdentifiableName.Create<IdentifiableName>(_projectId.Value),
-                Tracker         = new IdentifiableName { Name = inTicketData.TicketType },
+                Subject = inTicketData.Summary,
+                Description = inTicketData.Description,
+                Project = IdentifiableName.Create<IdentifiableName>(_projectId.Value),
+                Tracker = new IdentifiableName { Name = inTicketData.TicketType },
             };
 
             int id;
 
-            if(inTicketData.TicketType != null && int.TryParse(inTicketData.TicketType, out id))
+            if (inTicketData.TicketType != null && int.TryParse(inTicketData.TicketType, out id))
             {
                 newIssue.Tracker = IdentifiableName.Create<IdentifiableName>(id);
             }
 
-            if(inTicketData.Assign != null && int.TryParse(inTicketData.Assign?.Id, out id))
+            if (inTicketData.Assign != null && int.TryParse(inTicketData.Assign?.Id, out id))
             {
                 newIssue.AssignedTo = IdentifiableName.Create<IdentifiableName>(id);
             }
@@ -128,7 +119,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     if (values == null)
                         continue;
 
-                    if(int.TryParse(key, out id))
+                    if (int.TryParse(key, out id))
                     {
                         var newIssueCustomFiled = IssueCustomField.Create<IssueCustomField>(id);
                         newIssueCustomFiled.Values = new List<CustomFieldValue>();
@@ -144,7 +135,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if (inTicketData.Labels != null && inTicketData.Labels.Count != 0)
             {
                 string? category = inTicketData.Labels.First() ?? null;
-                if(category != null)
+                if (category != null)
                 {
                     if (int.TryParse(category, out id))
                         newIssue.Category = IdentifiableName.Create<IdentifiableName>(id);
@@ -174,7 +165,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
             if (createdIssue == null)
                 return (false, null);
-            
+
             try
             {
                 createdIssue.Watchers = new List<Watcher>();
@@ -344,7 +335,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             var users = await _client.GetObjectsAsync<User>(parameters);
 
             var result = new List<UserData>();
-            foreach ( var user in users)
+            foreach (var user in users)
             {
                 result.Add(new UserData
                 {
@@ -378,12 +369,12 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             var parameters = new NameValueCollection { { "include", "attachments" } };
             var issues = await _client.GetObjectsAsync<Issue>(parameters);
 
-            foreach(var issue in issues)
+            foreach (var issue in issues)
             {
                 Dictionary<string, List<string>> customFields = new Dictionary<string, List<string>>();
-                foreach(var issueCustomField in issue.CustomFields)
+                foreach (var issueCustomField in issue.CustomFields)
                 {
-                    if(issueCustomField.Multiple)
+                    if (issueCustomField.Multiple)
                     {
                         customFields.Add(issueCustomField.Id.ToString(), new List<string>());
                         foreach (var value in issueCustomField.Values)
@@ -403,7 +394,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     CustomFields = new CustomFields(issue.CustomFields.Select(x =>
                     {
                         var values = new List<string>();
-                        if(x.Values != null)
+                        if (x.Values != null)
                             foreach (var value in x.Values)
                                 values.Add(value.Info);
                         return (x.Id.ToString(), values);
