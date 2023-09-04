@@ -120,7 +120,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                 newIssue.Priority = IdentifiableName.Create<IdentifiableName>(id);
             }
 
-            if (inTicketData.CustomFields != null && inTicketData.CustomFields.Count != 0)
+            if (inTicketData.CustomFields.IsNotEmpty())
             {
                 newIssue.CustomFields = new List<IssueCustomField>();
                 foreach (var (key, values) in inTicketData.CustomFields)
@@ -137,7 +137,6 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                             newIssueCustomFiled.Values.Add(new CustomFieldValue { Info = value });
                         }
                         newIssue.CustomFields.Add(newIssueCustomFiled);
-
                     }
                 }
             }
@@ -401,14 +400,14 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
                     Assign = new UserData { Name = issue.AssignedTo?.Name },
                     Priority = issue.Priority.Name,
                     Status = issue.Status.Name,
-                    CustomFields = issue.CustomFields.Select(x =>
+                    CustomFields = new CustomFields(issue.CustomFields.Select(x =>
                     {
                         var values = new List<string>();
                         if(x.Values != null)
                             foreach (var value in x.Values)
                                 values.Add(value.Info);
                         return (x.Id.ToString(), values);
-                    }).ToDictionary(x => x.Item1, x => x.Item2)
+                    }).ToDictionary(x => x.Item1, x => x.Item2))
                 };
             }
         }

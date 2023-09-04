@@ -25,11 +25,11 @@ namespace BocchiTracker.Tests.CrossServiceReporter.Converter
                 }
             };
 
-            var customFieldLists = new Dictionary<string, List<string>>
+            var customFieldLists = new CustomFields(new Dictionary<string, List<string>>
             {
                 { "CustomField1", new List<string> { "Value1", "Value2" } },
                 { "CustomField2", new List<string> { "Value3" } }
-            };
+            });
 
             // Act
             var converter = new CustomFieldsToAppInfoConverter();

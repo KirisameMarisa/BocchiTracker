@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BocchiTracker.ServiceClientData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,15 +12,17 @@ namespace BocchiTracker.ServiceClientAdapters
 {
     public interface IDescriptionParser
     {
-        Dictionary<string, List<string>>? Parse(string inDescription);
+        CustomFields Parse(string inDescription);
     }
 
     public class DescriptionParser : IDescriptionParser
     {
-        public Dictionary<string, List<string>>? Parse(string inDescription)
+        public CustomFields Parse(string inDescription)
         {
+            var result = new CustomFields();
+
             if (string.IsNullOrEmpty(inDescription))
-                return null;
+                return result;
 
             Dictionary<string, List<string>> parsedData = new Dictionary<string, List<string>>();
 
@@ -42,7 +45,11 @@ namespace BocchiTracker.ServiceClientAdapters
                     }
                 }
             }
-            return parsedData.Count() == 0 ? null : parsedData;
+            if (parsedData.Count() == 0)
+                return result;
+
+            result.Set(parsedData);
+            return result;
         }
     }
 }

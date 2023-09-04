@@ -12,14 +12,14 @@ namespace BocchiTracker.CrossServiceReporter.Converter
 {
     public interface ICustomFieldsToAppInfoConverter
     {
-        Dictionary<string, List<string>> Convert(ServiceConfig inServiceConfig, Dictionary<string, List<string>> inCustomFieldLists);
+        CustomFields Convert(ServiceConfig inServiceConfig, CustomFields inCustomFieldLists);
     }
 
     public class CustomFieldsToAppInfoConverter : ICustomFieldsToAppInfoConverter
     {
-        public Dictionary<string, List<string>> Convert(ServiceConfig inServiceConfig, Dictionary<string, List<string>> inCustomFieldLists)
+        public CustomFields Convert(ServiceConfig inServiceConfig, CustomFields inCustomFieldLists)
         {
-            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
+            var result = new CustomFields();
 
             var queryFieldMappings = inServiceConfig.QueryFieldMappings;
             foreach (var m in queryFieldMappings)
@@ -30,7 +30,7 @@ namespace BocchiTracker.CrossServiceReporter.Converter
                 if (string.IsNullOrEmpty(definition))
                     continue;
 
-                if(inCustomFieldLists.TryGetValue(name, out var outValues))
+                if(inCustomFieldLists.TryGetValue(name, out List<string> outValues))
                 {
                     result.Add(definition, outValues);
                 }
