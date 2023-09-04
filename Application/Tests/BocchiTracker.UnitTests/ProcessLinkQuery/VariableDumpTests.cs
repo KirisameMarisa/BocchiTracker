@@ -32,8 +32,13 @@ namespace BocchiTracker.Tests.ProcessLinkQuery
             Assert.Equal("args",        variableDump.ClassAndPropertyNames["AppBasicInfo"][2]);
             Assert.Equal("platform",    variableDump.ClassAndPropertyNames["AppBasicInfo"][3]);
 
-            Assert.True(variableDump.ClassAndPropertyNames.ContainsKey("RequestQuery"));
-            Assert.Equal("query_id",    variableDump.ClassAndPropertyNames["RequestQuery"][0]);
+            Assert.True(variableDump.ClassAndPropertyNames.ContainsKey("IssueesRequest"));
+            Assert.Equal("issues",    variableDump.ClassAndPropertyNames["IssueesRequest"][0]);
+
+            Assert.True(variableDump.ClassAndPropertyNames.ContainsKey("JumpRequest"));
+            Assert.Equal("location",    variableDump.ClassAndPropertyNames["JumpRequest"][0]);
+            Assert.Equal("stage",       variableDump.ClassAndPropertyNames["JumpRequest"][1]);
+
         }
     }
 }

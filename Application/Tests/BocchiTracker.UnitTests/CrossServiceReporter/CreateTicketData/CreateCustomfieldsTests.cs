@@ -18,11 +18,11 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
-            var customFields = new Dictionary<string, List<string>>
+            var customFields = new CustomFields(new Dictionary<string, List<string>>
             {
                 { "Field1", new List<string> { "Value1", "Value2" } },
                 { "Field2", new List<string> { "Value3" } }
-            };
+            });
 
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { CustomFields = customFields };
@@ -51,15 +51,15 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
         }
 
         [Fact]
-        public void Create_ShouldReturnNull_WhenConfigIsNull()
+        public void Create_ShouldReturnEmpty_WhenConfigIsNull()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
-            var customFields = new Dictionary<string, List<string>>
+            var customFields = new CustomFields(new Dictionary<string, List<string>>
             {
                 { "Field1", new List<string> { "Value1", "Value2" } },
                 { "Field2", new List<string> { "Value3" } }
-            };
+            });
 
             var inBundle = new IssueInfoBundle();
             inBundle.TicketData = new TicketData { CustomFields = customFields };
@@ -72,11 +72,12 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var result = createCustomFields.Create(inService, inBundle, inConfig);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.True(result.IsEmpty());
         }
 
         [Fact]
-        public void Create_ShouldReturnNull_WhenTicketDataIsNull()
+        public void Create_ShouldReturnEmpty_WhenTicketDataIsNull()
         {
             // Arrange
             var inService = ServiceDefinitions.Redmine;
@@ -96,7 +97,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var result = createCustomFields.Create(inService, inBundle, inConfig);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.True(result.IsEmpty());
         }
     }
 }

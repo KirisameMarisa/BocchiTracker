@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 {
-    public class CreateCustomfields : ICreateUnifiedTicketData<Dictionary<string, List<string>>>
+    public class CreateCustomfields : ICreateUnifiedTicketData<CustomFields>
     {
-        public Dictionary<string, List<string>>? Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
+        public CustomFields Create(ServiceDefinitions inService, IssueInfoBundle inBundle, ServiceConfig inConfig)
         {
-            if (inConfig.QueryFieldMappings.Count == 0 || inBundle.TicketData.CustomFields == null || inBundle.TicketData.CustomFields.Count == 0)
-                return null;
+            if (inConfig.QueryFieldMappings.Count == 0 || inBundle.TicketData.CustomFields == null || inBundle.TicketData.CustomFields.IsEmpty())
+                return new CustomFields();
 
             Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
             foreach (var mapping in inConfig.QueryFieldMappings)
@@ -33,7 +33,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 
                 result[customFieldName] = values;
             }
-            return result;
+            return new CustomFields(result);
         }
     }
 }

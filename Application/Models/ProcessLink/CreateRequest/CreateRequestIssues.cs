@@ -21,27 +21,21 @@ namespace BocchiTracker.ProcessLink.CreateRequest
             List<Offset<Issue>> issuesOffset = new List<Offset<Issue>>();
             foreach(var ticket in issueRequestQuery.TicketData)
             {
+                if (ticket.CustomFields == null)
+                    continue;
+
                 float x = float.NaN, y = float.NaN, z = float.NaN; string stage = string.Empty;
-                if(ticket.CustomFields != null && ticket.CustomFields.TryGetValue("PlayerPosition.x", out List<string>? outStrX))
-                {
-                    if(outStrX != null && outStrX.Count < 0 && float.TryParse(outStrX[0], out float outX))
-                        x = outX;
-                }
-                if (ticket.CustomFields != null && ticket.CustomFields.TryGetValue("PlayerPosition.y", out List<string>? outStrY))
-                {
-                    if (outStrY != null && outStrY.Count < 0 && float.TryParse(outStrY[0], out float outY))
-                        y = outY;
-                }
-                if (ticket.CustomFields != null && ticket.CustomFields.TryGetValue("PlayerPosition.z", out List<string>? outStrZ))
-                {
-                    if (outStrZ != null && outStrZ.Count < 0 && float.TryParse(outStrZ[0], out float outZ))
-                        z = outZ;
-                }
-                if (ticket.CustomFields != null && ticket.CustomFields.TryGetValue("PlayerPosition.stage", out List<string>? outStrStage))
-                {
-                    if (outStrStage != null && outStrStage.Count < 0)
-                        stage = outStrStage[0];
-                }
+                if(ticket.CustomFields.TryGetValue("PlayerPosition.x", out float outX))
+                    x = outX;
+
+                if (ticket.CustomFields.TryGetValue("PlayerPosition.y", out float outY))
+                    y = outY;
+
+                if (ticket.CustomFields.TryGetValue("PlayerPosition.z", out float outZ))
+                    z = outZ;
+
+                if (ticket.CustomFields.TryGetValue("PlayerPosition.stage", out string outStage))
+                    stage = outStage;
 
                 if (x == float.NaN || y == float.NaN || z == float.NaN)
                     continue;

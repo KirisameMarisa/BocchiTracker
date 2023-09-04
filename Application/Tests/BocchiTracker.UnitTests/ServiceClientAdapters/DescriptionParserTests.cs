@@ -70,7 +70,8 @@ namespace BocchiTracker.Tests.ServiceClientAdapters
             var result = parser.Parse(inputText);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.True(result.IsEmpty());
         }
     }
 }

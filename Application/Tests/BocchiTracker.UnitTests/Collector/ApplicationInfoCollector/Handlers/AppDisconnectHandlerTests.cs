@@ -32,7 +32,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
             var handler = new AppDisconnectHandler(mockEvent.Object, _bundles);
             const int cClientID = 2;
 
-            _bundles.Add(cClientID);
+            _bundles.Add(cClientID, new Dictionary<string, string>());
             var request = new AppDisconnectEventParameter(cClientID);
 
             // Act
