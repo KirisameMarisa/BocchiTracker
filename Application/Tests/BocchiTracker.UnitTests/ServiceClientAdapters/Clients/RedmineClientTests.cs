@@ -169,7 +169,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
             Assert.True(result);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task Test_GetTickets()
         {
             Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
