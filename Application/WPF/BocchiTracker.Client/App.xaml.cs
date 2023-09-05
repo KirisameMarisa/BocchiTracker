@@ -113,6 +113,7 @@ namespace BocchiTracker.Client
             regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
             regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
             regionManager.RegisterViewWithRegion("IssuesRegion", typeof(IssuesView));
+            regionManager.RegisterViewWithRegion("UserConfigRegion", typeof(UserConfigView));
 
             var projectConfig               = LoadProjectConfig(Container);
 
@@ -169,7 +170,6 @@ namespace BocchiTracker.Client
             containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
-            containerRegistry.RegisterDialog<UserConfigDialog, UserConfigViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

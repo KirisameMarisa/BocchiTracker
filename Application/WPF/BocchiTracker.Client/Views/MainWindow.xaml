@@ -90,6 +90,17 @@
                     <ContentControl Margin="3" prism:RegionManager.RegionName="IssuesRegion" />
                 </Grid>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon Kind="CogOutline" HorizontalAlignment="Center" Width="32" Height="32" />
+                        <TextBlock HorizontalAlignment="Center" Text="Setting" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="5">
+                    <ContentControl Margin="3" prism:RegionManager.RegionName="UserConfigRegion" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

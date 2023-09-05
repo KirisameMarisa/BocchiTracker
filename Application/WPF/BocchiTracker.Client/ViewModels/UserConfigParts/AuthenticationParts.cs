@@ -65,25 +65,29 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 
         private IAuthConfigRepositoryFactory _authConfigRepositoryFactory;
 
-        public AuthenticationParts(IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig)
+        public AuthenticationParts()
+        {
+            CheckAuthenticationCommand = new AsyncCommand(OnCheckAuthenticationCommand);
+        }
+
+        public void Initialize(CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig)
         {
             _authConfigRepositoryFactory = inAuthConfigRepositoryFactory;
-            CheckAuthenticationCommand = new AsyncCommand(OnCheckAuthenticationCommand);
 
-            foreach(var serviceConfig in inProjectConfig.ServiceConfigs)
+            foreach (var serviceConfig in inProjectConfig.ServiceConfigs)
             {
-                Authentications[serviceConfig.Service].AuthConfig   = new ReactiveProperty<AuthConfig>(_authConfigRepositoryFactory.Load(serviceConfig.Service));
+                Authentications[serviceConfig.Service].AuthConfig = new ReactiveProperty<AuthConfig>(_authConfigRepositoryFactory.Load(serviceConfig.Service));
                 if (Authentications[serviceConfig.Service].AuthConfig.Value == null)
                 {
                     Authentications[serviceConfig.Service].AuthConfig.Value = new AuthConfig();
                     _authConfigRepositoryFactory.Save(serviceConfig.Service, Authentications[serviceConfig.Service].AuthConfig.Value);
                 }
 
-                Authentications[serviceConfig.Service].URL          = serviceConfig.URL;
-                Authentications[serviceConfig.Service].ProxyURL     = serviceConfig.ProxyURL;
-                Authentications[serviceConfig.Service].Service      = serviceConfig.Service;
+                Authentications[serviceConfig.Service].URL = serviceConfig.URL;
+                Authentications[serviceConfig.Service].ProxyURL = serviceConfig.ProxyURL;
+                Authentications[serviceConfig.Service].Service = serviceConfig.Service;
 
-                if(!string.IsNullOrEmpty(Authentications[serviceConfig.Service].URL))
+                if (!string.IsNullOrEmpty(Authentications[serviceConfig.Service].URL))
                     Authentications[serviceConfig.Service].IsEnable.Value = true;
             }
             Task.Run(OnCheckAuthenticationCommand);

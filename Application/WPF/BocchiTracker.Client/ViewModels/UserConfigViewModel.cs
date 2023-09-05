@@ -12,67 +12,72 @@ using Reactive.Bindings;
 using BocchiTracker.Config;
 using BocchiTracker.Client.ViewModels.UserConfigParts;
 using System.Windows;
+using Prism.Events;
+using BocchiTracker.ModelEvent;
+using System.Windows.Input;
+using BocchiTracker.Client.Share.Commands;
+using Prism.Commands;
 
 namespace BocchiTracker.Client.ViewModels
 {
-    public class UserConfigViewModel : BindableBase, IDialogAware
+    public class UserConfigViewModel : BindableBase
     {
-        public string Title => "User Config";
-        public event Action<IDialogResult> RequestClose;
+        public ICommand SaveCommand { get; private set; }
 
         public UserConfigParts.AuthenticationParts AuthenticationParts { get; set; }
         public UserConfigParts.ChoiceProjectConfigParts ChoiceProjectConfigParts  { get; set; }
         public UserConfigParts.MiscParts MiscParts { get; set; }
 
+        private readonly IEventAggregator _eventAggregator;
         private IAuthConfigRepositoryFactory _authConfigRepository;
         private CachedConfigRepository<ProjectConfig> _projectConfigRepository;
         private CachedConfigRepository<UserConfig> _userConfigRepository;
 
-        public UserConfigViewModel(CachedConfigRepository<ProjectConfig> inProjectConfigRepository, CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepository)
+        public UserConfigViewModel(
+            IEventAggregator inEventAggregator,
+            CachedConfigRepository<ProjectConfig> inProjectConfigRepository, 
+            CachedConfigRepository<UserConfig> inUserConfigRepository, 
+            IAuthConfigRepositoryFactory inAuthConfigRepository)
         {
+            SaveCommand = new DelegateCommand(OnSave);
+
+            _eventAggregator = inEventAggregator;
             _authConfigRepository = inAuthConfigRepository;
             _userConfigRepository = inUserConfigRepository;
             _projectConfigRepository = inProjectConfigRepository;
 
+            _eventAggregator
+                .GetEvent<ConfigReloadEvent>()
+                .Subscribe(OnConfigReload, ThreadOption.UIThread);
+
+            AuthenticationParts = new UserConfigParts.AuthenticationParts();
+            MiscParts = new UserConfigParts.MiscParts();
+            ChoiceProjectConfigParts = new UserConfigParts.ChoiceProjectConfigParts();
+        }
+
+        private void OnConfigReload(ConfigReloadEventParameter inParam)
+        {
             var userConfig = _userConfigRepository.Load();
             if (userConfig == null)
-                inUserConfigRepository.Save(new UserConfig());
+                _userConfigRepository.Save(new UserConfig());
 
-            AuthenticationParts = new UserConfigParts.AuthenticationParts(_authConfigRepository, _projectConfigRepository.Load());
-            MiscParts = new UserConfigParts.MiscParts(inUserConfigRepository);
-            ChoiceProjectConfigParts = new UserConfigParts.ChoiceProjectConfigParts(inUserConfigRepository);
+            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts })
+                ui.Initialize(_userConfigRepository, _authConfigRepository, _projectConfigRepository.Load());
         }
 
-        public bool CanCloseDialog()
-        {
-            return true;
-        }
-
-        public void OnDialogClosed()
-        {
+       public void OnSave()
+       {
             bool isNeedRestart = false;
-
-            AuthenticationParts.Save(ref isNeedRestart);
-            ChoiceProjectConfigParts.Save(ref isNeedRestart);
-            MiscParts.Save(ref isNeedRestart);
+            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts })
+                ui.Save(ref isNeedRestart);
 
             var config = _userConfigRepository.Load();
             _userConfigRepository.Save(config);
 
             if (isNeedRestart) 
-                MessageBox.Show("Should restart client!", "BocchiTracker");
-
-            RaiseRequestClose(new DialogResult(ButtonResult.OK));
-        }
-
-        public virtual void RaiseRequestClose(IDialogResult dialogResult)
-        {
-            RequestClose?.Invoke(dialogResult);
-        }
-
-        public void OnDialogOpened(IDialogParameters parameters)
-        {
-
-        }
+                MessageBox.Show("Save successed! Should restart client!", "BocchiTracker");
+            else
+                MessageBox.Show("Save successed!", "BocchiTracker");
+       }
     }
 }

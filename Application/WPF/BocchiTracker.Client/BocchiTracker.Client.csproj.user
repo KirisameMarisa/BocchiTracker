@@ -31,7 +31,7 @@
     <Compile Update="Views\UploadFilesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserConfigDialog.xaml.cs">
+    <Compile Update="Views\UserConfigView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\UtilityView.xaml.cs">
@@ -69,7 +69,7 @@
     <Page Update="Views\UploadFilesView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserConfigDialog.xaml">
+    <Page Update="Views\UserConfigView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UtilityView.xaml">

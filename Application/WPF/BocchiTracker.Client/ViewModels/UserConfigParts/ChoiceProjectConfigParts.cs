@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Reactive.Bindings;
 using System.IO;
+using BocchiTracker.ServiceClientAdapters;
 
 namespace BocchiTracker.Client.ViewModels.UserConfigParts
 {
@@ -16,18 +17,16 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
     {
         public string ProjectConfigDirectory;
 
-        public ReactiveCollection<string> ProjectConfigs { get; set; }
+        public ReactiveCollection<string> ProjectConfigs { get; set; } = new ReactiveCollection<string>();
         public ReactiveProperty<string> UseProjectConfig { get; set; } = new ReactiveProperty<string>();
 
         private UserConfig _userConfig;
 
-        public ChoiceProjectConfigParts(CachedConfigRepository<UserConfig> inUserConfigRepository) 
+        public void Initialize(CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig)
         {
             Debug.Assert(inUserConfigRepository.Load() != null);
 
             _userConfig = inUserConfigRepository.Load();
-
-            ProjectConfigs = new ReactiveCollection<string>();
 
             ProjectConfigDirectory = Path.GetDirectoryName(_userConfig.ProjectConfigFilename);
             if (Directory.Exists(ProjectConfigDirectory))
