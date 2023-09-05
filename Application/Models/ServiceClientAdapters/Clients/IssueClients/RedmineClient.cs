@@ -114,7 +114,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if (inTicketData.CustomFields.IsNotEmpty())
             {
                 newIssue.CustomFields = new List<IssueCustomField>();
-                foreach (var (key, values) in inTicketData.CustomFields)
+                foreach (var (key, values) in inTicketData.CustomFields.Fields)
                 {
                     if (values == null)
                         continue;

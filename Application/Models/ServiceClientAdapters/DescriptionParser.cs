@@ -43,7 +43,7 @@ namespace BocchiTracker.ServiceClientAdapters
             if (parsedData.Count() == 0)
                 return result;
 
-            result.Set(parsedData);
+            result.Fields = parsedData;
             return result;
         }
     }

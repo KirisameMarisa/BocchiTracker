@@ -43,7 +43,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.Count());
             Assert.True(result.ContainsKey("CustomField1"));
             Assert.True(result.ContainsKey("CustomField2"));
             Assert.Equal(customFields["Field1"], result["CustomField1"]);
