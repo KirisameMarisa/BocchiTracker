@@ -4,6 +4,8 @@ namespace BocchiTracker.ServiceClientData
 {
     public class TicketData
     {
+        public string Id { get; set; } = string.Empty;
+
         public string? Summary { get; set; } = string.Empty;
 
         public string? Description { get; set; } = string.Empty;
@@ -18,8 +20,10 @@ namespace BocchiTracker.ServiceClientData
 
         public string? Priority { get; set; } = string.Empty;
 
-        public Dictionary<string, List<string>>? CustomFields { get; set; } = new Dictionary<string, List<string>>();
+        public CustomFields CustomFields { get; set; } = new CustomFields();
 
-        public List<string>? Lables { get; set; } = new List<string>();
+        public List<string>? Labels { get; set; } = new List<string>();
+
+        public string Status { get; set; } = string.Empty;
     }
 }

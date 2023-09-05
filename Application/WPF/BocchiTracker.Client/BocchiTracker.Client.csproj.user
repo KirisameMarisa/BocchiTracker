@@ -10,7 +10,13 @@
     <Compile Update="Controls\ComboboxWithFilter.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\IssueTrackerMap.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\PickerDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\IssuesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
@@ -39,10 +45,16 @@
     <Page Update="Controls\ComboboxWithFilter.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Controls\IssueTrackerMap.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Controls\PickerDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\MultipleItemDisplay.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\IssuesView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">

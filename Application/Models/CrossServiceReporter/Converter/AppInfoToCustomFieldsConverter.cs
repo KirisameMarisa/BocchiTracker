@@ -1,4 +1,5 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
+using BocchiTracker.ServiceClientData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,12 @@ namespace BocchiTracker.CrossServiceReporter.Converter
 {
     public interface IAppInfoToCustomFieldsConverter
     {
-        Dictionary<string, List<string>> Convert(AppStatusBundle inAppBundle);
+        CustomFields Convert(AppStatusBundle inAppBundle);
     }
 
     public class AppInfoToCustomFieldsConverter : IAppInfoToCustomFieldsConverter
     {
-        public Dictionary<string, List<string>> Convert(AppStatusBundle inAppBundle)
+        public CustomFields Convert(AppStatusBundle inAppBundle)
         {
             Dictionary<string, List<string>> customFields = new Dictionary<string, List<string>>();
             
@@ -30,7 +31,7 @@ namespace BocchiTracker.CrossServiceReporter.Converter
                 customFields[key].Add(value);
             }
 
-            return customFields;
+            return new CustomFields(customFields);
         }
     }
 }

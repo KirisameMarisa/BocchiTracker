@@ -53,7 +53,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 
             _eventAggregator
                 .GetEvent<RequestQueryEvent>()
-                .Publish(new RequestQueryEventParameter(inClientID, QueryID.ScreenshotData));
+                .Publish(new ScreenshotRequestEventParameter(inClientID));
         }
     }
 }

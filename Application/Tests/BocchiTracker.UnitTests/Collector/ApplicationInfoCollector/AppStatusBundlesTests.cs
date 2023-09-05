@@ -18,7 +18,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector
                 var appStatusBundles = new AppStatusBundles();
 
                 // Act
-                appStatusBundles.Add(1);
+                appStatusBundles.Add(1, new Dictionary<string, string>());
 
                 // Assert
                 Assert.True(appStatusBundles.Bundles.ContainsKey(1));
@@ -29,7 +29,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector
             {
                 // Arrange
                 var appStatusBundles = new AppStatusBundles();
-                appStatusBundles.Add(1);
+                appStatusBundles.Add(1, new Dictionary<string, string>());
 
                 // Act
                 appStatusBundles.Remove(1);
@@ -43,7 +43,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector
             {
                 // Arrange
                 var appStatusBundles = new AppStatusBundles();
-                appStatusBundles.Add(1);
+                appStatusBundles.Add(1, new Dictionary<string, string>());
 
                 // Act
                 var bundle = appStatusBundles.GetBundlesByClientID(1);

@@ -25,18 +25,18 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
                 Assign = new UserData { Name = "John" },
-                Lables = new List<string> { "Label1", "Label2" },
+                Labels = new List<string> { "Label1", "Label2" },
                 Priority = "High",
-                CustomFields = new Dictionary<string, List<string>>
+                CustomFields = new CustomFields(new Dictionary<string, List<string>>
                 {
                     { "Field1", new List<string> { "Value1", "Value2" } },
                     { "Field2", new List<string> { "Value3" } }
-                }
+                })
             };
 
             var inConfig = new ServiceConfig
             {
-                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\nAssign: {Assign}\nLabels: {Lables}\nPriority: {Priority}\nField1: {Field1}\nField2: {Field2}"
+                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\n{Assign}\n{Labels}\n{Priority}\n{Field1}\n{Field2}"
             };
 
             var createDescription = new CreateDescription();
@@ -66,13 +66,13 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
                 Summary = "Ticket Summary",
                 Description = "Ticket Description",
                 Assign = new UserData { Name = "John" },
-                Lables = new List<string> { "Label1", "Label2" },
+                Labels = new List<string> { "Label1", "Label2" },
                 Priority = "High",
-                CustomFields = new Dictionary<string, List<string>>
+                CustomFields = new CustomFields(new Dictionary<string, List<string>>
                 {
                     { "Field1", new List<string> { "Value1", "Value2" } },
                     { "Field2", new List<string> { "Value3" } }
-                }
+                })
             };
 
             var inConfig = new ServiceConfig
@@ -97,7 +97,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             var inBundle = new IssueInfoBundle();
             var inConfig = new ServiceConfig
             {
-                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\nAssignee: {Assignee}\nLabels: {Lables}\nPriority: {Priority}\nField1: {Field1}\nField2: {Field2}"
+                DescriptionFormat = "Summary: {Summary}\nDescription: {Description}\n{Assignee}\n{Labels}\n{Priority}\n{Field1}\n{Field2}"
             };
 
             var createDescription = new CreateDescription();
@@ -105,8 +105,8 @@ namespace BocchiTracker.Tests.CrossServiceReporter.CreateTicketData
             // Act
             var result = createDescription.Create(inService, inBundle, inConfig);
 
-            // Assert
-            Assert.Equal(result, inConfig.DescriptionFormat);
+            // Assert (Description must be replaced)
+            Assert.Equal("Summary: {Summary}\nDescription: \n{Assignee}\n{Labels}\n{Priority}\n{Field1}\n{Field2}", result);
         }
     }
 }

@@ -1,6 +1,28 @@
 namespace BocchiTracker.ProcessLinkQuery.Queries;
 
-union QueryID { AppBasicInfo, RequestQuery, PlayerPosition, ScreenshotData }
+union QueryID { 
+    AppBasicInfo, 
+    PlayerPosition, 
+    ScreenshotData, 
+    ScreenshotRequest, 
+    JumpRequest, 
+    IssueesRequest 
+}
+
+struct Vec3 {
+    x:          float;
+    y:          float;
+    z:          float;
+}
+
+table Issue {
+    id:         string;
+    summary:    string;
+    assign:     string;
+    status:     string;
+    stage:      string;
+    location:   Vec3;
+}
 
 table ScreenshotData {
     width:      int;
@@ -22,8 +44,17 @@ table AppBasicInfo {
     platform:   string;
 }
 
-table RequestQuery {
-    query_id:   int;
+table ScreenshotRequest {
+
+}
+
+table JumpRequest {
+    location:   Vec3;
+    stage:      string;
+}
+
+table IssueesRequest {
+    issues:     [Issue];
 }
 
 table Packet {

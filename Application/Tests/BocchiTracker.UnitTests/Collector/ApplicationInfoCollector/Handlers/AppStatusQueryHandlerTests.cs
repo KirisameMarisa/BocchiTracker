@@ -55,7 +55,7 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
         }
 
         [Fact]
-        public void Test_Handle_ShouldCallProcessAppStatusDynamic_WhenQueryIdIsNot0()
+        public void Test_Handle_ShouldBundleNull_WhenNotRequiredClientID()
         {
             // Arrange
             var mockEvent = new Mock<IEventAggregator>();
@@ -77,6 +77,49 @@ namespace BocchiTracker.Tests.Collector.ApplicationInfoCollector.Handlers
 
             // Act
             handler.Handle(request);
+
+            // Assert
+            var asset_bundle = _bundles.GetBundlesByClientID(2);
+            Assert.Null(asset_bundle);
+        }
+
+        [Fact]
+        public void Test_Handle_ShouldCallProcessAppStatusDynamic_WhenQueryIdIsNot0()
+        {
+            // Arrange
+            var mockEvent = new Mock<IEventAggregator>();
+            mockEvent
+                .Setup(ea => ea.GetEvent<AppStatusQueryEvent>())
+                .Returns(new AppStatusQueryEvent());
+            var handler = new AppStatusQueryHandler(mockEvent.Object, _bundles);
+
+            var request1 = new AppStatusQueryEventParameter(new AppStatus
+            {
+                ClientID = 2,
+                QueryID = (byte)QueryID.AppBasicInfo,
+                Status = new Dictionary<string, string>
+                {
+                    { "AppBasicInfo.pid", "1234" },
+                    { "AppBasicInfo.app_name", "TestApp" },
+                    { "AppBasicInfo.args", "TestArgs" },
+                    { "AppBasicInfo.platform", "Windows" },
+                },
+            });
+
+            var request2 = new AppStatusQueryEventParameter(new AppStatus
+            {
+                ClientID = 2,
+                QueryID = 0,
+                Status = new Dictionary<string, string>
+                {
+                    {"Memory", "4GB"},
+                    {"CPU", "2.4 GHz"}
+                }
+            });
+
+            // Act
+            handler.Handle(request1);
+            handler.Handle(request2);
 
             // Assert
             var asset_bundle = _bundles.GetBundlesByClientID(2);

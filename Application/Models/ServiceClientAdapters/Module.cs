@@ -15,6 +15,7 @@ namespace BocchiTracker.ServiceClientAdapters
             containerRegistry.RegisterSingleton<IServiceClientFactory, ServiceClientAdapterFactory>();
             containerRegistry.RegisterSingleton<IPasswordService, PasswordService>();
             containerRegistry.RegisterSingleton<IAuthConfigRepositoryFactory, AuthConfigRepositoryFactory>();
+            containerRegistry.RegisterSingleton<IDescriptionParser, DescriptionParser>();
         }
     }
 }

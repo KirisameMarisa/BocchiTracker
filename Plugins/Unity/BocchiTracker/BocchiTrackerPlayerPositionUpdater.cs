@@ -6,9 +6,9 @@ using UnityEngine;
 namespace BocchiTracker
 {
     /// <summary>
-    /// Sends player position updates to the BocchiTrackerSystem if the player's movement distance exceeds a certain threshold.
+    /// Monitors the player's position and sends updates to the BocchiTrackerSystem if the player's movement distance exceeds a certain threshold.
     /// </summary>
-    public class BocchiTrackerPlayerPositionSender : MonoBehaviour
+    public class BocchiTrackerPlayerPositionUpdater : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField]
@@ -50,6 +50,11 @@ namespace BocchiTracker
 
                 // Update the previous position to the current position
                 previousPosition = currentPosition;
+            }
+
+            if (system.JumpRequest.TryDequeue(out var request))
+            {
+                transform.position = request.Location;
             }
         }
     }

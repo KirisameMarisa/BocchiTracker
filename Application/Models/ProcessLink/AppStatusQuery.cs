@@ -1,4 +1,5 @@
 ﻿using BocchiTracker.ModelEvent;
+using BocchiTracker.ProcessLink.CreateRequest;
 using BocchiTracker.ProcessLink.ProcessData;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Google.FlatBuffers;
@@ -22,13 +23,15 @@ namespace BocchiTracker.ProcessLink
         private readonly IEventAggregator _eventAggregator;
         private readonly SubscriptionToken _subscriptionToken;
         private readonly IServiceProcessData _serviceProcessData;
+        private readonly IServiceCreateRequest _serviceCreateReuqest;
 
-        public AppStatusQuery(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData, int inClientID, TcpClient inClient)
+        public AppStatusQuery(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData, IServiceCreateRequest inServiceCreateRequest, int inClientID, TcpClient inClient)
         {
             _clientId = inClientID;
             _tcpClient = inClient;
             _eventAggregator = inEventAggregator;
             _serviceProcessData = inServiceProcessData;
+            _serviceCreateReuqest = inServiceCreateRequest;
 
             _subscriptionToken = _eventAggregator
                 .GetEvent<RequestQueryEvent>()
@@ -59,24 +62,16 @@ namespace BocchiTracker.ProcessLink
             }
         }
 
-        public void Handle(RequestQueryEventParameter request)
+        public void Handle(RequestEventParameterBase inRequest)
         {
-            if (_clientId != request.ClientID)
+            if (_clientId != inRequest.ClientID)
                 return;
 
-            var fbb = new FlatBufferBuilder(1024);
-            RequestQuery.StartRequestQuery(fbb);
-            RequestQuery.AddQueryId(fbb, (int)request.QueryID);
-            var table = RequestQuery.EndRequestQuery(fbb);
+            var data = _serviceCreateReuqest.Create(inRequest);
+            if (data == null)
+                return;
 
-            Packet.StartPacket(fbb);
-            Packet.AddQueryIdType(fbb, QueryID.RequestQuery);
-            Packet.AddQueryId(fbb, table.Value);
-            var packet = Packet.EndPacket(fbb);
-            Packet.FinishPacketBuffer(fbb, packet);
-
-            int ret = _tcpClient.Client.Send(fbb.SizedByteArray());
-            System.Console.WriteLine(ret);
+            int ret = _tcpClient.Client.Send(data);
         }
 
         public void Dispose()
