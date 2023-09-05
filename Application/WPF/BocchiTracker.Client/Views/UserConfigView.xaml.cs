@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace BocchiTracker.Client.Views
 {
     /// <summary>
-    /// UserConfigDialog.xaml の相互作用ロジック
+    /// UserConfigView.xaml の相互作用ロジック
     /// </summary>
-    public partial class UserConfigDialog : UserControl
+    public partial class UserConfigView : UserControl
     {
-        public UserConfigDialog()
+        public UserConfigView()
         {
             InitializeComponent();
         }

@@ -8,6 +8,8 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 {
     public interface IConfig
     {
+        public void Initialize(CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig);
+
         public void Save(ref bool outIsNeedRestart);
     }
 }

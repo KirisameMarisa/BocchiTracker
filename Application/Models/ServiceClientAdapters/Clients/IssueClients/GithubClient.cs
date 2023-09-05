@@ -24,6 +24,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (IsAuthenticated())
+                return true;
+
             if (string.IsNullOrEmpty(inAuthConfig.APIKey))
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} APIKey is null");

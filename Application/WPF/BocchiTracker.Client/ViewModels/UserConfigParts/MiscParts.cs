@@ -18,7 +18,7 @@ namespace BocchiTracker.Client.ViewModels.UserConfigParts
 
         private UserConfig _userConfig;
 
-        public MiscParts(CachedConfigRepository<UserConfig> inUserConfigRepository)
+        public void Initialize(CachedConfigRepository<UserConfig> inUserConfigRepository, IAuthConfigRepositoryFactory inAuthConfigRepositoryFactory, ProjectConfig inProjectConfig)
         {
             Debug.Assert(inUserConfigRepository.Load() != null);
 
