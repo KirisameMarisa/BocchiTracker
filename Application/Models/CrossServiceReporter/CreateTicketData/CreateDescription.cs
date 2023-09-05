@@ -51,7 +51,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
 
             if (inBundle.TicketData.CustomFields.IsNotEmpty())
             {
-                foreach (var (key, value) in inBundle.TicketData.CustomFields)
+                foreach (var (key, value) in inBundle.TicketData.CustomFields.Fields)
                 {
                     string value_str = CreateVariable(key, string.Join(", ", value));
                     variables.Add(key, value_str);

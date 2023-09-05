@@ -7,23 +7,15 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ServiceClientData
 {
-    public class CustomFields : IEnumerable<(string, List<string>)>
+    public class CustomFields
     {
-        private Dictionary<string, List<string>> _fields = new Dictionary<string, List<string>>();
+        public Dictionary<string, List<string>> Fields { get; set; } = new Dictionary<string, List<string>>();
 
-        public CustomFields() 
-        {
-
-        }
+        public CustomFields() {}
 
         public CustomFields(Dictionary<string, List<string>> inFields)
         {
-            _fields = inFields;
-        }
-
-        public void Set(Dictionary<string, List<string>> inFields)
-        {
-            _fields = inFields;
+            Fields = inFields;
         }
 
         public bool TryGetValue(string inKey, out float outValue)
@@ -33,7 +25,7 @@ namespace BocchiTracker.ServiceClientData
             if (!ContainsKey(inKey))
                 return false;
 
-            var values = _fields[inKey];
+            var values = Fields[inKey];
             if(values.Count == 0) 
                 return false;
 
@@ -49,7 +41,7 @@ namespace BocchiTracker.ServiceClientData
             if (!ContainsKey(inKey))
                 return false;
 
-            var values = _fields[inKey];
+            var values = Fields[inKey];
             if (values.Count == 0)
                 return false;
 
@@ -65,7 +57,7 @@ namespace BocchiTracker.ServiceClientData
             if (!ContainsKey(inKey))
                 return false;
 
-            var values = _fields[inKey];
+            var values = Fields[inKey];
             if (values.Count == 0)
                 return false;
 
@@ -81,7 +73,7 @@ namespace BocchiTracker.ServiceClientData
             if (!ContainsKey(inKey))
                 return false;
 
-            var values = _fields[inKey];
+            var values = Fields[inKey];
             if (values.Count == 0)
                 return false;
 
@@ -96,13 +88,13 @@ namespace BocchiTracker.ServiceClientData
             if (!ContainsKey(inKey))
                 return false;
 
-            outValue = _fields[inKey];
+            outValue = Fields[inKey];
             return true;
         }
 
         public bool ContainsKey(string inKey)
         {
-            return _fields.ContainsKey(inKey);
+            return Fields.ContainsKey(inKey);
         }
 
         public void Add(string inKey, string inValue)
@@ -111,15 +103,15 @@ namespace BocchiTracker.ServiceClientData
                 return;
 
             if (!ContainsKey(inKey))
-                _fields.Add(inKey, new List<string>());
+                Fields.Add(inKey, new List<string>());
 
-            _fields[inKey].Add(inValue);
+            Fields[inKey].Add(inValue);
         }
 
         public void Add(string inKey, List<string> inValues)
         {
             if (!ContainsKey(inKey))
-                _fields.Add(inKey, new List<string>());
+                Fields.Add(inKey, new List<string>());
 
             foreach(var item in inValues)
                 Add(inKey, item);
@@ -127,30 +119,15 @@ namespace BocchiTracker.ServiceClientData
 
         public bool IsEmpty()
         {
-            return _fields.Count == 0;
+            return Fields.Count == 0;
         }
 
         public bool IsNotEmpty()
         {
-            return _fields.Count != 0;
+            return Fields.Count != 0;
         }
 
-        public int Count { get => _fields.Count; }
-
-        IEnumerator<(string, List<string>)> IEnumerable<(string, List<string>)>.GetEnumerator()
-        {
-            return _fields.Select(kv => (kv.Key, kv.Value)).GetEnumerator();
-        }
-
-        IEnumerator GetEnumerator()
-        {
-            return _fields.Select(kv => (kv.Key, kv.Value)).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        public int Count() => Fields.Count;
 
         public List<string> this[string inKey]
         {

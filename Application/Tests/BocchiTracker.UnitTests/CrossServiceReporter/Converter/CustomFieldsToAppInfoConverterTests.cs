@@ -36,7 +36,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.Converter
             var result = converter.Convert(serviceConfig, customFieldLists);
 
             // Assert
-            Assert.Single(result); // CustomField1 のみが期待される
+            Assert.Single(result.Fields); // CustomField1 のみが期待される
             Assert.True(result.ContainsKey("Id1"));
             Assert.Equal(2, result["Id1"].Count);
             Assert.Contains("Value1", result["Id1"]);
