@@ -40,5 +40,20 @@ namespace BocchiTracker.ServiceClientData
                     IconURL = string.Empty };
             } 
         }
+
+        public bool Contains(string inValue)
+        {
+            string v = inValue.ToLower();
+            if (Name != null && Name.ToLower().Contains(inValue))
+                return true;
+
+            if (Email != null && Email.ToLower().Contains(inValue))
+                return true;
+
+            if (Id != null && Id.ToLower().Contains(inValue))
+                return true;
+
+            return false;
+        }
     }
 }

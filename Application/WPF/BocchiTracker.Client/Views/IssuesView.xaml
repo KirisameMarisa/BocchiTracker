@@ -13,19 +13,20 @@
         <Style x:Key="CenteredContentPresenterStyle" TargetType="ContentPresenter">
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
 
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IssueSearch.IsVisible, Converter={StaticResource BoolVisibilityConverter}}">
             <ComboBox 
                     Margin="5"
-                    ItemsSource="{Binding ServiceDefinitions}"
-                    SelectedItem="{Binding SelectedService.Value}"
+                    ItemsSource="{Binding IssueSearch.ServiceDefinitions}"
+                    SelectedItem="{Binding IssueSearch.SelectedService.Value}"
                     MinWidth="100"
                     Foreground="White"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"
@@ -33,39 +34,37 @@
                     FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
             </ComboBox>
 
-
-
             <ComboBox 
                     Margin="5"
                     MinWidth="100"
-                    ItemsSource="{Binding ConnectTo.Items}"
-                    SelectedItem="{Binding ConnectTo.Selected.Value, Mode=TwoWay}"
+                    ItemsSource="{Binding IssueSearch.ConnectTo.Items}"
+                    SelectedItem="{Binding IssueSearch.ConnectTo.Selected.Value, Mode=TwoWay}"
                     Foreground="White"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    materialDesign:HintAssist.Hint="{Binding ConnectTo.HintText.Value}"
+                    materialDesign:HintAssist.Hint="{Binding IssueSearch.ConnectTo.HintText.Value}"
                     FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                 <ComboBox.Resources>
                     <Style BasedOn="{StaticResource CenteredContentPresenterStyle}" TargetType="ContentPresenter"/>
                 </ComboBox.Resources>
             </ComboBox>
 
-            <TextBox Margin="5, 0, 0, 15" Text="{Binding SearchText.Value, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"/>
+            <TextBox Margin="5, 0, 0, 15" Text="{Binding IssueSearch.SearchText.Value, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search..." FontSize="14" MinWidth="200" HorizontalContentAlignment="Left" VerticalAlignment="Bottom"/>
 
             <CheckBox
                 Margin="5, 0, 0, -10"
                 materialDesign:CheckBoxAssist.CheckBoxSize="30"
                 Content="Show With Location"
-                IsChecked="{Binding ShowItemsWithLocation.Value}"/>
+                IsChecked="{Binding IssueSearch.ShowItemsWithLocation.Value}"/>
         </StackPanel>
 
-        <ListView Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding Issues}" Height="Auto" >
+        <ListView Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="IssueList" ItemsSource="{Binding IssueList.Issues}" Height="Auto" >
             <i:Interaction.Behaviors>
-                <behaviors:SelectedItemsBehavior SelectedItems="{Binding SelectedIssues}" />
+                <behaviors:SelectedItemsBehavior SelectedItems="{Binding IssueList.SelectedIssues}" />
             </i:Interaction.Behaviors>
 
             <ListView.ContextMenu>
                 <ContextMenu StaysOpen="true">
-                    <MenuItem Header="Open in Browser" Command="{Binding OpenInBrowserCommand}"/>
+                    <MenuItem Header="Open in Browser" Command="{Binding IssueList.OpenInBrowserCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

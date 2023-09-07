@@ -133,6 +133,7 @@ namespace BocchiTracker.Client
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
             var authConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+            var getIssues                   = Container.Resolve<IGetIssues>();
             authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
 
             _ = connection.StartAsync(projectConfig.Port);
@@ -145,7 +146,10 @@ namespace BocchiTracker.Client
 
                 eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Authentication started" });
                 await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
-                
+
+                foreach(var serviceConfig in projectConfig.ServiceConfigs)
+                    await getIssues.GetAsync(serviceConfig);
+
                 eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting service infomation" });
                 await issueInfoBundle.Initialize(dataRepository, eventAggregator);
 

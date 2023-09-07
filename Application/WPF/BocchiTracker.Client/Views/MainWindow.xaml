@@ -7,7 +7,7 @@
     xmlns:conveters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:prism="http://prismlibrary.com/" mc:Ignorable="d"
-    AllowDrop="True" Title="MainWindow" Height="850" Width="800" MinWidth="400">
+    AllowDrop="True" Title="MainWindow" Height="850" Width="1000" MinWidth="1000">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter" />
@@ -39,8 +39,12 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="5">
-                    <Grid Panel.ZIndex="1"
-                        Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.6*"/>
+                        <ColumnDefinition Width="0.4*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid Panel.ZIndex="1" Grid.ColumnSpan="2" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
 
                         <StackPanel Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                             <ProgressBar Margin="5" Height="100" Width="100" IsIndeterminate="True"
@@ -54,29 +58,30 @@
                             </GroupBox>
                         </StackPanel>
                     </Grid>
-                    <ScrollViewer Panel.ZIndex="0"
-                        IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
+
+                    <Grid Panel.ZIndex="0" Grid.Column="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
                         <i:Interaction.Behaviors>
                             <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
                         </i:Interaction.Behaviors>
-                        <StackPanel Margin="10">
-                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion" />
-                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion" />
 
+                        <Grid >
+                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion" />
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Column="1" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
+                        <StackPanel Margin="10">
+                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion" />
                             <Grid>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="0.45*" />
-                                    </Grid.ColumnDefinitions>
-                                    <ContentControl Grid.Column="0" Margin="3"
-                                        prism:RegionManager.RegionName="UploadFilesRegion" />
-                                    <ContentControl Grid.Column="1" Margin="3"
-                                        prism:RegionManager.RegionName="UtilityRegion" />
-                                </Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.45*" />
+                                </Grid.ColumnDefinitions>
+                                <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion" />
+                                <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion" />
                             </Grid>
                         </StackPanel>
-                    </ScrollViewer>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem>
