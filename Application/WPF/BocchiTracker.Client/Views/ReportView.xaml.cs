@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BocchiTracker.Client.Views
 {
     /// <summary>
-    /// UtilityBtnsView.xaml の相互作用ロジック
+    /// ReportView.xaml の相互作用ロジック
     /// </summary>
-    public partial class UtilityView : UserControl
+    public partial class ReportView : UserControl
     {
-        public UtilityView()
+        public ReportView()
         {
             InitializeComponent();
         }

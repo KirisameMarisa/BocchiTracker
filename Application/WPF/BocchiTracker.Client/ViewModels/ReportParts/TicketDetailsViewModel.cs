@@ -19,7 +19,7 @@ using BocchiTracker.ServiceClientData;
 using BocchiTracker.Client.Controls;
 using BocchiTracker.ModelEvent;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.ReportParts
 {
     public class TicketLabels : BindableBase
     {

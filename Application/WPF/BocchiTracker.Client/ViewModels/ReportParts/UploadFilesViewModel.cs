@@ -21,7 +21,7 @@ using System.Reflection.Metadata;
 using System.Diagnostics;
 using BocchiTracker.ModelEvent;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.ReportParts
 {
     public class UploadFilesViewModel : BindableBase
     {

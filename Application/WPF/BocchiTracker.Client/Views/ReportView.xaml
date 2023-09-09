@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="BocchiTracker.Client.Views.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BocchiTracker.Client.Views"
+             xmlns:ReportParts="clr-namespace:BocchiTracker.Client.Views.ReportParts"
+             xmlns:IssueListParts="clr-namespace:BocchiTracker.Client.Views.IssueListParts"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="1000">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+
+            <ReportParts:TicketBasicView Margin="3" Height="Auto"/>
+            <ReportParts:UploadFilesView Grid.Row="1" Margin="3"/>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <StackPanel Margin="10">
+                <GroupBox FontSize="16" Header="Similer Issues" Style="{StaticResource MaterialDesignCardGroupBox}">
+                    <IssueListParts:IssuesView Margin="3" SearchControlVisible="False" Height="200" 
+                                           StatusColumnVisible="False"
+                                           JumpColumnVisible="False" 
+                                           AssignColumnVisible="False"/>
+                </GroupBox>
+                <ReportParts:TicketDetailsView Margin="3"/>
+                <ReportParts:UtilityView Margin="3"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

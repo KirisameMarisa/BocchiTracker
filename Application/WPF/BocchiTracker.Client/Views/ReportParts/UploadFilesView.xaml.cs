@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Client.Views
+namespace BocchiTracker.Client.Views.ReportParts
 {
     /// <summary>
-    /// IssuesView.xaml の相互作用ロジック
+    /// UploadFilesView.xaml の相互作用ロジック
     /// </summary>
-    public partial class IssuesView : UserControl
+    public partial class UploadFilesView : UserControl
     {
-        public IssuesView()
+        public UploadFilesView()
         {
             InitializeComponent();
         }

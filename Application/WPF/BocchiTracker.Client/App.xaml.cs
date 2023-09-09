@@ -108,12 +108,11 @@ namespace BocchiTracker.Client
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion("TicketBasicRegion", typeof(TicketBasicView));
-            regionManager.RegisterViewWithRegion("TicketDetailsRegion", typeof(TicketDetailsView));
-            regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
-            regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
-            regionManager.RegisterViewWithRegion("IssuesRegion", typeof(IssuesView));
+            regionManager.RegisterViewWithRegion("ReportRegion", typeof(ReportView));
+            regionManager.RegisterViewWithRegion("IssueTrakingRegion", typeof(IssueTrakingView));
             regionManager.RegisterViewWithRegion("UserConfigRegion", typeof(UserConfigView));
+
+
 
             var projectConfig               = LoadProjectConfig(Container);
 

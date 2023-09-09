@@ -1,4 +1,5 @@
-﻿using BocchiTracker.Data;
+﻿using BocchiTracker.Client.ViewModels.ReportParts;
+using BocchiTracker.Data;
 using BocchiTracker.ServiceClientData;
 using Reactive.Bindings;
 using System;
