@@ -5,7 +5,7 @@ using BocchiTracker.ModelEvent;
 using Prism.Events;
 using Prism.Mvvm;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.IssueListParts
 {
     public class IssuesViewModel : BindableBase
     {

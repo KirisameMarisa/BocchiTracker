@@ -29,6 +29,10 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <i:Interaction.Behaviors>
+            <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
+        </i:Interaction.Behaviors>
+        
         <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True" SnapsToDevicePixels="True"
             Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Left">
             <TabItem>
@@ -39,12 +43,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.6*"/>
-                        <ColumnDefinition Width="0.4*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <Grid Panel.ZIndex="1" Grid.ColumnSpan="2" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
+                    <Grid Panel.ZIndex="1" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
 
                         <StackPanel Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                             <ProgressBar Margin="5" Height="100" Width="100" IsIndeterminate="True"
@@ -59,28 +58,8 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Panel.ZIndex="0" Grid.Column="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
-                        <i:Interaction.Behaviors>
-                            <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
-                        </i:Interaction.Behaviors>
-
-                        <Grid >
-                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion" />
-                        </Grid>
-                    </Grid>
-
-                    <Grid Grid.Column="1" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
-                        <StackPanel Margin="10">
-                            <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion" />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="0.45*" />
-                                </Grid.ColumnDefinitions>
-                                <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion" />
-                                <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion" />
-                            </Grid>
-                        </StackPanel>
+                    <Grid Panel.ZIndex="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
+                        <ContentControl prism:RegionManager.RegionName="ReportRegion"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -92,7 +71,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="5">
-                    <ContentControl Margin="3" prism:RegionManager.RegionName="IssuesRegion" />
+                    <ContentControl Margin="3" prism:RegionManager.RegionName="IssueTrakingRegion" />
                 </Grid>
             </TabItem>
             <TabItem>

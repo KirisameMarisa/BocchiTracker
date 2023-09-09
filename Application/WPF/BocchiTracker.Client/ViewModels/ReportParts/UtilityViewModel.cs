@@ -30,7 +30,7 @@ using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Commands;
 using BocchiTracker.ModelEvent;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.ReportParts
 {
     public class UtilityViewModel : BindableBase
     {
