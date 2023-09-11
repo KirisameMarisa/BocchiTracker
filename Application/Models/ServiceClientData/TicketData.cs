@@ -18,6 +18,8 @@ namespace BocchiTracker.ServiceClientData
 
     public class TicketData
     {
+        public ServiceDefinitions Service { get; set; }
+
         public string Id { get; set; } = string.Empty;
 
         public string? Summary { get; set; } = string.Empty;

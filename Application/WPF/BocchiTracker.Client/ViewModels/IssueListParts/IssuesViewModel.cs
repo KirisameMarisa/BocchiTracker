@@ -22,24 +22,13 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
                 .Subscribe(OnConfigReload, ThreadOption.UIThread);
 
             IssueList = new IssueListParts.ListPart(inGetIssues, inEventAggregator, inIssueOpener);
-            IssueSearch = new IssueListParts.SearchPart(inTicketProperty, IssueList);
+            IssueSearch = new IssueListParts.SearchPart(inEventAggregator, inTicketProperty, IssueList);
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
         {
-            foreach (var item in inParam.ProjectConfig.ServiceConfigs)
-            {
-                if (string.IsNullOrEmpty(item.URL))
-                    continue;
-
-                IssueList.ServiceDefinitions.Add(item.Service, item);
-
-                var issues = IssueList.GetAllIssues(item.Service);
-                if (issues.Count > 0)
-                    IssueSearch.ServiceDefinitions.AddOnScheduler(item.Service);
-            }
-
-            IssueList.CurrentService = () => IssueSearch.SelectedService.Value;
+            IssueList.ServiceConfigs = inParam.ProjectConfig.ServiceConfigs;
+            IssueList.PopulateIssueList();
             IssueList.CurrentConnectionStatus = () => IssueSearch.ConnectTo.Selected.Value as AppStatusBundle;
         }
     }

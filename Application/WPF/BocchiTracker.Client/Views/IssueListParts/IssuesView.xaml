@@ -28,17 +28,6 @@
                     Visibility="{Binding SearchControlVisible, RelativeSource={RelativeSource AncestorType=local:IssuesView}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolVisibilityConverter}}">
             <ComboBox 
                     Margin="5"
-                    ItemsSource="{Binding IssueSearch.ServiceDefinitions}"
-                    SelectedItem="{Binding IssueSearch.SelectedService.Value}"
-                    MinWidth="100"
-                    Foreground="White"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    materialDesign:HintAssist.Hint="Service"
-                    FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-            </ComboBox>
-
-            <ComboBox 
-                    Margin="5"
                     MinWidth="100"
                     ItemsSource="{Binding IssueSearch.ConnectTo.Items}"
                     SelectedItem="{Binding IssueSearch.ConnectTo.Selected.Value, Mode=TwoWay}"

@@ -388,6 +388,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
                 yield return new TicketData
                 {
+                    Service = ServiceDefinitions.Redmine,
                     Id = issue.Id.ToString(),
                     Summary = issue.Subject,
                     Description = issue.Description,
