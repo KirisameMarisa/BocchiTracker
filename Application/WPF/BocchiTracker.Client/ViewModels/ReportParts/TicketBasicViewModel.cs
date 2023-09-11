@@ -40,6 +40,8 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
             inEventAggregator
                 .GetEvent<IssueSubmittedEvent>()
                 .Subscribe(OnIssueSubmittedEvent, ThreadOption.UIThread);
+            
+
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)

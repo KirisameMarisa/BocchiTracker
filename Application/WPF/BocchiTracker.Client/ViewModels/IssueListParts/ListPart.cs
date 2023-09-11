@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace BocchiTracker.Client.ViewModels.IssueListParts
@@ -16,14 +17,13 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
     public class ListPart
     {
         public Func<AppStatusBundle> CurrentConnectionStatus { get; set; }
-        public Func<ServiceDefinitions> CurrentService { get; set; }
 
         public ICommand OpenInBrowserCommand { get; private set; }
 
         public ReactiveCollection<IssueListParts.IssueItem> Issues { get; set; } = new ReactiveCollection<IssueListParts.IssueItem>();
         public IEnumerable SelectedIssues { get; set; } = new ObservableCollection<IssueListParts.IssueItem>();
 
-        public Dictionary<ServiceDefinitions, ServiceConfig> ServiceDefinitions { get; set; } = new Dictionary<ServiceDefinitions, ServiceConfig>();
+        public List<ServiceConfig> ServiceConfigs { get; set; } = new List<ServiceConfig>();
 
         private readonly IGetIssues _getIssues;
         private readonly IEventAggregator _eventAggregator;
@@ -49,22 +49,28 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
             }
         }
 
-        public void PopulateIssueList(ServiceDefinitions inService)
+        public void PopulateIssueList()
         {
             this.Issues.Clear();
 
-            var issues = this.GetAllIssues(inService);
+            var issues = this.GetAllIssues();
             foreach (var issue in issues)
             {
                 Add(issue);
             }
         }
 
-        public List<TicketData> GetAllIssues(ServiceDefinitions inService)
+        public List<TicketData> GetAllIssues()
         {
-            if (!ServiceDefinitions.ContainsKey(inService))
-                return new List<TicketData>();
-            return _getIssues.GetFromCache(ServiceDefinitions[inService]);
+            List<TicketData> result = new List<TicketData>();
+
+            foreach(var config in ServiceConfigs)
+            {
+                foreach(var ticket in _getIssues.GetFromCache(config))
+                    result.Add(ticket);
+            }
+
+            return result;
         }
 
         public void Clear()
@@ -76,7 +82,6 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
         {
             Issues.AddOnScheduler(new IssueListParts.IssueItem(inTicketData, _eventAggregator, _issueOpener)
             {
-                CurrentService = CurrentService,
                 CurrentConnectionStatus = CurrentConnectionStatus
             });
         }

@@ -25,15 +25,15 @@
                   SelectedItem="{Binding TicketProperty.TicketType.Value}" 
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                   materialDesign:HintAssist.Hint="TicketType"
-                  FontSize="16"
+                  FontSize="14"
                   Foreground="White"
                   Margin="5" />
 
             <TextBox Grid.Column="1"
-                 Text="{Binding TicketProperty.Summary.Value}"
+                 Text="{Binding TicketProperty.Summary.Value, UpdateSourceTrigger=PropertyChanged}"
                  materialDesign:HintAssist.Hint="Summary..."
                  Foreground="White"
-                 Margin="5, 0, 0, -15" TextWrapping="NoWrap" FontSize="16" VerticalContentAlignment="Bottom" VerticalAlignment="Center" />
+                 Margin="5, 0, 0, -10" TextWrapping="NoWrap" FontSize="15" VerticalContentAlignment="Bottom" VerticalAlignment="Center" />
         </Grid>
         
         <Grid Grid.Row="1">

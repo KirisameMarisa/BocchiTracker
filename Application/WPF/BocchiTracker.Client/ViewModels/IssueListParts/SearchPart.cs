@@ -1,6 +1,8 @@
 ﻿using BocchiTracker.Client.ViewModels.ReportParts;
 using BocchiTracker.Data;
+using BocchiTracker.ModelEvent;
 using BocchiTracker.ServiceClientData;
+using Prism.Events;
 using Reactive.Bindings;
 using System;
 
@@ -8,10 +10,8 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
 {
     public class SearchPart
     {
-        public ReactiveProperty<bool> IsVisible { get; set; } = new ReactiveProperty<bool>(true);
+        public bool IsVisible { get; set; } = true;
 
-        public ReactiveCollection<ServiceDefinitions> ServiceDefinitions { get; set; } = new ReactiveCollection<ServiceDefinitions>();
-        public ReactiveProperty<ServiceDefinitions> SelectedService { get; set; } = new ReactiveProperty<ServiceDefinitions>();
         public ConnectTo ConnectTo { get; set; }
 
         public ReactiveProperty<string> SearchText { get; set; } = new ReactiveProperty<string>();
@@ -19,20 +19,17 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
 
         public IssueListParts.ListPart IssueList = default!;
 
-        public SearchPart(TicketProperty inTicketProperty, ListPart inIssueList)
+        public SearchPart(IEventAggregator inEventAggregator, TicketProperty inTicketProperty, ListPart inIssueList)
         {
             IssueList = inIssueList;
             ConnectTo = new ConnectTo(inTicketProperty);
 
-            SelectedService.Subscribe((service) => IssueList.PopulateIssueList(service));
-            ServiceDefinitions.CollectionChanged += (_, __) =>
-            {
-                if (ServiceDefinitions.Count == 1)
-                    SelectedService.Value = ServiceDefinitions[0];
-            };
-
             SearchText.Subscribe((_) => OnApplyFilterIssues());
             ShowItemsWithLocation.Subscribe((_) => OnApplyFilterIssues());
+
+            inEventAggregator
+                .GetEvent<SummarySearchEvent>()
+                .Subscribe(OnSearchFromEvent, ThreadOption.UIThread);
         }
 
         private void OnApplyFilterIssues()
@@ -42,7 +39,7 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
 
             IssueList.Clear();
 
-            var issues = IssueList.GetAllIssues(SelectedService.Value);
+            var issues = IssueList.GetAllIssues();
             foreach (var issue in issues)
             {
                 if (issue.Contatins(TicketFilter.Summary | TicketFilter.Id | TicketFilter.Assign, filterText))
@@ -58,6 +55,13 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
                     }
                 }
             }
+        }
+
+        private void OnSearchFromEvent(string inText)
+        {
+            if (IsVisible)
+                return;
+            SearchText.Value = inText;
         }
     }
 }

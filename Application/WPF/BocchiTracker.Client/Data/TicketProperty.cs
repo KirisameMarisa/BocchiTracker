@@ -49,7 +49,11 @@ namespace BocchiTracker.Data
             AppStatusBundles = inAppStatusBundles;
 
             Summary = new ReactiveProperty<string>(inIssueInfoBundle.TicketData.Summary);
-            Summary.Subscribe(value => inIssueInfoBundle.TicketData.Summary = value);
+            Summary.Subscribe(value => 
+            {
+                inIssueInfoBundle.TicketData.Summary = value;
+                inEventAggregator.GetEvent<SummarySearchEvent>().Publish(value);
+            });
 
             TicketType = new ReactiveProperty<string>();
             TicketType.Subscribe(value => inIssueInfoBundle.TicketData.TicketType = value);

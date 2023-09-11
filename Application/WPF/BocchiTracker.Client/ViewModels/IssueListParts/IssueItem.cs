@@ -25,13 +25,13 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
 
         public IssueItem(TicketData inTicketData, IEventAggregator inEventAggregator, IIssueOpener inIssueOpener)
         {
+            _eventAggregator = inEventAggregator;
+            _issueOpener = inIssueOpener;
+
             TicketData = inTicketData;
 
             HyperlinkCommand = new DelegateCommand(OnOpenInBrowser);
             JumpPlayerLocationCommand = new DelegateCommand(OnJumpPlayerLocation, TicketData.CanJumpPlayer);
-
-            _eventAggregator = inEventAggregator;
-            _issueOpener = inIssueOpener;
         }
 
         private void OnJumpPlayerLocation()
@@ -59,11 +59,7 @@ namespace BocchiTracker.Client.ViewModels.IssueListParts
 
         public void OnOpenInBrowser()
         {
-            if (CurrentService == null)
-                return;
-
-            ServiceDefinitions service = CurrentService.Invoke();
-            _issueOpener.Open(service, TicketData.Id);
+            _issueOpener.Open(TicketData);
         }
     }
 }

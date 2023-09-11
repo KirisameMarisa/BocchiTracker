@@ -253,6 +253,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
                 yield return new TicketData
                 {
+                    Service = ServiceDefinitions.Github,
                     Id = issue.Number.ToString(),
                     Summary = issue.Title,
                     Description = issue.Body,

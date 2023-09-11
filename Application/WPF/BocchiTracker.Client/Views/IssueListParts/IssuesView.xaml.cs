@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BocchiTracker.Client.ViewModels.IssueListParts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace BocchiTracker.Client.Views.IssueListParts
     public partial class IssuesView : UserControl
     {
         public static readonly DependencyProperty SearchControlVisibleProperty =
-            DependencyProperty.Register("SearchControlVisible", typeof(bool), typeof(IssuesView), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            DependencyProperty.Register("SearchControlVisible", typeof(bool), typeof(IssuesView), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSearchControlVisibleUpdate));
 
         public bool SearchControlVisible
         {
@@ -77,6 +78,17 @@ namespace BocchiTracker.Client.Views.IssueListParts
         public IssuesView()
         {
             InitializeComponent();
+
+
+        }
+
+        private static void OnSearchControlVisibleUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is IssuesView context)
+            {
+                var vm = context.DataContext as IssuesViewModel;
+                vm.IssueSearch.IsVisible = (bool)e.NewValue;
+            }
         }
 
         private static void OnGridViewColumnVisibleUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
