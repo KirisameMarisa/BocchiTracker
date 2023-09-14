@@ -38,7 +38,7 @@ namespace BocchiTracker.ServiceClientData
 
         public CustomFields CustomFields { get; set; } = new CustomFields();
 
-        public List<string> Labels { get; set; } = new List<string>();
+        public List<string>? Labels { get; set; } = new List<string>();
 
         public string Status { get; set; } = string.Empty;
 

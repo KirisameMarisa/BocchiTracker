@@ -9,48 +9,76 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter" />
+    </UserControl.Resources>
+    
     <Grid MinHeight="300" MinWidth="300">
-        <GroupBox Margin="8" Grid.Row="1" FontSize="16" Header="Upload Files" Style="{StaticResource MaterialDesignCardGroupBox}">
-            <ListView ItemsSource="{Binding Bundle}">
-                <ListView.View>
-                    <GridView >
-                        <GridView.ColumnHeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </Style>
-                        </GridView.ColumnHeaderContainerStyle>
-                        <GridViewColumn Header="CloseBtn">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Width="48" Height="24" 
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:UploadFilesView}}, Path=DataContext.DeleteCommand}"
-                                            CommandParameter="{Binding FullName}">
-                                        <materialDesign:PackIcon Kind="Close" VerticalAlignment="Center" Width="12" Height="12"/>
-                                    </Button>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="OpenBtn">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Width="48" Height="24" 
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:UploadFilesView}}, Path=DataContext.OpenCommand}"
-                                            CommandParameter="{Binding FullName}">
-                                        <materialDesign:PackIcon Kind="FolderOpen" VerticalAlignment="Center" Width="12" Height="12"/>
-                                    </Button>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Filename">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Name}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+        <GroupBox Margin="8" FontSize="16" Header="Upload Files" Style="{StaticResource MaterialDesignCardGroupBox}">
+            <Grid>
+                <Label 
+                    Visibility="{Binding IsShowHelperText.Value, Converter={StaticResource BoolVisibilityConverter}}"
+                    Content="Drag and drop to add files" 
+                    FontSize="18" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Opacity="0.3" 
+                    Panel.ZIndex="0"/>
+                <ScrollViewer Panel.ZIndex="1">
+                    <ItemsControl ItemsSource="{Binding Bundle}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Grid MouseLeftButtonDown="OnItemClicked">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Edit" 
+                                                      Command="{Binding EditCommand}"/>
+                                                <MenuItem Header="Remove"
+                                                      Command="{Binding RemoveCommand}"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                        <materialDesign:PackIcon Margin="5" x:Name="LogImageControl" Width="64" Height="64" HorizontalAlignment="Center" Kind="FileDocumentMultipleOutline" />
+                                        <materialDesign:PackIcon Margin="5" x:Name="UnknownImageControl" Width="64" Height="64" HorizontalAlignment="Center" Kind="Help" />
+                                        <Image Margin="7" x:Name="ImageControl" Source="{Binding PreviewImage, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform" Width="Auto" Height="Auto" />
+                                    </Grid>
+                                    <TextBlock x:Name="TextBlockControl" Text="{Binding AssetData.Name}" />
+                                </StackPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding AssetData.Extension}" Value=".png">
+                                        <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Visible" />
+                                        <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding AssetData.Extension}" Value=".jpg">
+                                        <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Visible" />
+                                        <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding AssetData.Extension}" Value=".log">
+                                        <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Visible" />
+                                        <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding AssetData.Extension}" Value="">
+                                        <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Visible" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
         </GroupBox>
     </Grid>
 </UserControl>

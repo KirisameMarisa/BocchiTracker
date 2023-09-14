@@ -21,7 +21,7 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
 
             <ReportParts:TicketBasicView Margin="3" Height="Auto"/>
