@@ -10,7 +10,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.25*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
@@ -25,7 +25,7 @@
                   SelectedItem="{Binding TicketProperty.TicketType.Value}" 
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                   materialDesign:HintAssist.Hint="TicketType"
-                  FontSize="14"
+                  FontSize="15"
                   Foreground="White"
                   Margin="5" />
 
