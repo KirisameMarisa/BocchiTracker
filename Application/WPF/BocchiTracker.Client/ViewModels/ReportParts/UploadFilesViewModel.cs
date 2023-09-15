@@ -20,28 +20,64 @@ using Reactive.Bindings;
 using System.Reflection.Metadata;
 using System.Diagnostics;
 using BocchiTracker.ModelEvent;
+using System.Windows.Media.Imaging;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.ReportParts
 {
+    public class UploadItem
+    {
+        public ICommand EditCommand { get; private set; }
+
+        public ICommand RemoveCommand { get; private set; }
+
+        public bool IsSelected { get; set; } = false;
+
+        public AssetData AssetData { get; set; }
+
+        public BitmapImage PreviewImage { get; set; }
+
+        private UploadFilesViewModel _viewModel;
+
+        public UploadItem(AssetData inAssetData, UploadFilesViewModel inViewModel)
+        {
+            AssetData = inAssetData;
+            if (AssetData.PictureRawData != null)
+            {
+                var memStream = new MemoryStream(AssetData.PictureRawData);
+                PreviewImage = new BitmapImage();
+                PreviewImage.BeginInit();
+                PreviewImage.StreamSource = memStream;
+                PreviewImage.CacheOption = BitmapCacheOption.OnLoad;
+                PreviewImage.EndInit();
+            }
+            _viewModel = inViewModel;
+
+            RemoveCommand = new DelegateCommand(() => _viewModel.OnRemoveFile(AssetData.FullName));
+            EditCommand = new DelegateCommand(OnEditFile);
+        }
+
+        private void OnEditFile()
+        {
+            var info = new ProcessStartInfo(AssetData.FullName) { UseShellExecute = true };
+            Process.Start(info);
+        }
+    }
+
     public class UploadFilesViewModel : BindableBase
     {
+        private IssueAssetsBundle _issueAssetsBundle;
+
         private List<IssueAssetMonitor> _issueAssetMonitors = new List<IssueAssetMonitor>();
 
-        public ICommand OpenCommand { get; private set; }
-        public ICommand DeleteCommand { get; private set; }
-
-        public ReactiveCollection<AssetData> Bundle { get; }
-
-        private IssueAssetsBundle _issueAssetsBundle;
+        public ReactiveProperty<bool> IsShowHelperText { get; set; } = new ReactiveProperty<bool>(true);
+        public ReactiveCollection<UploadItem> Bundle { get; }
 
         public UploadFilesViewModel(IEventAggregator inEventAggregator, IssueAssetsBundle inIssueAssetsBundle)
         {
             _issueAssetsBundle = inIssueAssetsBundle;
 
-            Bundle = new ReactiveCollection<AssetData>();
+            Bundle = new ReactiveCollection<UploadItem>();
             Bundle.CollectionChanged += (_, __) => OnUpdateCollection();
-            DeleteCommand = new DelegateCommand<string>(OnDeleteFile);
-            OpenCommand = new DelegateCommand<string>(OnOpenFile);
 
             inEventAggregator
                 .GetEvent<AssetDropedEvent>()
@@ -67,7 +103,7 @@ namespace BocchiTracker.Client.ViewModels
 
                 var issueAssetMonitor           = new IssueAssetMonitor(item.Directory, item.Filter);
                 issueAssetMonitor.AddedAction   = OnAddFile;
-                issueAssetMonitor.DeletedAction = OnDeleteFile;
+                issueAssetMonitor.DeletedAction = OnRemoveFile;
                 issueAssetMonitor.RenamedAction = OnRenameFile;
                 _issueAssetMonitors.Add(issueAssetMonitor);
             }
@@ -80,7 +116,6 @@ namespace BocchiTracker.Client.ViewModels
                 }
             }
         }
-
 
         private void OnIssueSubmittedEvent(IssueSubmittedEventParameter inParam)
         {
@@ -97,12 +132,12 @@ namespace BocchiTracker.Client.ViewModels
 
         public void OnAddFile(string inFilePath)
         {
-            Bundle.AddOnScheduler(new AssetData(inFilePath));
+            Bundle.AddOnScheduler(new UploadItem(new AssetData(inFilePath), this));
         }
 
-        public void OnDeleteFile(string inFilePath)
+        public void OnRemoveFile(string inFilePath)
         {
-            var removeItem = Bundle.Where(x => x.FullName == inFilePath).FirstOrDefault() ?? null;
+            var removeItem = Bundle.Where(x => x.AssetData.FullName == inFilePath).FirstOrDefault() ?? null;
             if (removeItem != null)
             {
                 Bundle.RemoveOnScheduler(removeItem);
@@ -111,19 +146,15 @@ namespace BocchiTracker.Client.ViewModels
 
         public void OnRenameFile(string inOldPath, string inNewPath)
         {
-            OnDeleteFile(inOldPath);
+            OnRemoveFile(inOldPath);
             OnAddFile(inNewPath);
-        }
-
-        public void OnOpenFile(string inFilePath)
-        {
-            var info = new ProcessStartInfo(inFilePath) { UseShellExecute = true };
-            System.Diagnostics.Process.Start(info);
         }
 
         public void OnUpdateCollection()
         {
-            _issueAssetsBundle.Bundle = Bundle.ToList();
+            _issueAssetsBundle.Bundle = Bundle.Select(x => x.AssetData).ToList();
+            
+            IsShowHelperText.Value = Bundle.Count == 0 ? true : false;
         }
     }
 }

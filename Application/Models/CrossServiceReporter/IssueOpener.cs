@@ -14,6 +14,8 @@ namespace BocchiTracker.CrossServiceReporter
     public interface IIssueOpener
     {
         void Open(ServiceDefinitions inService, string inIssueKey);
+
+        void Open(TicketData inTicketData);
     }
 
     public class IssueOpener : IIssueOpener
@@ -31,6 +33,11 @@ namespace BocchiTracker.CrossServiceReporter
             if (client == null)
                 return;
             client.OpenWebBrowser(inIssueKey);
+        }
+
+        public void Open(TicketData inTicketData)
+        {
+            Open(inTicketData.Service, inTicketData.Id);
         }
     }
 }

@@ -23,6 +23,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (IsAuthenticated())
+                return true;
+
             if (string.IsNullOrEmpty(inURL))
             {
                 Trace.TraceError($"{ServiceDefinitions.Redmine} URL is null or empty");
@@ -385,6 +388,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
 
                 yield return new TicketData
                 {
+                    Service = ServiceDefinitions.Redmine,
                     Id = issue.Id.ToString(),
                     Summary = issue.Subject,
                     Description = issue.Description,

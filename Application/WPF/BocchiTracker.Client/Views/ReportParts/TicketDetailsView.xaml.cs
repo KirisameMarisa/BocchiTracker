@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Client.Views
+namespace BocchiTracker.Client.Views.ReportParts
 {
     /// <summary>
-    /// UserConfigDialog.xaml の相互作用ロジック
+    /// TicketDetailsView.xaml の相互作用ロジック
     /// </summary>
-    public partial class UserConfigDialog : UserControl
+    public partial class TicketDetailsView : UserControl
     {
-        public UserConfigDialog()
+        public TicketDetailsView()
         {
             InitializeComponent();
         }

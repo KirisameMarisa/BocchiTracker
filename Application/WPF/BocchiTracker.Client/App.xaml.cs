@@ -108,11 +108,11 @@ namespace BocchiTracker.Client
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion("TicketBasicRegion", typeof(TicketBasicView));
-            regionManager.RegisterViewWithRegion("TicketDetailsRegion", typeof(TicketDetailsView));
-            regionManager.RegisterViewWithRegion("UtilityRegion", typeof(UtilityView));
-            regionManager.RegisterViewWithRegion("UploadFilesRegion", typeof(UploadFilesView));
-            regionManager.RegisterViewWithRegion("IssuesRegion", typeof(IssuesView));
+            regionManager.RegisterViewWithRegion("ReportRegion", typeof(ReportView));
+            regionManager.RegisterViewWithRegion("IssueTrakingRegion", typeof(IssueTrakingView));
+            regionManager.RegisterViewWithRegion("UserConfigRegion", typeof(UserConfigView));
+
+
 
             var projectConfig               = LoadProjectConfig(Container);
 
@@ -132,6 +132,7 @@ namespace BocchiTracker.Client
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
             var authConfigRepositoryFactory = Container.Resolve<IAuthConfigRepositoryFactory>();
+            var getIssues                   = Container.Resolve<IGetIssues>();
             authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
 
             _ = connection.StartAsync(projectConfig.Port);
@@ -144,7 +145,10 @@ namespace BocchiTracker.Client
 
                 eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Authentication started" });
                 await Task.Run(() => serviceAuthenticator.ReauthenticateServices(projectConfig.ServiceConfigs));
-                
+
+                foreach(var serviceConfig in projectConfig.ServiceConfigs)
+                    await getIssues.GetAsync(serviceConfig);
+
                 eventAggregator.GetEvent<ProgressingEvent>().Publish(new ProgressEventParameter { Message = "Initialize: Getting service infomation" });
                 await issueInfoBundle.Initialize(dataRepository, eventAggregator);
 
@@ -169,7 +173,6 @@ namespace BocchiTracker.Client
             containerRegistry.RegisterSingleton(typeof(TicketProperty));
             containerRegistry.Register<IFileSystem, FileSystem>();
             containerRegistry.RegisterDialog<ConfigFilePickerDialog, ConfigFilePickerViewModel>();
-            containerRegistry.RegisterDialog<UserConfigDialog, UserConfigViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

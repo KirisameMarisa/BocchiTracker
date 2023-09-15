@@ -16,25 +16,31 @@
     <Compile Update="Controls\PickerDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\IssuesView.xaml.cs">
+    <Compile Update="Views\IssueListParts\IssuesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\IssueTrakingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\TicketBasicView.xaml.cs">
+    <Compile Update="Views\ReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\TicketDetailsView.xaml.cs">
+    <Compile Update="Views\ReportParts\TicketBasicView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UploadFilesView.xaml.cs">
+    <Compile Update="Views\ReportParts\TicketDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserConfigDialog.xaml.cs">
+    <Compile Update="Views\ReportParts\UploadFilesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UtilityView.xaml.cs">
+    <Compile Update="Views\UserConfigView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportParts\UtilityView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -54,25 +60,31 @@
     <Page Update="Controls\MultipleItemDisplay.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\IssuesView.xaml">
+    <Page Update="Views\IssueListParts\IssuesView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\IssueTrakingView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\TicketBasicView.xaml">
+    <Page Update="Views\ReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\TicketDetailsView.xaml">
+    <Page Update="Views\ReportParts\TicketBasicView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UploadFilesView.xaml">
+    <Page Update="Views\ReportParts\TicketDetailsView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserConfigDialog.xaml">
+    <Page Update="Views\ReportParts\UploadFilesView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UtilityView.xaml">
+    <Page Update="Views\UserConfigView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportParts\UtilityView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

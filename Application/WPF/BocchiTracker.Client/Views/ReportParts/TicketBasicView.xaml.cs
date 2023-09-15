@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BocchiTracker.Client.Views
+namespace BocchiTracker.Client.Views.ReportParts
 {
     /// <summary>
-    /// UtilityBtnsView.xaml の相互作用ロジック
+    /// TicketBasicView.xaml の相互作用ロジック
     /// </summary>
-    public partial class UtilityView : UserControl
+    public partial class TicketBasicView : UserControl
     {
-        public UtilityView()
+        public TicketBasicView()
         {
             InitializeComponent();
         }

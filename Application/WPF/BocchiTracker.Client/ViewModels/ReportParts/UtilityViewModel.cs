@@ -30,7 +30,7 @@ using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Commands;
 using BocchiTracker.ModelEvent;
 
-namespace BocchiTracker.Client.ViewModels
+namespace BocchiTracker.Client.ViewModels.ReportParts
 {
     public class UtilityViewModel : BindableBase
     {
@@ -179,33 +179,8 @@ namespace BocchiTracker.Client.ViewModels
             if (_projectConfig == null)
                 return;
 
-            string hostname = Dns.GetHostName();
-
-            var addresses = Dns.GetHostAddresses(hostname).ToList();
-            addresses.Add(IPAddress.Parse("127.0.0.1"));
-
-            bool found_ip_address = false;
-            foreach(var address in addresses)
-            {
-                if(address.GetHashCode() == _appStatusBundles.TrackerApplication.AppBasicInfo.ClientID)
-                {
-                    found_ip_address = true; break;
-                }
-            }
-
-            if (found_ip_address)
-            {
-                if (int.TryParse(_appStatusBundles.TrackerApplication.AppBasicInfo.Pid, out int outPid))
-                {
-                    var handler = _createActionHandler.Create(typeof(LocalScreenshotHandler));
-                    handler.Handle(0, outPid, _projectConfig.FileSaveDirectory);
-                }
-            }
-            else
-            {
-                var handler = _createActionHandler.Create(typeof(RemoteScreenshotHandler));
-                handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
-            }
+            var handler = _createActionHandler.Create(typeof(RemoteScreenshotHandler));
+            handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
         }
     }
 }

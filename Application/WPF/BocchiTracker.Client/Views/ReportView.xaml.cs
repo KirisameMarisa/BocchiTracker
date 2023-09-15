@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BocchiTracker.Client.Views
 {
     /// <summary>
-    /// UploadFilesView.xaml の相互作用ロジック
+    /// ReportView.xaml の相互作用ロジック
     /// </summary>
-    public partial class UploadFilesView : UserControl
+    public partial class ReportView : UserControl
     {
-        public UploadFilesView()
+        public ReportView()
         {
             InitializeComponent();
         }
