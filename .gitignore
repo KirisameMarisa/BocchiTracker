@@ -4,6 +4,7 @@ obj/
 Artifact/
 *.pyc
 *.yaml
+*.dblite
 launchSettings.json
 
 Plugins/UnrealEngine/BocchiTracker/Content
