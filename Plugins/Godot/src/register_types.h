@@ -4,5 +4,5 @@
 
 using namespace godot;
 
-void initialize_physics_server_box2d_module(ModuleInitializationLevel p_level);
-void uninitialize_physics_server_box2d_module(ModuleInitializationLevel p_level);
+void initialize_bocchi_tracker_module(ModuleInitializationLevel p_level);
+void uninitialize_bocchi_tracker_module(ModuleInitializationLevel p_level);
