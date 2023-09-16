@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+import os
+import sys
+
+env = SConscript("../../ExternalTools/godot-cpp/SConstruct")
+
+flatbuffer_folder = "../../ExternalTools/flatbuffers/"
+flatbuffer_include = [ "include/", "src/", "grpc/" ]
+flatbuffer_src = [
+	"idl_gen_text.cpp",
+	"idl_parser.cpp",
+	"reflection.cpp",
+	"util.cpp"
+]
+	
+env.Prepend(CPPPATH=[flatbuffer_folder + folder for folder in flatbuffer_include])
+env.Append(CPPPATH=["src/"])
+sources = Glob("src/*.cpp")
+sources.extend([flatbuffer_folder + 'src/' + box2d_src_file for box2d_src_file in flatbuffer_src])
+
+if env["platform"] == "macos":
+	library = env.SharedLibrary(
+		"dist/addons/godot-bocchitracker/bin/libgodot-bocchitracker.{}.{}.framework/libgodot-bocchitracker.{}.{}".format(
+			env["platform"], env["target"], env["platform"], env["target"]
+		),
+		source=sources,
+	)
+else:
+	library = env.SharedLibrary(
+		"dist/addons/godot-bocchitracker/bin/libgodot-bocchitracker{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+		source=sources,
+	)
+
+Default(library)
