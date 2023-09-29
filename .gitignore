@@ -1,4 +1,6 @@
 .vs/
+.godot/
+
 bin/
 obj/
 Artifact/
