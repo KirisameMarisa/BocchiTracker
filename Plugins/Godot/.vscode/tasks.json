@@ -1,0 +1,10 @@
+{
+  "label": "Godot Build with SCons",
+  "type": "shell",
+  "command": "python",
+  "args": ["-m", "SCons"],
+  "group": {
+      "kind": "build",
+      "isDefault": true
+  }
+}

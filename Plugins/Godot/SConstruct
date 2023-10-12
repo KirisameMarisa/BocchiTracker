@@ -31,7 +31,7 @@ flatbuffer_src = [
 env.Prepend(CPPPATH=[flatbuffer_folder + folder for folder in flatbuffer_include])
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
-sources.extend([flatbuffer_folder + 'src/' + box2d_src_file for box2d_src_file in flatbuffer_src])
+sources.extend([flatbuffer_folder + 'src/' + flatbuffer_src_file for flatbuffer_src_file in flatbuffer_src])
 
 library = env.SharedLibrary(
     "project/addons/bocchitracker-gd/bin/"

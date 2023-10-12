@@ -5,6 +5,7 @@ bin/
 obj/
 Artifact/
 *.pyc
+*.obj
 *.yaml
 *.dblite
 launchSettings.json
