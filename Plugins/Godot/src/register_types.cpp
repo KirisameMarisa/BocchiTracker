@@ -9,27 +9,28 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/variant/callable.hpp>
 
-#include "bocchi_godot.h"
+#include "BocchiAPI.h"
 
 using namespace godot;
 
-static bocchi_godot* bocchiGodot;
+static BocchiAPI* bocchiAPI = nullptr;
 
 void initialize_bocchi_tracker_module(ModuleInitializationLevel p_level) 
 {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
     {
-        ClassDB::register_class<bocchi_godot>();
-        bocchiGodot = memnew(bocchi_godot);
-        Engine::get_singleton()->register_singleton("bocchi_godot", bocchi_godot::get_singleton());
-    }	
+        ClassDB::register_class<BocchiAPI>();
+        bocchiAPI = memnew(BocchiAPI);
+        Engine::get_singleton()->register_singleton("bocchi_api", BocchiAPI::get_instance());
+    }
 }
 
-void uninitialize_bocchi_tracker_module(ModuleInitializationLevel p_level) {
+void uninitialize_bocchi_tracker_module(ModuleInitializationLevel p_level) 
+{
     if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
     {
-        Engine::get_singleton()->unregister_singleton("bocchi_godot");
-        memdelete(bocchiGodot);
+        Engine::get_singleton()->unregister_singleton("bocchi_api");
+        memdelete(bocchiAPI);
     }
 }
 
