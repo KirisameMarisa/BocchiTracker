@@ -1,0 +1,17 @@
+[configuration]
+
+entry_symbol = "bocchi_tracker_library_init"
+compatibility_minimum = 4.1
+
+[libraries]
+
+macos.debug             = "macos/libbocchitracker_binding_debug.dylib"
+macos.release           = "macos/libbocchitracker_binding.dylib"
+windows.debug.x86_64    = "windows/bocchitracker_binding_debug.dll"
+windows.release.x86_64  = "windows/bocchitracker_binding.dll"
+linux.debug.x86_64      = "linux/libbocchitracker_binding_debug.so"
+linux.release.x86_64    = "linux/libbocchitracker_binding.so"
+linux.debug.arm64       = "linux/libbocchitracker_binding_debug.so"
+linux.release.arm64     = "linux/libbocchitracker_binding.so"
+linux.debug.rv64        = "linux/libbocchitracker_binding_debug.so"
+linux.release.rv64      = "linux/libbocchitracker_binding.so"
