@@ -20,6 +20,7 @@ void initialize_bocchi_tracker_module(ModuleInitializationLevel p_level)
     if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
     {
         ClassDB::register_class<BocchiAPI>();
+
         bocchiAPI = memnew(BocchiAPI);
         Engine::get_singleton()->register_singleton("bocchi_api", BocchiAPI::get_instance());
     }

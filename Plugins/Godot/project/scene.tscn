@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bifdkq64l4d00"]
+
+[ext_resource type="Script" path="res://addons/bocchi_tracker_godot/bocchi_tracker_system.gd" id="1_4ojjm"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_4ojjm")
