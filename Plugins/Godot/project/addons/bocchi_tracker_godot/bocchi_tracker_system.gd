@@ -1,16 +1,14 @@
+class_name BocchiTrackerSystem
+
 extends Node
 
 const BocchiTrackerTcpSocket = preload("res://addons/bocchi_tracker_godot/bocchi_tracker_tcp_socket.gd")
 const BocchiTrackerIssue = preload("res://addons/bocchi_tracker_godot/data/bocchi_tracker_issue.gd")
 const BocchiTrackerLocation = preload("res://addons/bocchi_tracker_godot/data/bocchi_tracker_location.gd")
 
-var jump_request := []
-
-var ip_address : String
-
-var port : int
-
 var tcp_socket: BocchiTrackerTcpSocket
+
+var jump_request := []
 
 var is_sent_app_basic_info = false
 
@@ -18,8 +16,8 @@ var pending_process_request := []
 
 func _ready():
 	tcp_socket = BocchiTrackerTcpSocket.new()
-	ip_address = ProjectSettings.get_setting("BocchiTracker/Setting/ServerAddress", "127.0.0.1")
-	port  = ProjectSettings.get_setting("BocchiTracker/Setting/ServerPort", 8888)
+	var ip_address = ProjectSettings.get_setting("BocchiTracker/Setting/ServerAddress", "127.0.0.1")
+	var port  = ProjectSettings.get_setting("BocchiTracker/Setting/ServerPort", 8888)
 	is_sent_app_basic_info = false
 	
 	if not is_connect():
@@ -93,3 +91,7 @@ func process_send_screenshot():
 
 	var screenshot_data_packet = bocchi_api.create_screenshot_data(screenshot.get_width(), screenshot.get_height(), screenshot_data)
 	tcp_socket.add_send_data(screenshot_data_packet)
+	
+func on_bocchi_recive_ticket_info(in_data):
+	var packet = bocchi_api.create_player_position(in_data.location, in_data.stage)
+	tcp_socket.add_send_data(packet)

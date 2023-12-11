@@ -1,6 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://bifdkq64l4d00"]
+[gd_scene load_steps=5 format=3 uid="uid://bifdkq64l4d00"]
 
 [ext_resource type="Script" path="res://addons/bocchi_tracker_godot/bocchi_tracker_system.gd" id="1_4ojjm"]
+[ext_resource type="Script" path="res://Player.gd" id="1_b4tg5"]
+[ext_resource type="Texture2D" uid="uid://cmgso85s5fpy0" path="res://icon.png" id="2_x70ao"]
+[ext_resource type="Script" path="res://addons/bocchi_tracker_godot/bocchi_tracker_player_updater.gd" id="4_fwwc6"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node2D" type="Node2D"]
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(128, 178.25)
+scale = Vector2(0.13946, 0.136294)
+texture = ExtResource("2_x70ao")
+script = ExtResource("1_b4tg5")
+
+[node name="BocchiTrackerPlayerUpdater" type="Node" parent="Player" groups=["BocchiReciveTicketInfo"]]
+script = ExtResource("4_fwwc6")
+
+[node name="BocchiTrackerSystem" type="Node" parent="." groups=["BocchiReciveTicketInfo"]]
 script = ExtResource("1_4ojjm")
