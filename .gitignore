@@ -1,9 +1,13 @@
 .vs/
+.godot/
+
 bin/
 obj/
 Artifact/
 *.pyc
+*.obj
 *.yaml
+*.dblite
 launchSettings.json
 
 Plugins/UnrealEngine/BocchiTracker/Content

@@ -45,7 +45,7 @@
                                         </Grid.ContextMenu>
                                         <materialDesign:PackIcon Margin="5" x:Name="LogImageControl" Width="64" Height="64" HorizontalAlignment="Center" Kind="FileDocumentMultipleOutline" />
                                         <materialDesign:PackIcon Margin="5" x:Name="UnknownImageControl" Width="64" Height="64" HorizontalAlignment="Center" Kind="Help" />
-                                        <Image Margin="7" x:Name="ImageControl" Source="{Binding PreviewImage, UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform" Width="Auto" Height="Auto" />
+                                        <Image Margin="7" x:Name="ImageControl" Source="{Binding PreviewImage.Value, UpdateSourceTrigger=PropertyChanged}"  Stretch="Uniform" Width="Auto" Height="Auto" />
                                     </Grid>
                                     <TextBlock x:Name="TextBlockControl" Text="{Binding AssetData.Name}" TextTrimming="CharacterEllipsis"/>
                                 </StackPanel>

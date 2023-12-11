@@ -34,22 +34,33 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
 
         public AssetData AssetData { get; set; }
 
-        public BitmapImage PreviewImage { get; set; }
+        public ReactiveProperty<BitmapImage> PreviewImage { get; set; } = new ReactiveProperty<BitmapImage>();
 
         private UploadFilesViewModel _viewModel;
 
         public UploadItem(AssetData inAssetData, UploadFilesViewModel inViewModel)
         {
             AssetData = inAssetData;
-            if (AssetData.PictureRawData != null)
+            
+            if (AssetData.IsPreviewPictureSupport())
             {
-                var memStream = new MemoryStream(AssetData.PictureRawData);
-                PreviewImage = new BitmapImage();
-                PreviewImage.BeginInit();
-                PreviewImage.StreamSource = memStream;
-                PreviewImage.CacheOption = BitmapCacheOption.OnLoad;
-                PreviewImage.EndInit();
+                Application.Current.Dispatcher.Invoke(() => 
+                {
+                    PreviewImage.Value = Load(AssetData.PreviewLoadingRawData);
+                });
+
+                Task.Run(async () =>
+                {
+                    while (!AssetData.IsPreviewPictureLoadCompleted())
+                        await Task.Delay(10000);
+
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        PreviewImage.Value = Load(AssetData.PictureRawData);
+                    });
+                });
             }
+
             _viewModel = inViewModel;
 
             RemoveCommand = new DelegateCommand(() => _viewModel.OnRemoveFile(AssetData.FullName));
@@ -60,6 +71,17 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
         {
             var info = new ProcessStartInfo(AssetData.FullName) { UseShellExecute = true };
             Process.Start(info);
+        }
+
+        private BitmapImage Load(byte[] inPictureRawData)
+        {
+            var memStream = new MemoryStream(inPictureRawData);
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = memStream;
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+            return image;
         }
     }
 
@@ -132,6 +154,8 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
 
         public void OnAddFile(string inFilePath)
         {
+            if (!Path.Exists(inFilePath))
+                return;
             Bundle.AddOnScheduler(new UploadItem(new AssetData(inFilePath), this));
         }
 
