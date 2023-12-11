@@ -1,76 +1,90 @@
 ﻿<Window x:Class="BocchiTracker.Client.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BocchiTracker.Client.Views"
-        xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
-        xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
-        xmlns:conveters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:prism="http://prismlibrary.com/"
-        mc:Ignorable="d"
-        AllowDrop="True"
-        Title="MainWindow" Height="850" Width="800" MinWidth="400">
-    
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:BocchiTracker.Client.Views" xmlns:controls="clr-namespace:BocchiTracker.Client.Controls"
+    xmlns:behaviors="clr-namespace:BocchiTracker.Client.Share.Behaviors;assembly=BocchiTracker.Client.Share"
+    xmlns:conveters="clr-namespace:BocchiTracker.Client.Share.Converters;assembly=BocchiTracker.Client.Share"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:prism="http://prismlibrary.com/" mc:Ignorable="d"
+    AllowDrop="True" Title="MainWindow" Height="850" Width="1000" MinWidth="1000">
+
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter" />
         <conveters:InvertBoolConverter x:Key="InvertBoolConverter" />
     </Window.Resources>
-    
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
-            <prism:InvokeCommandAction Command="{Binding ClosedCommand}"/>
+            <prism:InvokeCommandAction Command="{Binding ClosedCommand}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="MouseMove">
-            <prism:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
+            <prism:InvokeCommandAction Command="{Binding MouseMoveCommand}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Activated">
-            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="true"/>
+            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="true" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Deactivated">
-            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="false"/>
+            <prism:InvokeCommandAction Command="{Binding ActiveChangedCommand}" CommandParameter="false" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Background="{DynamicResource MaterialDesignPaper}">
-        <Grid Panel.ZIndex="1" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
+        <i:Interaction.Behaviors>
+            <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
+        </i:Interaction.Behaviors>
+        
+        <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True" SnapsToDevicePixels="True"
+            Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon Width="32" Height="32" HorizontalAlignment="Center" Kind="BugOutline" />
+                        <TextBlock HorizontalAlignment="Center" Text="Report" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="5">
+                    <Grid Panel.ZIndex="1" Visibility="{Binding IsProgressing.Value, Converter={StaticResource BoolVisibilityConverter}}">
 
-            <StackPanel Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                <ProgressBar
-                 Margin="5" Height="100" Width="100" IsIndeterminate="True" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="35" />
+                        <StackPanel Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ProgressBar Margin="5" Height="100" Width="100" IsIndeterminate="True"
+                                Style="{StaticResource MaterialDesignCircularProgressBar}" Value="35" />
 
-                <GroupBox Header="Message" 
-                          Style="{StaticResource MaterialDesignGroupBox}"
-                          materialDesign:ColorZoneAssist.Background="Gray"
-                          materialDesign:ColorZoneAssist.Foreground="White"
-                          materialDesign:ColorZoneAssist.Mode="Custom">
-                    <ListView FontWeight="Black" ItemsSource="{Binding ProgressResonMsg}"></ListView>
-                </GroupBox>
-            </StackPanel>
-            
-            
-        </Grid>
-        <ScrollViewer Panel.ZIndex="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
-            <i:Interaction.Behaviors>
-                <behaviors:AssetDropHandler FilesDroppedCommand="{Binding DropFilesCommand}" />
-            </i:Interaction.Behaviors>
-            <StackPanel Margin="10">
-                <ContentControl Margin="3" prism:RegionManager.RegionName="TicketBasicRegion"/>
-                <ContentControl Margin="3" prism:RegionManager.RegionName="TicketDetailsRegion"/>
+                            <GroupBox Header="Message" Style="{StaticResource MaterialDesignGroupBox}"
+                                materialDesign:ColorZoneAssist.Background="Gray"
+                                materialDesign:ColorZoneAssist.Foreground="White"
+                                materialDesign:ColorZoneAssist.Mode="Custom">
+                                <ListView FontWeight="Black" ItemsSource="{Binding ProgressResonMsg}"></ListView>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
 
-                <Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="0.45*"/>
-                        </Grid.ColumnDefinitions>
-                        <ContentControl Grid.Column="0" Margin="3" prism:RegionManager.RegionName="UploadFilesRegion"/>
-                        <ContentControl Grid.Column="1" Margin="3" prism:RegionManager.RegionName="UtilityRegion"/>
+                    <Grid Panel.ZIndex="0" IsEnabled="{Binding IsProgressing.Value, Converter={StaticResource InvertBoolConverter}}">
+                        <ContentControl prism:RegionManager.RegionName="ReportRegion"/>
                     </Grid>
                 </Grid>
-            </StackPanel>
-        </ScrollViewer>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon Width="32" Height="32" HorizontalAlignment="Center" Kind="CardSearchOutline" />
+                        <TextBlock HorizontalAlignment="Center" Text="Traking" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="5">
+                    <ContentControl Margin="3" prism:RegionManager.RegionName="IssueTrakingRegion" />
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon Kind="CogOutline" HorizontalAlignment="Center" Width="32" Height="32" />
+                        <TextBlock HorizontalAlignment="Center" Text="Setting" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="5">
+                    <ContentControl Margin="3" prism:RegionManager.RegionName="UserConfigRegion" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
-
 </Window>

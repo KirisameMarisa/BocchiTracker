@@ -7,6 +7,13 @@
 class UBocchiTrackerSettings;
 class FBocchiTrackerTcpSocket;
 
+class BocchiTrackerLocation
+{        
+public:
+	FVector Location;
+	FString Stage;
+};
+
 UCLASS(Blueprintable, BlueprintType)
 class ABocchiTrackerActor : public AActor
 {
@@ -33,15 +40,17 @@ public:
     UFUNCTION(BlueprintCallable, Category="BocchiTracker")
     void SetPlayerPosition(const FVector& InTrackedPosition, const FString& InStage);
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BocchiTracker")
-    FVector TrackedPosition;
+    UFUNCTION(BlueprintCallable, Category="BocchiTracker")
+    void JumpIssueLocation(AActor* inActor);
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BocchiTracker")
+private:
+    FVector TrackedPosition;
     FString Stage;
 
 private:
     bool bSentAppBasicInfo;
     const UBocchiTrackerSettings* Settings;
     TUniquePtr<FBocchiTrackerTcpSocket> Socket;
-    TQueue<uint8> PendingProcessRequest;
+    TQueue<TArray<uint8>> PendingProcessRequest;
+    TQueue<BocchiTrackerLocation> PendingJumpRequest;
 };

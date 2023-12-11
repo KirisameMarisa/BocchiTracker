@@ -13,11 +13,12 @@ namespace BocchiTracker
     /// </summary>
     public class BocchiTrackerSystem : MonoBehaviour
     {
+        public Queue<BocchiTrackerLocation> JumpRequest { get; set; } = new Queue<BocchiTrackerLocation>();
+
         private static BocchiTrackerTcpSocket tcpSocket;
         private BocchiTrackerSetting setting;
         private bool isSentAppBasicInfo;
-        private Queue<ProcessLinkQuery.Queries.QueryID> pendingProcessRequest
-            = new Queue<ProcessLinkQuery.Queries.QueryID>();
+        private Queue<object> pendingProcessRequest = new Queue<object>();
 
         public BocchiTrackerSystem()
         {
@@ -55,15 +56,31 @@ namespace BocchiTracker
         {
             if (IsConnect())
             {
-                if (pendingProcessRequest.TryDequeue(out ProcessLinkQuery.Queries.QueryID outQueryID))
+                if (pendingProcessRequest.TryDequeue(out object outQuery))
                 {
-                    switch (outQueryID)
+                    if(outQuery is ProcessLinkQuery.Queries.IssueesRequest)
                     {
-                        case ProcessLinkQuery.Queries.QueryID.ScreenshotData:
-                            StartCoroutine(ProcessSendScreenshot());
-                            break;
-                        default:
-                            break;
+                        var request = (ProcessLinkQuery.Queries.IssueesRequest)outQuery;
+                        for(int i = 0; i < request.IssuesLength; ++i)
+                        {
+                            var issue = request.Issues(i);
+                            if (issue == null)
+                                continue;
+                            CacheIssueInfo(issue.Value);
+                        }
+                    }
+                    else if(outQuery is ProcessLinkQuery.Queries.JumpRequest)
+                    {
+                        var request = (ProcessLinkQuery.Queries.JumpRequest)outQuery;
+                        var stage = request.Stage;
+                        var location = request.Location;
+                        if (location == null)
+                            return;
+                        JumpLocation(stage, location.Value.X, location.Value.Y, location.Value.Z);
+                    }
+                    else if(outQuery is ProcessLinkQuery.Queries.ScreenshotRequest)
+                    {
+                        StartCoroutine(ProcessSendScreenshot());
                     }
                 }
             }
@@ -81,12 +98,15 @@ namespace BocchiTracker
 
             switch (queryID)
             {
-                case ProcessLinkQuery.Queries.QueryID.RequestQuery:
-                    {
-                        ProcessLinkQuery.Queries.RequestQuery requestQuery = packet.QueryIdAsRequestQuery();
-                        pendingProcessRequest.Enqueue((ProcessLinkQuery.Queries.QueryID)requestQuery.QueryId);
-                        break;
-                    }
+                case ProcessLinkQuery.Queries.QueryID.ScreenshotRequest:
+                    pendingProcessRequest.Enqueue(packet.QueryIdAsScreenshotRequest()); break;
+                
+                case ProcessLinkQuery.Queries.QueryID.IssueesRequest:
+                    pendingProcessRequest.Enqueue(packet.QueryIdAsIssueesRequest()); break;
+
+                case ProcessLinkQuery.Queries.QueryID.JumpRequest:
+                    pendingProcessRequest.Enqueue(packet.QueryIdAsJumpRequest()); break;
+
                 default:
                     break;
             }
@@ -107,6 +127,17 @@ namespace BocchiTracker
             BocchiTrackerSendPacket(appBasicInformationPacket);
 
             isSentAppBasicInfo = true;
+        }
+
+        private void CacheIssueInfo(ProcessLinkQuery.Queries.Issue inIssue)
+        {
+            
+        }
+
+        private void JumpLocation(string inStage, float inX, float inY, float inZ)
+        {
+            if (JumpRequest.Count == 0)
+                JumpRequest.Enqueue(new BocchiTrackerLocation { Stage = inStage, Location = new Vector3(inX, inY, inZ) });
         }
 
         private IEnumerator ProcessSendScreenshot()

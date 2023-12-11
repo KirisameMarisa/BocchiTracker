@@ -1,4 +1,5 @@
-﻿using BocchiTracker.ProcessLink.ProcessData;
+﻿using BocchiTracker.ProcessLink.CreateRequest;
+using BocchiTracker.ProcessLink.ProcessData;
 using Prism.Events;
 using System;
 using System.Collections.Concurrent;
@@ -19,12 +20,14 @@ namespace BocchiTracker.ProcessLink
         private ConcurrentDictionary<IPAddress, TcpClient> _clients = new ConcurrentDictionary<IPAddress, TcpClient>();
         private readonly IEventAggregator _eventAggregator;
         private IServiceProcessData _serviceProcessData;
+        private IServiceCreateRequest _serviceCreateRequest;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public Connection(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData)
+        public Connection(IEventAggregator inEventAggregator, IServiceProcessData inServiceProcessData, IServiceCreateRequest inServiceCreateRequest)
         {
             _eventAggregator = inEventAggregator;
             _serviceProcessData = inServiceProcessData;
+            _serviceCreateRequest = inServiceCreateRequest;
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -97,7 +100,7 @@ namespace BocchiTracker.ProcessLink
         private async Task HandleClientAsync(IPAddress inIP, TcpClient ioClient)
         {
             Console.WriteLine($"Client connected: {inIP}");
-            using AppStatusQuery appStatusQuery = new AppStatusQuery(_eventAggregator, _serviceProcessData, inIP.GetHashCode(), ioClient);
+            using AppStatusQuery appStatusQuery = new AppStatusQuery(_eventAggregator, _serviceProcessData, _serviceCreateRequest, inIP.GetHashCode(), ioClient);
             while (IsConnected(ioClient))
             {
                 try

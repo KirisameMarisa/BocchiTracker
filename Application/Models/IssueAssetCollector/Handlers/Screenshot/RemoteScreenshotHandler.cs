@@ -1,4 +1,5 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
+using BocchiTracker.ImageProcessorAsync;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Prism.Events;
@@ -23,15 +24,16 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             _mediator = inMediator;
             _mediator
                 .GetEvent<ReceiveScreenshotEvent>()
-                .Subscribe(Handle, ThreadOption.BackgroundThread);
+                .Subscribe(Handle, ThreadOption.PublisherThread);
         }
 
-        public void Handle(ReceiveScreenshotEventParameter inRrequest)
+        public void Handle(ReceiveScreenshotEventParameter inEvent)
         {
-            var data = inRrequest;
-            using var image = Image.LoadPixelData<Byte4>(data.ImageData, data.Width, data.Height);
-            
-            image.SaveAsPng(Output);
+            var data = inEvent;
+            if (data.ImageData == null)
+                return;
+
+            ImageProcessor.Instnace.Save(Output, data.ImageData, data.Width, data.Height);
         }
     }
 
@@ -53,7 +55,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 
             _eventAggregator
                 .GetEvent<RequestQueryEvent>()
-                .Publish(new RequestQueryEventParameter(inClientID, QueryID.ScreenshotData));
+                .Publish(new ScreenshotRequestEventParameter(inClientID));
         }
     }
 }

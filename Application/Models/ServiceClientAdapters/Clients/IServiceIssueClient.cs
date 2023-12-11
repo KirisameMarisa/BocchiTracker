@@ -24,5 +24,7 @@ namespace BocchiTracker.ServiceClientAdapters.Clients
         Task<List<UserData>?>           GetUsers();
 
         void                            OpenWebBrowser(string inIssueKey);
+
+        IAsyncEnumerable<TicketData>    GetIssues();
     }
 }

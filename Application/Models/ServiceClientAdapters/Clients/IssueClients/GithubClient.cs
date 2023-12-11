@@ -20,9 +20,13 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         private string? _url;
         private long? _repoId;
         private bool _isAuthenticated;
+        private IDescriptionParser _descriptionParser = new DescriptionParser();
 
         public async Task<bool> Authenticate(AuthConfig inAuthConfig, string? inURL, string? inProxyURL = null)
         {
+            if (IsAuthenticated())
+                return true;
+
             if (string.IsNullOrEmpty(inAuthConfig.APIKey))
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} APIKey is null");
@@ -104,9 +108,9 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             if(!string.IsNullOrEmpty(inTicketData.Assign?.Name)) 
                 createIssue.Assignees.Add(inTicketData.Assign?.Name);
 
-            if (inTicketData.Lables != null)
+            if (inTicketData.Labels != null)
             {
-                foreach (var value in inTicketData.Lables)
+                foreach (var value in inTicketData.Labels)
                     createIssue.Labels.Add(value);
             }
             try
@@ -224,6 +228,40 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
             {
                 Trace.TraceError($"{ServiceDefinitions.Github} Cannot get users.");
                 return null;
+            }
+        }
+
+        public async IAsyncEnumerable<TicketData> GetIssues()
+        {
+            if (_client == null)
+            {
+                Trace.TraceError($"{ServiceDefinitions.Github} _client is null.");
+                yield break;
+            }
+
+            if (_repoId == null)
+            {
+                Trace.TraceError($"{ServiceDefinitions.Github} _repo_id is null");
+                yield break;
+            }
+
+            var issues = await _client.Issue.GetAllForRepository(_repoId.Value);
+
+            foreach(var issue in issues)
+            {
+                var customFields = _descriptionParser.Parse(issue.Body);
+
+                yield return new TicketData
+                {
+                    Service = ServiceDefinitions.Github,
+                    Id = issue.Number.ToString(),
+                    Summary = issue.Title,
+                    Description = issue.Body,
+                    CustomFields = customFields,
+                    Assign = new UserData { Name = issue.Assignee?.Login },
+                    Labels = issue.Labels.Select(x => x.Name).ToList(),
+                    Status = issue.State.StringValue
+                };
             }
         }
 

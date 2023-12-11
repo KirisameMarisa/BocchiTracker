@@ -72,7 +72,7 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
                 Summary = "Test Summary",
                 Description = "Test Description",
                 TicketType = "1",
-                CustomFields = new Dictionary<string, List<string>> { { "2", new List<string> { "100" } } }
+                CustomFields = new CustomFields(new Dictionary<string, List<string>> { { "2", new List<string> { "100" } } })
             };
             var post_result = await _client.Post(ticket);
             Assert.True(post_result.Item1);
@@ -167,6 +167,30 @@ namespace BocchiTracker.Tests.ServiceClientAdapters.Clients
 
             result = await _client.UploadFiles(issueKey.Item2, filenames);
             Assert.True(result);
+        }
+
+        [SkippableFact]
+        public async Task Test_GetTickets()
+        {
+            Skip.If(Environment.GetEnvironmentVariable("Builder") == "1");
+
+            Assert.NotNull(_project_url);
+            Assert.NotNull(_auth_config);
+            Assert.NotNull(_client);
+
+            bool result = await _client.Authenticate(_auth_config, _project_url);
+            Assert.True(result);
+
+            var issues =  _client.GetIssues();
+            Assert.NotNull(issues);
+
+            List<TicketData> tickets = new List<TicketData>();
+            await foreach(var issue in issues)
+            {
+                if (issue == null) continue;
+                tickets.Add(issue);
+            }
+            Assert.True(tickets.Count > 0);
         }
     }
 }

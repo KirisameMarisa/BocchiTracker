@@ -3,7 +3,46 @@
   "definitions": {
     "BocchiTracker_ProcessLinkQuery_Queries_QueryID" : {
       "type" : "string",
-      "enum": ["NONE", "AppBasicInfo", "RequestQuery", "PlayerPosition", "ScreenshotData"]
+      "enum": ["NONE", "AppBasicInfo", "PlayerPosition", "ScreenshotData", "ScreenshotRequest", "JumpRequest", "IssueesRequest"]
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_Vec3" : {
+      "type" : "object",
+      "properties" : {
+        "x" : {
+                "type" : "number"
+              },
+        "y" : {
+                "type" : "number"
+              },
+        "z" : {
+                "type" : "number"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_Issue" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+                "type" : "string"
+              },
+        "summary" : {
+                "type" : "string"
+              },
+        "assign" : {
+                "type" : "string"
+              },
+        "status" : {
+                "type" : "string"
+              },
+        "stage" : {
+                "type" : "string"
+              },
+        "location" : {
+                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vec3"
+              }
+      },
+      "additionalProperties" : false
     },
     "BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" : {
       "type" : "object",
@@ -56,11 +95,29 @@
       },
       "additionalProperties" : false
     },
-    "BocchiTracker_ProcessLinkQuery_Queries_RequestQuery" : {
+    "BocchiTracker_ProcessLinkQuery_Queries_ScreenshotRequest" : {
       "type" : "object",
       "properties" : {
-        "query_id" : {
-                "type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_JumpRequest" : {
+      "type" : "object",
+      "properties" : {
+        "location" : {
+                "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Vec3"
+              },
+        "stage" : {
+                "type" : "string"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "BocchiTracker_ProcessLinkQuery_Queries_IssueesRequest" : {
+      "type" : "object",
+      "properties" : {
+        "issues" : {
+                "type" : "array", "items" : {"$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_Issue"}
               }
       },
       "additionalProperties" : false
@@ -72,7 +129,7 @@
                 "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_QueryID"
               },
         "query_id" : {
-                "anyOf": [{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_RequestQuery" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" }]
+                "anyOf": [{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_JumpRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_IssueesRequest" }]
               }
       },
       "additionalProperties" : false

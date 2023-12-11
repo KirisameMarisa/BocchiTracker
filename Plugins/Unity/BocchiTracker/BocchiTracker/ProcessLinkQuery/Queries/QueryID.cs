@@ -9,9 +9,11 @@ public enum QueryID : byte
 {
   NONE = 0,
   AppBasicInfo = 1,
-  RequestQuery = 2,
-  PlayerPosition = 3,
-  ScreenshotData = 4,
+  PlayerPosition = 2,
+  ScreenshotData = 3,
+  ScreenshotRequest = 4,
+  JumpRequest = 5,
+  IssueesRequest = 6,
 };
 
 

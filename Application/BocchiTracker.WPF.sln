@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceClientData", "Models
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.Client.Share", "WPF\BocchiTracker.Client.Share\BocchiTracker.Client.Share.csproj", "{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProcessorAsync", "Models\ImageProcessorAsync\ImageProcessorAsync.csproj", "{ADB878D3-01EC-4FFD-94D9-4348E1689605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB878D3-01EC-4FFD-94D9-4348E1689605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB878D3-01EC-4FFD-94D9-4348E1689605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB878D3-01EC-4FFD-94D9-4348E1689605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB878D3-01EC-4FFD-94D9-4348E1689605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{E703C033-82F7-4294-B0CE-ACF9703FE0B6} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
 		{84D6A2DD-327D-4CF4-AC94-8DF9A910E7A9} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
 		{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA} = {12AAC0C3-970D-43F6-BD47-0B662B7157F6}
+		{ADB878D3-01EC-4FFD-94D9-4348E1689605} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F04B3FFB-34D2-4BBE-85BA-F28DEE1BCAB6}

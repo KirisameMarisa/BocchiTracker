@@ -21,7 +21,7 @@ namespace BocchiTracker.CrossServiceReporter.CreateTicketData
                 Assign        = new CreateAssignUser().Create(inService, inBundle, inConfig),
                 Watchers       = new CreateWatchUser().Create(inService, inBundle, inConfig),
                 CustomFields    = new CreateCustomfields().Create(inService, inBundle, inConfig),
-                Lables          = new CreateLabels().Create(inService, inBundle, inConfig),
+                Labels          = new CreateLabels().Create(inService, inBundle, inConfig),
                 Priority        = new CreatePriority().Create(inService, inBundle, inConfig),
                 Description     = new CreateDescription().Create(inService, inBundle, inConfig)
             };

@@ -65,5 +65,10 @@ namespace BocchiTracker.ServiceClientAdapters.Clients.IssueClients
         {
             throw new NotImplementedException();
         }
+
+        public IAsyncEnumerable<TicketData> GetIssues()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

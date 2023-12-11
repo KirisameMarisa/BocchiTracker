@@ -1,4 +1,5 @@
 ﻿using BocchiTracker.ProcessLinkQuery.Queries;
+using BocchiTracker.ServiceClientData;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,49 @@ using System.Threading.Tasks;
 
 namespace BocchiTracker.ModelEvent
 {
-    public class RequestQueryEventParameter
+    public class RequestEventParameterBase
     {
         public int ClientID { get; set; }
 
         public QueryID QueryID { get; set; }
 
-        public RequestQueryEventParameter(int inClientID, QueryID inQueryID)
+        public RequestEventParameterBase(int clientID, QueryID queryID)
         {
-            ClientID = inClientID;
-            QueryID = inQueryID;
+            ClientID = clientID;
+            QueryID = queryID;
         }
     }
 
-    public class RequestQueryEvent : PubSubEvent<RequestQueryEventParameter> {}
+    public class ScreenshotRequestEventParameter : RequestEventParameterBase
+    {
+        public ScreenshotRequestEventParameter(int inClientID) : base(inClientID, QueryID.ScreenshotRequest) { }
+    }
+
+    public class JumpRequestEventParameter : RequestEventParameterBase 
+    {
+        public float PosX { get; set; }
+
+        public float PosY { get; set; }
+
+        public float PosZ { get; set; }
+
+        public string Stage { get; set; }
+
+        public JumpRequestEventParameter(int inClientID, float inX, float inY, float inZ, string inStage) : base(inClientID, QueryID.JumpRequest) 
+        {
+            PosX = inX;
+            PosY = inY;
+            PosZ = inZ;
+            Stage = inStage;
+        }
+    }
+
+    public class IssuesRequestEventParameter : RequestEventParameterBase
+    {
+        public List<TicketData> TicketData { get; set; } = new List<TicketData>();
+
+        public IssuesRequestEventParameter(int inClientID) : base(inClientID, QueryID.IssueesRequest) {}
+    }
+
+    public class RequestQueryEvent : PubSubEvent<RequestEventParameterBase> {}
 }
