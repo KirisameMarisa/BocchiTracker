@@ -20,10 +20,12 @@ jobs:
 
     steps:
     - uses: release-drafter/release-drafter@v5
+      id: create_draft
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload_asset:
+    needs: create_draft_release
     runs-on: windows-latest
 
     steps:
