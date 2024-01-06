@@ -19,33 +19,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Install curl on Windows
-        run: |
-          choco install curl
-      
-      - name: Delete existing draft release
-        run: |
-          $releaseId = (curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
-                        "https://api.github.com/repos/${env:GITHUB_REPOSITORY}/releases/tags/${{ steps.gen_release_title.outputs.version }}" | ConvertFrom-Json).id
-          if ($releaseId -ne $null) {
-              curl -X DELETE -H "Authorization: Bearer $env:GITHUB_TOKEN" `
-                   "https://api.github.com/repos/${env:GITHUB_REPOSITORY}/releases/$releaseId"
-          }
-  
-      - name: Generate release title
-        id: gen_release_title
-        run: |
-          $TITLE = (Get-Date).ToString("yyyy-MM-dd") + "_BuildID-" + $env:GITHUB_RUN_NUMBER
-          Write-Host "Version set to $TITLE"
-          echo "::set-output name=version::$TITLE"
-
       - name: Create release draft
         uses: release-drafter/release-drafter@v5
         id: create_draft
-        with:
-          tag: ${{ steps.gen_release_title.outputs.title }}
-          name: ${{ steps.gen_release_title.outputs.title }}
-          version: ${{ steps.gen_release_title.outputs.title }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
