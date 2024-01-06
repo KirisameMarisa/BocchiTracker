@@ -16,7 +16,7 @@ jobs:
                      "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
                      | jq -r '.[].name')
 
-          if [[ ! "$LABELS" =~ ^(minor|major|patch)$ ]]; then
+          if [[ ! "$LABELS" =~ (minor|major|patch) ]]; then
             echo "Error: A version label (minor, major, or patch) is required for merging this PR."
             exit 1
           fi
