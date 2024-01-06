@@ -6,6 +6,8 @@ on:
       - master
   pull_request:
     types: [closed]
+    branches:
+      - master
 
 permissions:
   contents: read
