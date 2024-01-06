@@ -19,6 +19,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Delete drafts
+        uses: hugo19941994/delete-draft-releases@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Create release draft
         uses: release-drafter/release-drafter@v5
         id: create_draft
