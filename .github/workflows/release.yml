@@ -19,10 +19,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: release-drafter/release-drafter@v5
-      id: create_draft
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate release title
+        id: gen_release_title
+        run: |
+          TITLE=$(date "+%Y-%m-%d")_BuildID-${GITHUB_RUN_NUMBER}
+          echo ::set-output name=version::${TITLE}
+          echo "Version set to ${TITLE}"
+
+      - name: Create release draft
+        uses: release-drafter/release-drafter@v5
+        id: create_draft
+        with:
+          tag: ${{ steps.gen_release_title.outputs.title }}
+          name: ${{ steps.gen_release_title.outputs.title }}
+          version: ${{ steps.gen_release_title.outputs.title }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload_asset:
     needs: create_draft_release
@@ -57,7 +69,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
           asset_path: ./UnrealEngine.zip
           asset_name: UnrealEngine.zip
           asset_content_type: application/zip
@@ -67,7 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
           asset_path: ./Unity.zip
           asset_name: Unity.zip
           asset_content_type: application/zip
@@ -77,7 +89,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
           asset_path: ./Godot.zip
           asset_name: Godot.zip
           asset_content_type: application/zip
