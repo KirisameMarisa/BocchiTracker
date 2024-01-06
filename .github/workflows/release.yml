@@ -11,48 +11,71 @@ permissions:
   contents: read
 
 jobs:
-  release:
+  create_draft_release:
     permissions:
       contents: write
       pull-requests: write
 
+    runs-on: ubunth-latest
+
+    steps:
+    - uses: release-drafter/release-drafter@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload_asset:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      # - name: Set up .NET Core
+      #   uses: actions/setup-dotnet@v7
+      #   with:
+      #     dotnet-version: '3.1'
 
-    # - name: Set up .NET Core
-    #   uses: actions/setup-dotnet@v7
-    #   with:
-    #     dotnet-version: '3.1'
+      # - name: Build C# application
+      #   run: dotnet build -c Release
 
-    # - name: Build C# application
-    #   run: dotnet build -c Release
+      # - name: Archive application
+      #   run: zip -r app.zip path/to/your/application
 
-    # - name: Archive application
-    #   run: zip -r app.zip path/to/your/application
+      - name: Archive UnrealEngine plugin
+        run: Compress-Archive -Path "Plugins/UnrealEngine" -DestinationPath "UnrealEngine.zip"
 
-    - name: Archive UE plugin
-      run: Compress-Archive -Path "Plugins/UnrealEngine" -DestinationPath "UnrealEngine.zip"
+      - name: Archive Unity plugin
+        run: Compress-Archive -Path "Plugins/Unity" -DestinationPath "Unity.zip"
 
-    - name: Archive Unity plugin
-      run: Compress-Archive -Path "Plugins/Unity" -DestinationPath "Unity.zip"
+      - name: Archive Godot plugin
+        run: Compress-Archive -Path "Plugins/Godot" -DestinationPath "Godot.zip"
 
-    - name: Archive Godot plugin
-      run: Compress-Archive -Path "Plugins/Godot" -DestinationPath "Godot.zip"
+      - name: Upload UnrealEngine plugin 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          asset_path: ./UnrealEngine.zip
+          asset_name: UnrealEngine.zip
+          asset_content_type: application/zip
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: release-artifacts
-        path: |
-          UnrealEngine.zip
-          Unity.zip
-          Godot.zip
+      - name: Upload Unity plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          asset_path: ./Unity.zip
+          asset_name: Unity.zip
+          asset_content_type: application/zip
 
-    - uses: release-drafter/release-drafter@v5
-      with:
-        config-name: release-drafter.yml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Godot plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-draft.outputs.upload_url }} 
+          asset_path: ./Godot.zip
+          asset_name: Godot.zip
+          asset_content_type: application/zip
