@@ -14,7 +14,7 @@ categories:
     label: 'test'
   - title: 'Other Changes'
     label: '*'
-    
+
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&'
 
