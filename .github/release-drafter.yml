@@ -1,3 +1,4 @@
+commitish: "refs/heads/master"
 name-template: '$YEAR-$MONTH-$DAY Release $COUNT 🚀'
 tag-template:  '$YEAR-$MONTH-$DAY Release $COUNT'
 
