@@ -1,8 +1,13 @@
 @tool
 extends EditorPlugin
 
-
 func _enter_tree():
+	call_deferred("deferred_initialize")
+	
+func _exit_tree():
+	call_deferred("deferred_finalize")
+
+func deferred_initialize():
 	ProjectSettings.set_setting("BocchiTracker/Setting/enabled",false)
 	ProjectSettings.set_as_basic("BocchiTracker/Setting/enabled",true)
 	ProjectSettings.set_initial_value("BocchiTracker/Setting/enabled",false)
@@ -15,11 +20,7 @@ func _enter_tree():
 	ProjectSettings.set_setting("BocchiTracker/Setting/ServerPort", 8888)
 	ProjectSettings.set_as_basic("BocchiTracker/Setting/ServerPort",true)
 	ProjectSettings.set_initial_value("BocchiTracker/Setting/ServerPort", 8888)
-
-func _exit_tree():
-	# Clean-up of the plugin goes here.
-	pass
-
-func _disable_plugin() -> void:
-	push_warning("BocchiTracker Addon got disabled. PLEASE RESTART THE EDITOR!")
-
+	add_autoload_singleton("BocchiSystemSingleton", "res://addons/bocchi_tracker_godot/bocchi_tracker_system.gd")
+	
+func deferred_finalize():
+	remove_autoload_singleton("BocchiSystemSingleton")
