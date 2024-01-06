@@ -7,19 +7,72 @@ on:
     types: [ opened, synchronize, reopened ]
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     env:
       Builder: 1
     steps:
     - uses: actions/checkout@v3
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 7.0.x
+        
     - name: Restore dependencies
       run: dotnet restore Application/BocchiTracker.UnitTests.sln
-    - name: Build
+
+    - name: Build unit Test 
       run: dotnet build --no-restore Application/BocchiTracker.UnitTests.sln
-    - name: Test
+
+    - name: Execute unit test
       run: dotnet test --no-build --verbosity normal Application/BocchiTracker.UnitTests.sln
+
+  build-windows:
+    runs-on: windows-latest
+    env:
+      Builder: 1
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup .NET on Windows
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore Application/BocchiTracker.UnitTests.sln
+
+    - name: Build unit Test
+      run: dotnet build --no-restore Application/BocchiTracker.UnitTests.sln
+
+    - name: Execute unit test
+      run: dotnet test --no-build --verbosity normal Application/BocchiTracker.UnitTests.sln
+
+    - name: Build application in debug config
+      run: dotnet build Application/BocchiTracker.WPF.sln -c Debug
+
+    - name: Build application in release config
+      run: dotnet build Application/BocchiTracker.WPF.sln -c Release
+
+  build-mac:
+    runs-on: macos-latest
+    env:
+      Builder: 1
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+          
+      - name: Restore dependencies
+        run: dotnet restore Application/BocchiTracker.UnitTests.sln
+
+      - name: Build unit Test 
+        run: dotnet build --no-restore Application/BocchiTracker.UnitTests.sln
+
+      - name: Execute unit test
+        run: dotnet test --no-build --verbosity normal Application/BocchiTracker.UnitTests.sln
