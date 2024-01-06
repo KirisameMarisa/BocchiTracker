@@ -1,6 +1,6 @@
 commitish: "refs/heads/master"
-#name-template: '$RESOLVED_VERSION 🚀'
-#tag-template:  '$RESOLVED_VERSION'
+name-template: 'v$RESOLVED_VERSION 🚀'
+tag-template:  'v$RESOLVED_VERSION'
 
 categories:
   - title: '🚀 Features'
@@ -16,6 +16,18 @@ categories:
   - title: 'Other Changes'
     label: '*'
 
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+  
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&'
 
