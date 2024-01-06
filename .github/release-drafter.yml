@@ -1,6 +1,6 @@
 commitish: "refs/heads/master"
-name-template: '$YEAR-$MONTH-$DAY Release $COUNT 🚀'
-tag-template:  '$YEAR-$MONTH-$DAY Release $COUNT'
+name-template: '$RESOLVED_VERSION 🚀'
+tag-template:  '$RESOLVED_VERSION'
 
 categories:
   - title: '🚀 Features'
