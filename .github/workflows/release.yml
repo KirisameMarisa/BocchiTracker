@@ -22,9 +22,9 @@ jobs:
       - name: Generate release title
         id: gen_release_title
         run: |
-          TITLE=$(date "+%Y-%m-%d")_BuildID-${GITHUB_RUN_NUMBER}
-          echo ::set-output name=version::${TITLE}
-          echo "Version set to ${TITLE}"
+          $TITLE = (Get-Date).ToString("yyyy-MM-dd") + "_BuildID-" + $env:GITHUB_RUN_NUMBER
+          Write-Host "Version set to $TITLE"
+          echo "::set-output name=version::$TITLE"
 
       - name: Create release draft
         uses: release-drafter/release-drafter@v5
