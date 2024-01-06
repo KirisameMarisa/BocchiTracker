@@ -34,13 +34,13 @@ jobs:
     #   run: zip -r app.zip path/to/your/application
 
     - name: Archive UE plugin
-      run: zip -r UnrealEngine.zip  Plugins/UnrealEngine
+      run: Compress-Archive -Path "Plugins/UnrealEngine" -DestinationPath "UnrealEngine.zip"
 
     - name: Archive Unity plugin
-      run: zip -r Unity.zip         Plugins/Unity
+      run: Compress-Archive -Path "Plugins/Unity" -DestinationPath "Unity.zip"
 
     - name: Archive Godot plugin
-      run: zip -r Godot.zip         Plugins/Godot
+      run: Compress-Archive -Path "Plugins/Godot" -DestinationPath "Godot.zip"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
