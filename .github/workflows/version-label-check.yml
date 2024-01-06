@@ -1,0 +1,24 @@
+name: Restrict Merge Without Version Label
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  check_version_label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if version label is assigned
+        run: |
+          PR_NUMBER=$(jq -r ".pull_request.number" "$GITHUB_EVENT_PATH")
+          LABELS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                     "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
+                     | jq -r '.[].name')
+
+          if [[ ! "$LABELS" =~ ^(minor|major|patch)$ ]]; then
+            echo "Error: A version label (minor, major, or patch) is required for merging this PR."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
