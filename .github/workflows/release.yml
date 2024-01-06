@@ -1,0 +1,56 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      pull-requests: write
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # - name: Set up .NET Core
+    #   uses: actions/setup-dotnet@v7
+    #   with:
+    #     dotnet-version: '3.1'
+
+    # - name: Build C# application
+    #   run: dotnet build -c Release
+
+    # - name: Archive application
+    #   run: zip -r app.zip path/to/your/application
+
+    - name: Archive UE plugin
+      run: zip -r UnrealEngine.zip  Plugins/UnrealEngine
+
+    - name: Archive Unity plugin
+      run: zip -r Unity.zip         Plugins/Unity
+
+    - name: Archive Godot plugin
+      run: zip -r Godot.zip         Plugins/Godot
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-artifacts
+        path: |
+          UnrealEngine.zip
+          Unity.zip
+          Godot.zip
+
+    - uses: release-drafter/release-drafter@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

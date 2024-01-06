@@ -1,0 +1,40 @@
+name-template: '$YEAR-$MONTH-$DAY Release $COUNT 🚀'
+tag-template:  '$YEAR-$MONTH-$DAY Release $COUNT'
+
+categories:
+  - title: '🚀 Features'
+    label: 'enhancement'
+  - title: '🐛 Bug Fixes'
+    label: 'bug'
+  - title: '🔧 Refactoring'
+    label: 'refactor'
+  - title: '📖 Documentation'
+    label: 'documentation'
+  - title: '✅ Tests'
+    label: 'test'
+  - title: 'Other Changes'
+    label: '*'
+    
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+
+template: |
+  ## Changes
+  $CHANGES
+  
+autolabeler:
+  - label: enhancement
+    branch:
+      - '/^feat(ure)?[/-].+/'
+  - label: bug
+    branch:
+      - '/^fix[/-].+/'
+  - label: test
+    branch:
+      - '/^test[/-].+/'
+  - label: refactor
+    branch:
+      - '/^refactor[/-].+/'
+  - label: documentation
+    branch:
+      - '/^doc[/-].+/'
