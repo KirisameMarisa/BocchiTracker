@@ -19,6 +19,15 @@ Screenshots can also be taken with the push of a button!
 <img src="./Documents/Resources/Redmine_Sample.png" width="70%">
 
 <br>
+Currently supported game engine services include:
+
+|Unity|UnrealEngine|Godot|
+|:--:|:--:|:--:|
+|◯|◯|◯|
+
+<br>
+
+<br>
 Currently supported report services include:
 
 |Redmine|Github|Slack|Discord|Gitlab|JIRA|
