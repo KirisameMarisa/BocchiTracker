@@ -9,6 +9,8 @@ on:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    env:
+      Builder: 1
     steps:
     - uses: actions/checkout@v3
 
@@ -28,6 +30,8 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    env:
+      Builder: 1
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -51,6 +55,8 @@ jobs:
 
   build-mac:
     runs-on: macos-latest
+    env:
+      Builder: 1
     steps:
       - uses: actions/checkout@v3
 
