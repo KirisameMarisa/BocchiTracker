@@ -16,14 +16,16 @@ jobs:
       contents: write
       pull-requests: write
 
-    runs-on: ubunth-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: release-drafter/release-drafter@v5
+      id: create_draft
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload_asset:
+    needs: create_draft_release
     runs-on: windows-latest
 
     steps:
