@@ -1,0 +1,94 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  create_draft_release:
+    permissions:
+      contents: write
+      pull-requests: write
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Delete drafts
+        uses: hugo19941994/delete-draft-releases@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create release draft
+        uses: release-drafter/release-drafter@v5
+        id: create_draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+          
+      - name: Build C# application
+        run: dotnet build Application/BocchiTracker.WPF.sln -c Release
+
+      - name: Archive application
+        run: Compress-Archive -Path "Application/WPF/Artifact/Release/net7.0-windows" -DestinationPath "BocchiTracker.zip"
+
+      - name: Archive UnrealEngine plugin
+        run: Compress-Archive -Path "Plugins/UnrealEngine" -DestinationPath "UnrealEngine.zip"
+
+      - name: Archive Unity plugin
+        run: Compress-Archive -Path "Plugins/Unity" -DestinationPath "Unity.zip"
+
+      - name: Archive Godot plugin
+        run: Compress-Archive -Path "Plugins/Godot" -DestinationPath "Godot.zip"
+
+      - name: Upload Application 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./BocchiTracker.zip
+          asset_name: BocchiTracker.zip
+          asset_content_type: application/zip
+          
+      - name: Upload UnrealEngine plugin 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./UnrealEngine.zip
+          asset_name: UnrealEngine.zip
+          asset_content_type: application/zip
+
+      - name: Upload Unity plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./Unity.zip
+          asset_name: Unity.zip
+          asset_content_type: application/zip
+
+      - name: Upload Godot plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./Godot.zip
+          asset_name: Godot.zip
+          asset_content_type: application/zip
