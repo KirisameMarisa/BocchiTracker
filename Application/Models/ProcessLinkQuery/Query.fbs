@@ -3,10 +3,11 @@ namespace BocchiTracker.ProcessLinkQuery.Queries;
 union QueryID { 
     AppBasicInfo, 
     PlayerPosition, 
-    ScreenshotData, 
+    ScreenshotData,
+    LogData,
     ScreenshotRequest, 
     JumpRequest, 
-    IssueesRequest 
+    IssueesRequest,
 }
 
 struct Vec3 {
@@ -46,6 +47,10 @@ table AppBasicInfo {
 
 table ScreenshotRequest {
 
+}
+
+table LogData {
+    log:        [string];
 }
 
 table JumpRequest {

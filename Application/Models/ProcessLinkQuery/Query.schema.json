@@ -3,7 +3,7 @@
   "definitions": {
     "BocchiTracker_ProcessLinkQuery_Queries_QueryID" : {
       "type" : "string",
-      "enum": ["NONE", "AppBasicInfo", "PlayerPosition", "ScreenshotData", "ScreenshotRequest", "JumpRequest", "IssueesRequest"]
+      "enum": ["NONE", "AppBasicInfo", "PlayerPosition", "ScreenshotData", "LogData", "ScreenshotRequest", "JumpRequest", "IssueesRequest"]
     },
     "BocchiTracker_ProcessLinkQuery_Queries_Vec3" : {
       "type" : "object",
@@ -101,6 +101,15 @@
       },
       "additionalProperties" : false
     },
+    "BocchiTracker_ProcessLinkQuery_Queries_LogData" : {
+      "type" : "object",
+      "properties" : {
+        "log" : {
+                "type" : "array", "items" : {"type" : "string"}
+              }
+      },
+      "additionalProperties" : false
+    },
     "BocchiTracker_ProcessLinkQuery_Queries_JumpRequest" : {
       "type" : "object",
       "properties" : {
@@ -129,7 +138,7 @@
                 "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_QueryID"
               },
         "query_id" : {
-                "anyOf": [{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_JumpRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_IssueesRequest" }]
+                "anyOf": [{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_AppBasicInfo" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_PlayerPosition" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotData" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_LogData" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_ScreenshotRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_JumpRequest" },{ "$ref" : "#/definitions/BocchiTracker_ProcessLinkQuery_Queries_IssueesRequest" }]
               }
       },
       "additionalProperties" : false

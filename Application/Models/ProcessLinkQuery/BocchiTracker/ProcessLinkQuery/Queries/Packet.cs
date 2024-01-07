@@ -25,6 +25,7 @@ public struct Packet : IFlatbufferObject
   public BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo QueryIdAsAppBasicInfo() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.PlayerPosition QueryIdAsPlayerPosition() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.PlayerPosition>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.ScreenshotData QueryIdAsScreenshotData() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.ScreenshotData>().Value; }
+  public BocchiTracker.ProcessLinkQuery.Queries.LogData QueryIdAsLogData() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.LogData>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.ScreenshotRequest QueryIdAsScreenshotRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.ScreenshotRequest>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.JumpRequest QueryIdAsJumpRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.JumpRequest>().Value; }
   public BocchiTracker.ProcessLinkQuery.Queries.IssueesRequest QueryIdAsIssueesRequest() { return QueryId<BocchiTracker.ProcessLinkQuery.Queries.IssueesRequest>().Value; }
@@ -56,6 +57,7 @@ static public class PacketVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*QueryIdType*/, 1 /*BocchiTracker.ProcessLinkQuery.Queries.QueryID*/, 1, false)
+//      && verifier.VerifyUnion(tablePos, 4, 6 /*QueryId*/, BocchiTracker.ProcessLinkQuery.Queries.QueryIDVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
