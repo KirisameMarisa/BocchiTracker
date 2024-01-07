@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Google.FlatBuffers;
+using static UnityEngine.Application;
 
 namespace BocchiTracker
 {
@@ -17,6 +18,7 @@ namespace BocchiTracker
 
         private static BocchiTrackerTcpSocket tcpSocket;
         private BocchiTrackerSetting setting;
+        private BocchiTrackerLogHook logHook;
         private bool isSentAppBasicInfo;
         private Queue<object> pendingProcessRequest = new Queue<object>();
 
@@ -24,6 +26,13 @@ namespace BocchiTracker
         {
             if (tcpSocket == null)
                 tcpSocket = new BocchiTrackerTcpSocket();
+
+        }
+
+        private void Awake()
+        {
+            if (logHook == null)
+                logHook = new BocchiTrackerLogHook();
         }
 
         private async void Start()
@@ -48,6 +57,9 @@ namespace BocchiTracker
             {
                 if (!isSentAppBasicInfo)
                     ProcessSendAppBasicInfo();
+
+                ProcessSendLogMessage();
+
                 await tcpSocket.Update();
             }
         }
@@ -119,6 +131,16 @@ namespace BocchiTracker
         public void BocchiTrackerSendPacket(List<byte> inData)
         {
             tcpSocket.AddSendData(inData);
+        }
+
+        private void ProcessSendLogMessage()
+        {
+            List<string> message;
+            if(logHook.GetLogBuffer(out message))
+            {
+                var logDataPacket = CreatePacketHelper.CreateLogData(message);
+                BocchiTrackerSendPacket(logDataPacket);
+            }
         }
 
         private void ProcessSendAppBasicInfo()
