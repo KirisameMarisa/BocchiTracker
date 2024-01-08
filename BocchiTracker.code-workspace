@@ -1,0 +1,114 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Client",
+			"path": "./Application"
+		},
+		{
+			"name": "Client_UnitTests",
+			"path": "./Application/Tests/BocchiTracker.UnitTests"
+		},
+		{
+			"name": "Plugin_Godot",
+			"path": "./Plugins/Godot"
+		},
+		{
+			"name": "Plugin_Unity",
+			"path": "./Plugins/Unity"
+		},
+		{
+			"name": "Plugin_UnrealEngine",
+			"path": "./Plugins/UnrealEngine"
+		},
+		{
+			"name": "Documents",
+			"path": "./Documents"
+		},
+	],
+	"settings": {
+		"dotnet-test-explorer.testProjectPath": "Application/Tests/**/*UnitTests.csproj",
+		"taskExplorer.exclude": [
+			"${workspaceFolder:BocchiTracker}/ExternalTools/**",
+		],
+		"taskExplorer.enabledTasks": {
+			"workspace": true
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "BocchiTracker Client WPF",
+				"type": "coreclr",
+				"request": "launch",
+				"program": "${workspaceFolder:BocchiTracker}/Application/WPF/Artifact/Debug/net7.0-windows/BocchiTracker.Client.dll",
+				"args": [],
+				"cwd": "${workspaceFolder:BocchiTracker}/Application/WPF/Artifact/Debug/net7.0-windows",
+				"sourceFileMap": {
+				  "/": "${workspaceFolder:BocchiTracker}/Application"
+				},
+				"console": "internalConsole",
+				"preLaunchTask": "BocchiTracker (WPF) Build",
+			  }
+		],
+		"compounds": []
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Godot Build with SCons",
+				"type": "shell",
+				"command": "python",
+				"args": ["-m", "SCons"],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"options": {
+                    "cwd": "${workspaceFolder:BocchiTracker}/Plugins/Godot",
+                },
+			},
+			{
+				"label": "Unity Build",
+				"command": "dotnet",
+				"args": ["build", "Plugins/Unity/BocchiTracker/BocchiTracker.sln"]
+			},
+			{
+				"label": "BocchiTracker WPF Build",
+				"command": "dotnet",
+				"args": ["build", "Application/BocchiTracker.WPF.sln"]
+			},
+			{
+				"label": "BocchiTracker UnitTests Build",
+				"command": "dotnet",
+				"args": ["build", "Application/BocchiTracker.UnitTests.sln"]
+			},
+			{
+				"label": "BocchiTracker UnitTests Run",
+				"command": "dotnet",
+				"args": ["test", "--no-build", "--verbosity", "normal", "Application/BocchiTracker.UnitTests.sln"] 
+			},
+			{
+				"label": "flatbuffers Build",
+				"command": "python",
+				"args": ["ExternalTools/BuildScripts/build_flatbuffers.py"]
+			}
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"formulahendry.dotnet-test-explorer",
+			"ms-dotnettools.vscode-dotnet-runtime",
+			"ms-vscode.cpptools",
+			"ms-vscode.cpptools-extension-pack",
+			"ms-dotnettools.csharp",
+			"ms-dotnettools.csdevkit",
+			"gaborv.flatbuffers",
+			"spmeesseman.vscode-taskexplorer"
+		]
+	}
+}
