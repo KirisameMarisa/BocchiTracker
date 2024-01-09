@@ -27,7 +27,8 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Log
 
         public void Handle(ReceiveLogDataEventParameter inEvent)
         {
-            File.AppendAllText(_output_filename, string.Join("\n", inEvent.Log));
+            string content = string.Join("\n", inEvent.Log) + "\n";
+            File.AppendAllText(_output_filename, content);
         }
     }
 
