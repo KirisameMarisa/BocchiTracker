@@ -29,6 +29,7 @@ using BocchiTracker.CrossServiceUploader;
 using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Commands;
 using BocchiTracker.ModelEvent;
+using BocchiTracker.IssueAssetCollector.Handlers.Log;
 
 namespace BocchiTracker.Client.ViewModels.ReportParts
 {
@@ -82,6 +83,8 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
             _issuePoster = inIssuePoster;
             _issueOpener = inIssueOpener;
             _issueAssetUploader = inIssueAssetUploader;
+
+            _appStatusBundles.AppConnected += OnConnectedCreateHandle;
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -180,6 +183,12 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
                 return;
 
             var handler = _createActionHandler.Create(typeof(RemoteScreenshotHandler));
+            handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
+        }
+
+        public void OnConnectedCreateHandle(AppStatusBundle inAppStatusBundle)
+        {
+            var handler = _createActionHandler.Create(typeof(LogCaptureHandler));
             handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
         }
     }
