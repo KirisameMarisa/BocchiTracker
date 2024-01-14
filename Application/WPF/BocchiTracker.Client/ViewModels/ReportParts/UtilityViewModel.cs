@@ -83,8 +83,6 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
             _issuePoster = inIssuePoster;
             _issueOpener = inIssueOpener;
             _issueAssetUploader = inIssueAssetUploader;
-
-            _appStatusBundles.AppConnected += OnConnectedCreateHandle;
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -114,6 +112,11 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
                         item.IsSelected.Value = true;
                 }
             }
+
+            if(_appStatusBundles.TrackerApplication != null)
+                OnConnectedCreateHandle(_appStatusBundles.TrackerApplication);
+
+            _appStatusBundles.AppConnected += OnConnectedCreateHandle;
         }
 
         public void OnChangedPostService()
@@ -169,7 +172,7 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
             if (int.TryParse(_appStatusBundles.TrackerApplication.AppBasicInfo.Pid, out int outPid))
             {
                 var handler = _createActionHandler.Create(typeof(WindowsCoredumpHandler));
-                handler.Handle(0, outPid, _projectConfig.FileSaveDirectory);
+                handler.Handle(_appStatusBundles.TrackerApplication, outPid, _projectConfig.FileSaveDirectory);
             }
 #endif
         }
@@ -183,13 +186,20 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
                 return;
 
             var handler = _createActionHandler.Create(typeof(RemoteScreenshotHandler));
-            handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
+            handler.Handle(_appStatusBundles.TrackerApplication, 0, _projectConfig.FileSaveDirectory);
         }
 
         public void OnConnectedCreateHandle(AppStatusBundle inAppStatusBundle)
         {
-            var handler = _createActionHandler.Create(typeof(LogCaptureHandler));
-            handler.Handle(_appStatusBundles.TrackerApplication.AppBasicInfo.ClientID, 0, _projectConfig.FileSaveDirectory);
+            {
+                var handler = _createActionHandler.Create(typeof(LogRemoteCaptureHandler));
+                handler.Handle(inAppStatusBundle, 0, _projectConfig.FileSaveDirectory);
+            }
+
+            {
+                var handler = _createActionHandler.Create(typeof(LogFileCaptureHandler));
+                handler.Handle(inAppStatusBundle, 0, _projectConfig.FileSaveDirectory);
+            }
         }
     }
 }

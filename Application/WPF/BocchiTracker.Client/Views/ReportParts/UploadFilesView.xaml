@@ -68,6 +68,12 @@
                                         <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Collapsed" />
                                     </DataTrigger>
 
+                                    <DataTrigger Binding="{Binding AssetData.Extension}" Value=".txt">
+                                        <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Collapsed" />
+                                        <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Visible" />
+                                        <Setter Property="UIElement.Visibility" TargetName="UnknownImageControl" Value="Collapsed" />
+                                    </DataTrigger>
+
                                     <DataTrigger Binding="{Binding AssetData.Extension}" Value="">
                                         <Setter Property="UIElement.Visibility" TargetName="LogImageControl" Value="Collapsed" />
                                         <Setter Property="UIElement.Visibility" TargetName="ImageControl" Value="Collapsed" />
