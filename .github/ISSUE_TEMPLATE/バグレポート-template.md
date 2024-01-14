@@ -2,8 +2,9 @@
 name: バグレポート template
 about: Bug Report
 title: "[Bug]"
-labels: ''
+labels: bug
 assignees: KirisameMarisa
+projects:  ["KirisameMarisa/2"]
 
 ---
 

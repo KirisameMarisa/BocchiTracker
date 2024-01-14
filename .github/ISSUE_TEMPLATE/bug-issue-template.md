@@ -4,6 +4,7 @@ about: Bug Report
 title: "{Bug]"
 labels: bug
 assignees: KirisameMarisa
+projects:  ["KirisameMarisa/2"]
 
 ---
 

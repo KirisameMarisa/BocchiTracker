@@ -1,9 +1,10 @@
 ---
 name: 機能リクエスト template
 about: Feature Request
-title: ''
+title: "[Feature Request]"
 labels: enhancement
 assignees: KirisameMarisa
+projects:  ["KirisameMarisa/2"]
 
 ---
 
