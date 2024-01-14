@@ -15,12 +15,12 @@ namespace BocchiTracker.IssueAssetCollector
 {
     public interface IFilenameGenerator
     {
-        string Generate();
+        string Generate(AppStatusBundle inAppStatusBundle);
     }
 
     public class TimestampedFilenameGenerator : IFilenameGenerator
     {
-        public string Generate()
+        public string Generate(AppStatusBundle inAppStatusBundle)
         {
             return DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss");
         }
@@ -28,18 +28,9 @@ namespace BocchiTracker.IssueAssetCollector
 
     public class RunningAppFilenameGenerator : IFilenameGenerator 
     {
-        public int ClientID { get; set; }
-
-        AppStatusBundles _appStatusBundles;
-
-        public RunningAppFilenameGenerator(AppStatusBundles inAppStatus)
+        public string Generate(AppStatusBundle inAppStatusBundle)
         {
-            _appStatusBundles = inAppStatus;
-        }
-
-        public string Generate()
-        {
-            var info = _appStatusBundles.TrackerApplication;
+            var info = inAppStatusBundle;
             if (info == null)
                 return string.Empty;
 
@@ -62,7 +53,7 @@ namespace BocchiTracker.IssueAssetCollector
                 _services.Add(typeof(TimestampedFilenameGenerator), new TimestampedFilenameGenerator());
 
             if (!_services.ContainsKey(typeof(RunningAppFilenameGenerator)))
-                _services.Add(typeof(RunningAppFilenameGenerator), new RunningAppFilenameGenerator(inAppStatusBundles));
+                _services.Add(typeof(RunningAppFilenameGenerator), new RunningAppFilenameGenerator());
         }
 
         public IFilenameGenerator GetFilenameGenerator(Type inType)

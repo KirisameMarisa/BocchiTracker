@@ -1,4 +1,5 @@
-﻿using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
+﻿using BocchiTracker.ApplicationInfoCollector;
+using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using BocchiTracker.ModelEvent;
 using Prism.Events;
 using System;
@@ -32,13 +33,13 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Log
         }
     }
 
-    public class LogCaptureHandler : IHandle
+    public class LogRemoteCaptureHandler : IHandle
     {
         private IEventAggregator _event;
         private RunningAppFilenameGenerator? _filename_generator = null;
         private Dictionary<int, LogAppendProcess> _save_process_map = new Dictionary<int, LogAppendProcess>();
 
-        public LogCaptureHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator)
+        public LogRemoteCaptureHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator)
         {
             _filename_generator = inFilenameGenerator as RunningAppFilenameGenerator;
 
@@ -52,15 +53,15 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Log
                 }, ThreadOption.BackgroundThread);
         }
 
-        public void Handle(int inClientID, int inPID, string inOutput)
+        public void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput)
         {
             if(_filename_generator == null) { return; }
 
-            if(!_save_process_map.ContainsKey(inClientID)) 
+            if(!_save_process_map.ContainsKey(inAppStatusBundle.AppBasicInfo.ClientID)) 
             {
                 _save_process_map.Add(
-                    inClientID,
-                    new LogAppendProcess(_event, Path.Combine(inOutput, _filename_generator.Generate() + ".txt"))
+                    inAppStatusBundle.AppBasicInfo.ClientID,
+                    new LogAppendProcess(_event, Path.Combine(inOutput, _filename_generator.Generate(inAppStatusBundle) + ".txt"))
                 );
             }
         }

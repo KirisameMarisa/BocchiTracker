@@ -21,7 +21,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             this._getWindowHandleFromPid = inGetWindowHandleFromPid;
         }
 
-        public override void Handle(int inClientID, int inPID, string inOutput)
+        public override void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput)
         {
             var handle = _getWindowHandleFromPid.Get(inPID);
             if (handle == IntPtr.Zero) 
@@ -29,7 +29,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
 
             var data = _capture.CaptureWindow(handle);
             using var image = Image.LoadPixelData<Byte4>(data.ImageData, data.Width, data.Height);
-            image.SaveAsPng(Path.Combine(inOutput, _filenameGenerator.Generate() + ".png"));
+            image.SaveAsPng(Path.Combine(inOutput, _filenameGenerator.Generate(inAppStatusBundle) + ".png"));
         }
     }
 }

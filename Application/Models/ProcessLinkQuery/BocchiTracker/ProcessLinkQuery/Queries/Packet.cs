@@ -57,7 +57,7 @@ static public class PacketVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*QueryIdType*/, 1 /*BocchiTracker.ProcessLinkQuery.Queries.QueryID*/, 1, false)
-//      && verifier.VerifyUnion(tablePos, 4, 6 /*QueryId*/, BocchiTracker.ProcessLinkQuery.Queries.QueryIDVerify.Verify, false)
+ //     && verifier.VerifyUnion(tablePos, 4, 6 /*QueryId*/, BocchiTracker.ProcessLinkQuery.Queries.QueryIDVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

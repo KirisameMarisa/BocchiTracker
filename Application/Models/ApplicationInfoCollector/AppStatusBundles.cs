@@ -23,11 +23,13 @@ namespace BocchiTracker.ApplicationInfoCollector
 
         public string Platform { get; set; } = string.Empty;
 
+        public string LogFilepath { get; set; } = string.Empty;
+
         public void Set(string inName, string inValue)
         {
-            if(inName == GetVarName(nameof(ClientID)) && int.TryParse(inValue, out int outClientID))
+            if (inName == GetVarName(nameof(ClientID)) && int.TryParse(inValue, out int outClientID))
                 ClientID = outClientID;
-            else if(inName == GetVarName(nameof(Pid)))
+            else if (inName == GetVarName(nameof(Pid)))
                 Pid = inValue;
             else if (inName == GetVarName(nameof(AppName)))
                 AppName = inValue;
@@ -37,16 +39,19 @@ namespace BocchiTracker.ApplicationInfoCollector
                 Args = inValue;
             else if (inName == GetVarName(nameof(Platform)))
                 Platform = inValue;
+            else if (inName == GetVarName(nameof(LogFilepath)))
+                LogFilepath = inValue;
         }
 
         public Dictionary<string, string> ToDict()
         {
             return new Dictionary<string, string> { 
-                { GetVarName(nameof(Pid)),      Pid         },
-                { GetVarName(nameof(AppName)),  AppName     },
-                { GetVarName(nameof(Version)),  Version     },
-                { GetVarName(nameof(Args)),     Args        },
-                { GetVarName(nameof(Platform)), Platform    },
+                { GetVarName(nameof(Pid)),          Pid             },
+                { GetVarName(nameof(AppName)),      AppName         },
+                { GetVarName(nameof(Version)),      Version         },
+                { GetVarName(nameof(Args)),         Args            },
+                { GetVarName(nameof(Platform)),     Platform        },
+                { GetVarName(nameof(LogFilepath)),  LogFilepath     },
             };
         }
 

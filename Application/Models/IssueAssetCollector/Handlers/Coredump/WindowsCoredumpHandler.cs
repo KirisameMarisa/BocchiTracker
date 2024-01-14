@@ -20,7 +20,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Coredump
             _procDumpApp = inProcDumpPath;
         }
 
-        public override void Handle(int inClientID, int inPID, string inOutput)
+        public override void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput)
         {
             if(!File.Exists(_procDumpApp))
             {
@@ -30,7 +30,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Coredump
 
             using (Process proc = new Process())
             {
-                string output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".dmp");
+                string output = Path.Combine(inOutput, _filenameGenerator.Generate(inAppStatusBundle) + ".dmp");
                 proc.StartInfo = new ProcessStartInfo
                 {
                     FileName = _procDumpApp,

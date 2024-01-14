@@ -91,6 +91,9 @@
               },
         "platform" : {
                 "type" : "string"
+              },
+        "log_filepath" : {
+                "type" : "string"
               }
       },
       "additionalProperties" : false

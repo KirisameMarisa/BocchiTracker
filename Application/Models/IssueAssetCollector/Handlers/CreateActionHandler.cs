@@ -1,4 +1,5 @@
-﻿using BocchiTracker.Config.Configs;
+﻿using BocchiTracker.ApplicationInfoCollector;
+using BocchiTracker.Config.Configs;
 using BocchiTracker.IssueAssetCollector.Handlers.Coredump;
 using BocchiTracker.IssueAssetCollector.Handlers.Log;
 using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
@@ -25,12 +26,14 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
         private readonly IEventAggregator _eventAggregator;
         private readonly IFilenameGeneratorFactory _filenameGeneratorFactory;
         private readonly ProjectConfig _projectConfig;
+        private readonly AppStatusBundles _appStatusBundles;
 
-        public CreateActionHandler(IEventAggregator inEventAggregator, IFilenameGeneratorFactory inFilenameGenFac, ProjectConfig inConfig)
+        public CreateActionHandler(IEventAggregator inEventAggregator, IFilenameGeneratorFactory inFilenameGenFac, AppStatusBundles inAppStatusBundles, ProjectConfig inConfig)
         {
             _eventAggregator = inEventAggregator;
             _filenameGeneratorFactory = inFilenameGenFac;
             _projectConfig = inConfig;
+            _appStatusBundles = inAppStatusBundles;
         }
 
         public IHandle Create(Type inType)
@@ -57,9 +60,14 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
                 _cacheHandles.Add(inType, handler);
             }
 #endif
-            if(inType == typeof(LogCaptureHandler))
+            if(inType == typeof(LogRemoteCaptureHandler))
             {
-                var handler = new LogCaptureHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(RunningAppFilenameGenerator)));
+                var handler = new LogRemoteCaptureHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(RunningAppFilenameGenerator)));
+                _cacheHandles.Add(inType, handler);
+            } 
+            else if (inType == typeof(LogFileCaptureHandler))
+            {
+                var handler = new LogFileCaptureHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(RunningAppFilenameGenerator)));
                 _cacheHandles.Add(inType, handler);
             }
 

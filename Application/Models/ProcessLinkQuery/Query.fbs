@@ -39,10 +39,11 @@ table PlayerPosition {
 }
 
 table AppBasicInfo {
-    pid:        int;
-    app_name:   string;
-    args:       string;
-    platform:   string;
+    pid:            int;
+    app_name:       string;
+    args:           string;
+    platform:       string;
+    log_filepath:   string;
 }
 
 table ScreenshotRequest {

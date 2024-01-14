@@ -20,6 +20,7 @@ namespace BocchiTracker.ProcessLink.ProcessData
             status["AppBasicInfo.app_name"] = data.AppName;
             status["AppBasicInfo.args"] = data.Args;
             status["AppBasicInfo.platform"] = data.Platform;
+            status["AppBasicInfo.log_filepath"] = data.LogFilepath;
 
             inEventAggregator
                 .GetEvent<AppStatusQueryEvent>()
