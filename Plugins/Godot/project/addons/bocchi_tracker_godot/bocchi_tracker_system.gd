@@ -63,8 +63,9 @@ func process_send_app_basic_info():
 	for arg in OS.get_cmdline_args():
 		args += "-" + arg + " "
 	var platform 	= OS.get_name()
-
-	var app_basic_info_packet = bocchi_api.create_application_basic_information(pid, app_name, args, platform)
+	var log_file_path = ProjectSettings.globalize_path(ProjectSettings.get_setting("debug/file_logging/log_path"))
+	
+	var app_basic_info_packet = bocchi_api.create_application_basic_information(pid, app_name, args, platform, log_file_path)
 
 	tcp_socket.add_send_data(app_basic_info_packet)
 	is_sent_app_basic_info = true

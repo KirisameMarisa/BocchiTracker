@@ -34,6 +34,9 @@ struct AppBasicInfoBuilder;
 struct ScreenshotRequest;
 struct ScreenshotRequestBuilder;
 
+struct LogData;
+struct LogDataBuilder;
+
 struct JumpRequest;
 struct JumpRequestBuilder;
 
@@ -48,19 +51,21 @@ enum QueryID : uint8_t {
   QueryID_AppBasicInfo = 1,
   QueryID_PlayerPosition = 2,
   QueryID_ScreenshotData = 3,
-  QueryID_ScreenshotRequest = 4,
-  QueryID_JumpRequest = 5,
-  QueryID_IssueesRequest = 6,
+  QueryID_LogData = 4,
+  QueryID_ScreenshotRequest = 5,
+  QueryID_JumpRequest = 6,
+  QueryID_IssueesRequest = 7,
   QueryID_MIN = QueryID_NONE,
   QueryID_MAX = QueryID_IssueesRequest
 };
 
-inline const QueryID (&EnumValuesQueryID())[7] {
+inline const QueryID (&EnumValuesQueryID())[8] {
   static const QueryID values[] = {
     QueryID_NONE,
     QueryID_AppBasicInfo,
     QueryID_PlayerPosition,
     QueryID_ScreenshotData,
+    QueryID_LogData,
     QueryID_ScreenshotRequest,
     QueryID_JumpRequest,
     QueryID_IssueesRequest
@@ -69,11 +74,12 @@ inline const QueryID (&EnumValuesQueryID())[7] {
 }
 
 inline const char * const *EnumNamesQueryID() {
-  static const char * const names[8] = {
+  static const char * const names[9] = {
     "NONE",
     "AppBasicInfo",
     "PlayerPosition",
     "ScreenshotData",
+    "LogData",
     "ScreenshotRequest",
     "JumpRequest",
     "IssueesRequest",
@@ -102,6 +108,10 @@ template<> struct QueryIDTraits<BocchiTracker::ProcessLinkQuery::Queries::Player
 
 template<> struct QueryIDTraits<BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData> {
   static const QueryID enum_value = QueryID_ScreenshotData;
+};
+
+template<> struct QueryIDTraits<BocchiTracker::ProcessLinkQuery::Queries::LogData> {
+  static const QueryID enum_value = QueryID_LogData;
 };
 
 template<> struct QueryIDTraits<BocchiTracker::ProcessLinkQuery::Queries::ScreenshotRequest> {
@@ -435,7 +445,8 @@ struct AppBasicInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_PID = 4,
     VT_APP_NAME = 6,
     VT_ARGS = 8,
-    VT_PLATFORM = 10
+    VT_PLATFORM = 10,
+    VT_LOG_FILEPATH = 12
   };
   int32_t pid() const {
     return GetField<int32_t>(VT_PID, 0);
@@ -449,6 +460,9 @@ struct AppBasicInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::String *platform() const {
     return GetPointer<const ::flatbuffers::String *>(VT_PLATFORM);
   }
+  const ::flatbuffers::String *log_filepath() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_LOG_FILEPATH);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_PID, 4) &&
@@ -458,6 +472,8 @@ struct AppBasicInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            verifier.VerifyString(args()) &&
            VerifyOffset(verifier, VT_PLATFORM) &&
            verifier.VerifyString(platform()) &&
+           VerifyOffset(verifier, VT_LOG_FILEPATH) &&
+           verifier.VerifyString(log_filepath()) &&
            verifier.EndTable();
   }
 };
@@ -478,6 +494,9 @@ struct AppBasicInfoBuilder {
   void add_platform(::flatbuffers::Offset<::flatbuffers::String> platform) {
     fbb_.AddOffset(AppBasicInfo::VT_PLATFORM, platform);
   }
+  void add_log_filepath(::flatbuffers::Offset<::flatbuffers::String> log_filepath) {
+    fbb_.AddOffset(AppBasicInfo::VT_LOG_FILEPATH, log_filepath);
+  }
   explicit AppBasicInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -494,8 +513,10 @@ inline ::flatbuffers::Offset<AppBasicInfo> CreateAppBasicInfo(
     int32_t pid = 0,
     ::flatbuffers::Offset<::flatbuffers::String> app_name = 0,
     ::flatbuffers::Offset<::flatbuffers::String> args = 0,
-    ::flatbuffers::Offset<::flatbuffers::String> platform = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> platform = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> log_filepath = 0) {
   AppBasicInfoBuilder builder_(_fbb);
+  builder_.add_log_filepath(log_filepath);
   builder_.add_platform(platform);
   builder_.add_args(args);
   builder_.add_app_name(app_name);
@@ -508,16 +529,19 @@ inline ::flatbuffers::Offset<AppBasicInfo> CreateAppBasicInfoDirect(
     int32_t pid = 0,
     const char *app_name = nullptr,
     const char *args = nullptr,
-    const char *platform = nullptr) {
+    const char *platform = nullptr,
+    const char *log_filepath = nullptr) {
   auto app_name__ = app_name ? _fbb.CreateString(app_name) : 0;
   auto args__ = args ? _fbb.CreateString(args) : 0;
   auto platform__ = platform ? _fbb.CreateString(platform) : 0;
+  auto log_filepath__ = log_filepath ? _fbb.CreateString(log_filepath) : 0;
   return BocchiTracker::ProcessLinkQuery::Queries::CreateAppBasicInfo(
       _fbb,
       pid,
       app_name__,
       args__,
-      platform__);
+      platform__,
+      log_filepath__);
 }
 
 struct ScreenshotRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -547,6 +571,58 @@ inline ::flatbuffers::Offset<ScreenshotRequest> CreateScreenshotRequest(
     ::flatbuffers::FlatBufferBuilder &_fbb) {
   ScreenshotRequestBuilder builder_(_fbb);
   return builder_.Finish();
+}
+
+struct LogData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef LogDataBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_LOG = 4
+  };
+  const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *log() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *>(VT_LOG);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_LOG) &&
+           verifier.VerifyVector(log()) &&
+           verifier.VerifyVectorOfStrings(log()) &&
+           verifier.EndTable();
+  }
+};
+
+struct LogDataBuilder {
+  typedef LogData Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_log(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> log) {
+    fbb_.AddOffset(LogData::VT_LOG, log);
+  }
+  explicit LogDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<LogData> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<LogData>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<LogData> CreateLogData(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> log = 0) {
+  LogDataBuilder builder_(_fbb);
+  builder_.add_log(log);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<LogData> CreateLogDataDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<::flatbuffers::Offset<::flatbuffers::String>> *log = nullptr) {
+  auto log__ = log ? _fbb.CreateVector<::flatbuffers::Offset<::flatbuffers::String>>(*log) : 0;
+  return BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(
+      _fbb,
+      log__);
 }
 
 struct JumpRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -686,6 +762,9 @@ struct Packet FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData *query_id_as_ScreenshotData() const {
     return query_id_type() == BocchiTracker::ProcessLinkQuery::Queries::QueryID_ScreenshotData ? static_cast<const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData *>(query_id()) : nullptr;
   }
+  const BocchiTracker::ProcessLinkQuery::Queries::LogData *query_id_as_LogData() const {
+    return query_id_type() == BocchiTracker::ProcessLinkQuery::Queries::QueryID_LogData ? static_cast<const BocchiTracker::ProcessLinkQuery::Queries::LogData *>(query_id()) : nullptr;
+  }
   const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotRequest *query_id_as_ScreenshotRequest() const {
     return query_id_type() == BocchiTracker::ProcessLinkQuery::Queries::QueryID_ScreenshotRequest ? static_cast<const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotRequest *>(query_id()) : nullptr;
   }
@@ -714,6 +793,10 @@ template<> inline const BocchiTracker::ProcessLinkQuery::Queries::PlayerPosition
 
 template<> inline const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData *Packet::query_id_as<BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData>() const {
   return query_id_as_ScreenshotData();
+}
+
+template<> inline const BocchiTracker::ProcessLinkQuery::Queries::LogData *Packet::query_id_as<BocchiTracker::ProcessLinkQuery::Queries::LogData>() const {
+  return query_id_as_LogData();
 }
 
 template<> inline const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotRequest *Packet::query_id_as<BocchiTracker::ProcessLinkQuery::Queries::ScreenshotRequest>() const {
@@ -774,6 +857,10 @@ inline bool VerifyQueryID(::flatbuffers::Verifier &verifier, const void *obj, Qu
     }
     case QueryID_ScreenshotData: {
       auto ptr = reinterpret_cast<const BocchiTracker::ProcessLinkQuery::Queries::ScreenshotData *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case QueryID_LogData: {
+      auto ptr = reinterpret_cast<const BocchiTracker::ProcessLinkQuery::Queries::LogData *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case QueryID_ScreenshotRequest: {
