@@ -36,10 +36,9 @@ namespace BocchiTracker.IssueAssetCollector
             FullName = inFilename;
             Name = Path.GetFileName(FullName);
 
-            var ext = Path.GetExtension(FullName);
-            if (_preview_support_exts.Contains(ext))
+            Extension = Path.GetExtension(FullName);
+            if (_preview_support_exts.Contains(Extension))
             {
-                Extension = ext;
                 Task.Factory.StartNew(() => { PictureRawData = ImageProcessor.Instnace.Load(FullName); });
             }
         }
