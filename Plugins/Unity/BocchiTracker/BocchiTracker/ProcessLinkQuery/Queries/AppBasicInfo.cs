@@ -41,13 +41,22 @@ public struct AppBasicInfo : IFlatbufferObject
   public ArraySegment<byte>? GetPlatformBytes() { return __p.__vector_as_arraysegment(10); }
 #endif
   public byte[] GetPlatformArray() { return __p.__vector_as_array<byte>(10); }
+  public string LogFilepath { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetLogFilepathBytes() { return __p.__vector_as_span<byte>(12, 1); }
+#else
+  public ArraySegment<byte>? GetLogFilepathBytes() { return __p.__vector_as_arraysegment(12); }
+#endif
+  public byte[] GetLogFilepathArray() { return __p.__vector_as_array<byte>(12); }
 
   public static Offset<BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo> CreateAppBasicInfo(FlatBufferBuilder builder,
       int pid = 0,
       StringOffset app_nameOffset = default(StringOffset),
       StringOffset argsOffset = default(StringOffset),
-      StringOffset platformOffset = default(StringOffset)) {
-    builder.StartTable(4);
+      StringOffset platformOffset = default(StringOffset),
+      StringOffset log_filepathOffset = default(StringOffset)) {
+    builder.StartTable(5);
+    AppBasicInfo.AddLogFilepath(builder, log_filepathOffset);
     AppBasicInfo.AddPlatform(builder, platformOffset);
     AppBasicInfo.AddArgs(builder, argsOffset);
     AppBasicInfo.AddAppName(builder, app_nameOffset);
@@ -55,11 +64,12 @@ public struct AppBasicInfo : IFlatbufferObject
     return AppBasicInfo.EndAppBasicInfo(builder);
   }
 
-  public static void StartAppBasicInfo(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void StartAppBasicInfo(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddPid(FlatBufferBuilder builder, int pid) { builder.AddInt(0, pid, 0); }
   public static void AddAppName(FlatBufferBuilder builder, StringOffset appNameOffset) { builder.AddOffset(1, appNameOffset.Value, 0); }
   public static void AddArgs(FlatBufferBuilder builder, StringOffset argsOffset) { builder.AddOffset(2, argsOffset.Value, 0); }
   public static void AddPlatform(FlatBufferBuilder builder, StringOffset platformOffset) { builder.AddOffset(3, platformOffset.Value, 0); }
+  public static void AddLogFilepath(FlatBufferBuilder builder, StringOffset logFilepathOffset) { builder.AddOffset(4, logFilepathOffset.Value, 0); }
   public static Offset<BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo> EndAppBasicInfo(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<BocchiTracker.ProcessLinkQuery.Queries.AppBasicInfo>(o);
@@ -76,6 +86,7 @@ static public class AppBasicInfoVerify
       && verifier.VerifyString(tablePos, 6 /*AppName*/, false)
       && verifier.VerifyString(tablePos, 8 /*Args*/, false)
       && verifier.VerifyString(tablePos, 10 /*Platform*/, false)
+      && verifier.VerifyString(tablePos, 12 /*LogFilepath*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
