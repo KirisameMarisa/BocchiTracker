@@ -1,4 +1,8 @@
+# BocchiTracker : Game BugReport Tool
 [![Build and unit tests](https://github.com/KirisameMarisa/BocchiTracker/actions/workflows/main.yml/badge.svg)](https://github.com/KirisameMarisa/BocchiTracker/actions/workflows/main.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/kirisamemarisa/bocchitracker/badge)](https://www.codefactor.io/repository/github/kirisamemarisa/bocchitracker)
+[![codecov](https://codecov.io/gh/KirisameMarisa/BocchiTracker/graph/badge.svg?token=KOW5YDQVN0)](https://codecov.io/gh/KirisameMarisa/BocchiTracker)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/KirisameMarisa/BocchiTracker/blob/master/LICENCE.txt)
 
 # What's this BocchiTracker?
 
