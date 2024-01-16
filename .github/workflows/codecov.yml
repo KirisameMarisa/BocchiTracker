@@ -8,8 +8,11 @@ on:
     branches: [ master ]
 
 jobs:
+
   cover:
     runs-on: ubuntu-latest
+    env:
+      Builder: 1
     steps:
     - uses: actions/checkout@v3
 
