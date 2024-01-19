@@ -174,10 +174,11 @@ PackedByteArray BocchiAPI::create_log_data(const String& inData)
 
     // Create ScreenshotData object
     auto dataOffset = builder.CreateString(GODOT_TO_STD_STRING(inData));
+    auto logdata = BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(builder, dataOffset);
 
     // Create Packet object
     auto packet = BocchiTracker::ProcessLinkQuery::Queries::CreatePacket(
-        builder, BocchiTracker::ProcessLinkQuery::Queries::QueryID_LogData, dataOffset.Union()
+        builder, BocchiTracker::ProcessLinkQuery::Queries::QueryID_LogData, logdata.Union()
     );
 
     builder.Finish(packet);
