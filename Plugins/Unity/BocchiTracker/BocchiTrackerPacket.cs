@@ -4,6 +4,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BocchiTracker.ProcessLinkQuery.Queries;
+using System.Xml.Linq;
+using Google.FlatBuffers;
 
 namespace BocchiTracker
 {
@@ -97,6 +99,31 @@ namespace BocchiTracker
 
             // Create Packet object
             var packet = Packet.CreatePacket(builder, QueryID.ScreenshotData, screenshotData.Value);
+
+            builder.Finish(packet.Value);
+
+            // Convert FlatBuffers data to byte array
+            byte[] packetData = builder.SizedByteArray();
+
+            // Prepend packet size
+            int packetSize = packetData.Length;
+            List<byte> finalPacketData = new List<byte>();
+            finalPacketData.AddRange(System.BitConverter.GetBytes(packetSize));
+            finalPacketData.AddRange(packetData);
+
+            return finalPacketData;
+        }
+
+        public static List<byte> CreateLogData(string inLog)
+        {
+            var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+
+            // Create ScreenshotData object
+            var dataOffset = builder.CreateString(inLog);
+            var logdata = LogData.CreateLogData(builder, dataOffset);
+
+            // Create Packet object
+            var packet = Packet.CreatePacket(builder, QueryID.LogData, logdata.Value);
 
             builder.Finish(packet.Value);
 

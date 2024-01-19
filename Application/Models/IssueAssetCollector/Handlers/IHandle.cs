@@ -9,6 +9,6 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
 {
     public interface IHandle
     {
-        void Handle(int inClientID, int inPID, string inOutput);
+        void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput);
     }
 }

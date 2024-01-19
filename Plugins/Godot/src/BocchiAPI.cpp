@@ -21,8 +21,11 @@ void BocchiAPI::_bind_methods()
         &BocchiAPI::createApplicationBasicInformation);
     ClassDB::bind_method(D_METHOD("create_screenshot_data",                 "width", "height", "screenshot_data"), 
         &BocchiAPI::create_screenshot_data);
+    ClassDB::bind_method(D_METHOD("create_log_data",                        "data"), 
+        &BocchiAPI::create_log_data);
     ClassDB::bind_method(D_METHOD("resolve_request_query",                  "packet"), 
         &BocchiAPI::resolve_request_query);
+
 
     BIND_ENUM_CONSTANT(QueryID_NONE)
     BIND_ENUM_CONSTANT(QueryID_AppBasicInfo)
@@ -31,6 +34,7 @@ void BocchiAPI::_bind_methods()
     BIND_ENUM_CONSTANT(QueryID_ScreenshotRequest)
     BIND_ENUM_CONSTANT(QueryID_JumpRequest)
     BIND_ENUM_CONSTANT(QueryID_IssueesRequest)
+    BIND_ENUM_CONSTANT(QueryID_LogData)
 }
 
 BocchiAPI* BocchiAPI::get_instance()
@@ -87,7 +91,7 @@ PackedByteArray BocchiAPI::createPlayerPosition(const Vector3& inPlayerPosition,
     return finalPacketData;
 }
 
-PackedByteArray BocchiAPI::createApplicationBasicInformation(uint32_t inPID, const String& inAppName, const String& inArgs, const String& inPlatform) 
+PackedByteArray BocchiAPI::createApplicationBasicInformation(uint32_t inPID, const String& inAppName, const String& inArgs, const String& inPlatform, const String& inLogFilepath) 
 {
     flatbuffers::FlatBufferBuilder builder;
 
@@ -95,9 +99,10 @@ PackedByteArray BocchiAPI::createApplicationBasicInformation(uint32_t inPID, con
     auto appNameOffset = builder.CreateString(GODOT_TO_STD_STRING(inAppName));
     auto argsOffset = builder.CreateString(GODOT_TO_STD_STRING(inArgs));
     auto platformOffset = builder.CreateString(GODOT_TO_STD_STRING(inPlatform));
+    auto logfileOffset = builder.CreateString(GODOT_TO_STD_STRING(inLogFilepath));
 
     auto appBasicInfoOffset = BocchiTracker::ProcessLinkQuery::Queries::CreateAppBasicInfo(
-        builder, inPID, appNameOffset, argsOffset, platformOffset
+        builder, inPID, appNameOffset, argsOffset, platformOffset, logfileOffset
     );
 
     // Create Packet object
@@ -139,6 +144,41 @@ PackedByteArray BocchiAPI::create_screenshot_data(uint32_t inWidth, uint32_t inH
     // Create Packet object
     auto packet = BocchiTracker::ProcessLinkQuery::Queries::CreatePacket(
         builder, BocchiTracker::ProcessLinkQuery::Queries::QueryID_ScreenshotData, screenshotData.Union()
+    );
+
+    builder.Finish(packet);
+
+    // Convert FlatBuffers data to Array
+    const uint8_t* bufferPointer = builder.GetBufferPointer();
+    int32_t bufferSize = builder.GetSize();
+
+    // Convert FlatBuffers data to TArray<uint8>
+    PackedByteArray packetData;
+    packetData.resize(bufferSize);
+    memcpy(packetData.ptrw(), bufferPointer, bufferSize);
+
+    // Prepend packet size
+    int32_t packetSize = packetData.size();
+    PackedByteArray finalPacketData;
+    finalPacketData.resize(packetSize + sizeof(int32_t));
+ 
+    memcpy(finalPacketData.ptrw(), reinterpret_cast<const uint8_t*>(&packetSize), sizeof(int32_t));
+    memcpy(finalPacketData.ptrw() + sizeof(int32_t), packetData.ptr(), packetSize);
+    
+    return finalPacketData;
+}
+
+PackedByteArray BocchiAPI::create_log_data(const String& inData)
+{
+    flatbuffers::FlatBufferBuilder builder;
+
+    // Create ScreenshotData object
+    auto dataOffset = builder.CreateString(GODOT_TO_STD_STRING(inData));
+    auto logdata = BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(builder, dataOffset);
+
+    // Create Packet object
+    auto packet = BocchiTracker::ProcessLinkQuery::Queries::CreatePacket(
+        builder, BocchiTracker::ProcessLinkQuery::Queries::QueryID_LogData, logdata.Union()
     );
 
     builder.Finish(packet);

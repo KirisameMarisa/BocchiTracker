@@ -10,6 +10,7 @@ using BocchiTracker.IssueAssetCollector;
 using BocchiTracker.ModelEvent;
 using System.IO;
 using BocchiTracker.IssueAssetCollector.Utils.Win32;
+using BocchiTracker.ApplicationInfoCollector;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 {
@@ -19,6 +20,7 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
         public void Test_Handle()
         {
             // Arrange
+            var mocAppStatusBundle = new AppStatusBundle(0);
             var mockCapture = new Mock<IClientCapture>();
             var mockGetWindowHandle = new Mock<IGetWindowHandleFromPid>();
             var mockFilenameGenerator = new Mock<IFilenameGenerator>();
@@ -48,12 +50,12 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 
             mockCapture.Setup(c => c.CaptureWindow(It.IsAny<IntPtr>())).Returns(testData);
             mockGetWindowHandle.Setup(c => c.Get(It.IsAny<int>())).Returns(new IntPtr(1));
-            mockFilenameGenerator.Setup(f => f.Generate()).Returns("test");
+            mockFilenameGenerator.Setup(f => f.Generate(mocAppStatusBundle)).Returns("test");
 
             var handler = new LocalScreenshotHandler(mockCapture.Object, mockGetWindowHandle.Object, mockFilenameGenerator.Object);
 
             // Act
-            handler.Handle(0, 0, "output2");
+            handler.Handle(mocAppStatusBundle, 0, "output2");
 
             // Assert
             Assert.True(File.Exists(expectedFilePath));

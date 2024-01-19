@@ -104,3 +104,35 @@ TArray<uint8> CreatePacketHelper::CreateScreenshotData(int inWidth, int inHeight
 
     return FinalPacketData;
 }
+
+TArray<uint8> CreatePacketHelper::CreateLogData(const FString& inData)
+{
+    flatbuffers::FlatBufferBuilder builder;
+
+    // Create ScreenshotData object
+    auto dataOffset = builder.CreateString(TCHAR_TO_UTF8(*inData));
+    auto logdata = BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(builder, dataOffset);
+
+    // Create Packet object
+    auto packet = BocchiTracker::ProcessLinkQuery::Queries::CreatePacket(
+        builder, BocchiTracker::ProcessLinkQuery::Queries::QueryID_LogData, logdata.Union()
+    );
+
+    builder.Finish(packet);
+
+    // Convert FlatBuffers data to Array
+    const uint8_t* bufferPointer = builder.GetBufferPointer();
+    int32_t bufferSize = builder.GetSize();
+
+    // Convert FlatBuffers data to TArray<uint8>
+    TArray<uint8> PacketData;
+    PacketData.Append(reinterpret_cast<const uint8_t*>(builder.GetBufferPointer()), builder.GetSize());
+
+    // Prepend packet size
+    int32 PacketSize = PacketData.Num();
+    TArray<uint8> FinalPacketData;
+    FinalPacketData.Append(reinterpret_cast<const uint8_t*>(&PacketSize), sizeof(int32));
+    FinalPacketData.Append(PacketData);
+
+    return FinalPacketData;
+}

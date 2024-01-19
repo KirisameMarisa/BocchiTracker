@@ -49,13 +49,13 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             this.SaveProcess = new RemoteScreenshotSaveProcess(inEventAggregator);
         }
 
-        public override void Handle(int inClientID, int inPID, string inOutput)
+        public override void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput)
         {
-            this.SaveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate() + ".png");
+            this.SaveProcess.Output = Path.Combine(inOutput, _filenameGenerator.Generate(inAppStatusBundle) + ".png");
 
             _eventAggregator
                 .GetEvent<RequestQueryEvent>()
-                .Publish(new ScreenshotRequestEventParameter(inClientID));
+                .Publish(new ScreenshotRequestEventParameter(inAppStatusBundle.AppBasicInfo.ClientID));
         }
     }
 }

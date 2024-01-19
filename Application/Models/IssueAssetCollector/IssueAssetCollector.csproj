@@ -3,6 +3,7 @@
   <Import Project="..\..\BocchiTracker.Common.props" />
 
   <ItemGroup>
+    <None Remove="Res\LogFileIcon.png" />
     <None Remove="Res\PreviewLoadingIcon.png" />
   </ItemGroup>
 

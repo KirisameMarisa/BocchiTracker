@@ -11,7 +11,7 @@ namespace BocchiTracker.IssueAssetCollector
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IFilenameGenerator, TimestampedFilenameGenerator>();
+            containerRegistry.Register<IFilenameGeneratorFactory, FilenameGeneratorFactory>();
             containerRegistry.RegisterSingleton(typeof(IssueAssetsBundle));
             containerRegistry.RegisterSingleton<ICreateActionHandler, CreateActionHandler>();
         }

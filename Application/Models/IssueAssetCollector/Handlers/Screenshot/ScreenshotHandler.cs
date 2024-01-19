@@ -17,6 +17,6 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Screenshot
             _filenameGenerator = inFilenameGenerator;
         }
 
-        public virtual void Handle(int inClientID, int inPID, string inOutput) { }
+        public virtual void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput) { }
     }
 }

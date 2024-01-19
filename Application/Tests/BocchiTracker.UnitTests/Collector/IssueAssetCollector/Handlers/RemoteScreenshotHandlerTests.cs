@@ -13,6 +13,7 @@ using System.IO;
 using System.Threading;
 using Prism.Events;
 using BocchiTracker.ProcessLinkQuery.Queries;
+using BocchiTracker.ApplicationInfoCollector;
 
 namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
 {
@@ -22,9 +23,10 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
         public void Test_Handle_RequestQueryEventBus()
         {
             // Arrange
+            var mocAppStatusBundle = new AppStatusBundle(1);
             var mockFilenameGenerator = new Mock<IFilenameGenerator>();
 
-            mockFilenameGenerator.Setup(f => f.Generate()).Returns("test");
+            mockFilenameGenerator.Setup(f => f.Generate(mocAppStatusBundle)).Returns("test");
             
             var mockedEvent1 = new Mock<RequestQueryEvent>();
             var mockedEvent2 = new Mock<ReceiveScreenshotEvent>();
@@ -39,7 +41,7 @@ namespace BocchiTracker.Tests.Collector.IssueAssetCollector.Handlers
             var handler = new RemoteScreenshotHandler(eventAggregatorMock.Object, mockFilenameGenerator.Object);
 
             // Act
-            handler.Handle(1, 1, "output");
+            handler.Handle(mocAppStatusBundle, 1, "output");
 
             // Assert
             mockedEvent1.Verify(x => x.Publish(It.Is<ScreenshotRequestEventParameter>(m => m.ClientID == 1 && m.QueryID == QueryID.ScreenshotRequest)));

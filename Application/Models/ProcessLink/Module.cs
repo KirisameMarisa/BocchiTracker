@@ -13,6 +13,7 @@ namespace BocchiTracker.ProcessLink
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.AppBasicInfo, new ProcessDataAppBasicInfo());
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.PlayerPosition, new ProcessDataPlayerPosition());
             serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.ScreenshotData, new ProcessDataScreenshotData());
+            serviceProcessData.Register(ProcessLinkQuery.Queries.QueryID.LogData, new ProcessDataLogData());
 
             var serviceCreateRequest = containerProvider.Resolve<IServiceCreateRequest>();
             serviceCreateRequest.Register(ProcessLinkQuery.Queries.QueryID.ScreenshotRequest, new CreateRequestScreenshot());
