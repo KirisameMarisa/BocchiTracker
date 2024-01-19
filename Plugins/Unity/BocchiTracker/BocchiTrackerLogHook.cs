@@ -9,7 +9,7 @@ namespace BocchiTracker
 {
     public class BocchiTrackerLogHook : IDisposable
     {
-        private readonly int LOG_MAX_BUFFER = 256;
+        private readonly int LOG_MAX_BUFFER = 2048;
         private int bufferID = 0;
         private List<string> logBuffer;
 
