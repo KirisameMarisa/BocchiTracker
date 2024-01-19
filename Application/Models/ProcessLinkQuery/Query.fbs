@@ -51,7 +51,7 @@ table ScreenshotRequest {
 }
 
 table LogData {
-    log:        [string];
+    log: string;
 }
 
 table JumpRequest {

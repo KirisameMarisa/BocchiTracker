@@ -19,23 +19,23 @@ public struct LogData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public LogData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public string Log(int j) { int o = __p.__offset(4); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
-  public int LogLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public string Log { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetLogBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetLogBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetLogArray() { return __p.__vector_as_array<byte>(4); }
 
   public static Offset<BocchiTracker.ProcessLinkQuery.Queries.LogData> CreateLogData(FlatBufferBuilder builder,
-      VectorOffset logOffset = default(VectorOffset)) {
+      StringOffset logOffset = default(StringOffset)) {
     builder.StartTable(1);
     LogData.AddLog(builder, logOffset);
     return LogData.EndLogData(builder);
   }
 
   public static void StartLogData(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddLog(FlatBufferBuilder builder, VectorOffset logOffset) { builder.AddOffset(0, logOffset.Value, 0); }
-  public static VectorOffset CreateLogVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateLogVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateLogVectorBlock(FlatBufferBuilder builder, ArraySegment<StringOffset> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateLogVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<StringOffset>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartLogVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddLog(FlatBufferBuilder builder, StringOffset logOffset) { builder.AddOffset(0, logOffset.Value, 0); }
   public static Offset<BocchiTracker.ProcessLinkQuery.Queries.LogData> EndLogData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<BocchiTracker.ProcessLinkQuery.Queries.LogData>(o);
@@ -48,7 +48,7 @@ static public class LogDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfStrings(tablePos, 4 /*Log*/, false)
+      && verifier.VerifyString(tablePos, 4 /*Log*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

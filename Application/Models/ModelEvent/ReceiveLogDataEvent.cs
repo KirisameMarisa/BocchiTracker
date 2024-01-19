@@ -9,9 +9,9 @@ namespace BocchiTracker.ModelEvent
 {
     public class ReceiveLogDataEventParameter
     {
-        public List<string> Log { get; set; }
+        public string Log { get; set; }
 
-        public ReceiveLogDataEventParameter(List<string> inLog)
+        public ReceiveLogDataEventParameter(string inLog)
         {
             Log = inLog;
         }

@@ -108,7 +108,7 @@
       "type" : "object",
       "properties" : {
         "log" : {
-                "type" : "array", "items" : {"type" : "string"}
+                "type" : "string"
               }
       },
       "additionalProperties" : false
