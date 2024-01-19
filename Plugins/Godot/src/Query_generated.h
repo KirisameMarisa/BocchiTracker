@@ -578,14 +578,13 @@ struct LogData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_LOG = 4
   };
-  const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *log() const {
-    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *>(VT_LOG);
+  const ::flatbuffers::String *log() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_LOG);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_LOG) &&
-           verifier.VerifyVector(log()) &&
-           verifier.VerifyVectorOfStrings(log()) &&
+           verifier.VerifyString(log()) &&
            verifier.EndTable();
   }
 };
@@ -594,7 +593,7 @@ struct LogDataBuilder {
   typedef LogData Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_log(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> log) {
+  void add_log(::flatbuffers::Offset<::flatbuffers::String> log) {
     fbb_.AddOffset(LogData::VT_LOG, log);
   }
   explicit LogDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
@@ -610,7 +609,7 @@ struct LogDataBuilder {
 
 inline ::flatbuffers::Offset<LogData> CreateLogData(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> log = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> log = 0) {
   LogDataBuilder builder_(_fbb);
   builder_.add_log(log);
   return builder_.Finish();
@@ -618,8 +617,8 @@ inline ::flatbuffers::Offset<LogData> CreateLogData(
 
 inline ::flatbuffers::Offset<LogData> CreateLogDataDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<::flatbuffers::Offset<::flatbuffers::String>> *log = nullptr) {
-  auto log__ = log ? _fbb.CreateVector<::flatbuffers::Offset<::flatbuffers::String>>(*log) : 0;
+    const char *log = nullptr) {
+  auto log__ = log ? _fbb.CreateString(log) : 0;
   return BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(
       _fbb,
       log__);

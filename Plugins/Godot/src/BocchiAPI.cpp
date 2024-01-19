@@ -168,21 +168,12 @@ PackedByteArray BocchiAPI::create_screenshot_data(uint32_t inWidth, uint32_t inH
     return finalPacketData;
 }
 
-PackedByteArray BocchiAPI::create_log_data(const Array& inData)
+PackedByteArray BocchiAPI::create_log_data(const String& inData)
 {
     flatbuffers::FlatBufferBuilder builder;
 
     // Create ScreenshotData object
-    std::vector<flatbuffers::Offset<flatbuffers::String>> logOffsets;
-    for (int i = 0; i < inData.size(); ++i) {
-        Variant element = inData[i];
-        if (element.get_type() == Variant::Type::STRING) {
-            logOffsets.push_back(builder.CreateString(GODOT_TO_STD_STRING(element.operator String())));
-        } else {
-            // Handle non-string elements in the array (if needed)
-        }
-    }
-    auto dataOffset = BocchiTracker::ProcessLinkQuery::Queries::CreateLogData(builder, builder.CreateVector(logOffsets));
+    auto dataOffset = builder.CreateString(GODOT_TO_STD_STRING(inData));
 
     // Create Packet object
     auto packet = BocchiTracker::ProcessLinkQuery::Queries::CreatePacket(
