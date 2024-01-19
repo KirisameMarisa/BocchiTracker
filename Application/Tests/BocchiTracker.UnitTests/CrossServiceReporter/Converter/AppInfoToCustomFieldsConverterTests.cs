@@ -42,7 +42,7 @@ namespace BocchiTracker.Tests.CrossServiceReporter.Converter
             var customFields = converter.Convert(appBundle);
 
             // Assert
-            Assert.Equal(7, customFields.Count()); // 3 つのカスタムフィールドが期待される
+            Assert.Equal(8, customFields.Count()); // 3 つのカスタムフィールドが期待される
 
             // Version フィールドのチェック
             Assert.True(customFields.ContainsKey("AppBasicInfo.pid"));
