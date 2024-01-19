@@ -11,29 +11,29 @@ namespace BocchiTracker
     {
         private readonly int LOG_MAX_BUFFER = 256;
         private int bufferID = 0;
-        private List<List<string>> logBuffer;
+        private List<string> logBuffer;
 
         public BocchiTrackerLogHook() 
         {
             Application.logMessageReceived += OnRecived;
-            this.logBuffer = new List<List<string>> { new List<string>(), new List<string>() };
+            this.logBuffer = new List<string> { "", "" };
         }
 
         private void OnRecived(string logText, string stackTrace, LogType type)
         {
-            this.logBuffer[bufferID].Add(logText);
+            this.logBuffer[bufferID] += logText + "\n";
         }
 
-        public bool GetLogBuffer(out List<string> outMessages)
+        public bool GetLogBuffer(out string outMessages)
         {
             //!< 閾値を超えた
             outMessages = null;
-            if (this.logBuffer[bufferID].Count > LOG_MAX_BUFFER)
+            if (this.logBuffer[bufferID].Length > LOG_MAX_BUFFER)
             {
-                outMessages = this.logBuffer[bufferID].ToList();
+                outMessages = this.logBuffer[bufferID];
                 int previous_id = bufferID;
                 Interlocked.Exchange(ref bufferID, (bufferID + 1) % 2);
-                this.logBuffer[previous_id].Clear();
+                this.logBuffer[previous_id] = "";
                 return true;
             }
             return false;

@@ -135,7 +135,7 @@ namespace BocchiTracker
 
         private void ProcessSendLogMessage()
         {
-            List<string> message;
+            string message;
             if(logHook.GetLogBuffer(out message))
             {
                 var logDataPacket = CreatePacketHelper.CreateLogData(message);

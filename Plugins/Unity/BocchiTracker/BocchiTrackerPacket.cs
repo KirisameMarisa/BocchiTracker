@@ -114,17 +114,12 @@ namespace BocchiTracker
             return finalPacketData;
         }
 
-        public static List<byte> CreateLogData(List<string> inLog)
+        public static List<byte> CreateLogData(string inLog)
         {
             var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 
             // Create ScreenshotData object
-            var logOffsets = new StringOffset[inLog.Count];
-            for (int i = 0; i < inLog.Count; i++)
-            {
-                logOffsets[i] = builder.CreateString(inLog[i]);
-            }
-            var dataOffset = LogData.CreateLogVector(builder, logOffsets);
+            var dataOffset = builder.CreateString(inLog);
             var logdata = LogData.CreateLogData(builder, dataOffset);
 
             // Create Packet object
