@@ -41,6 +41,7 @@ public class BocchiTracker : ModuleRules
 				"SlateCore",
 				"Sockets",
                 "Networking",
+				"MessageLog",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

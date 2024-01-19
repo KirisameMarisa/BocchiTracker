@@ -36,6 +36,10 @@ private:
 
     void ProcessSendScreenshot();
 
+    void ProcessSendLogData();
+
+    void ProcessRevicePacket();
+
 public:
     UFUNCTION(BlueprintCallable, Category="BocchiTracker")
     void SetPlayerPosition(const FVector& InTrackedPosition, const FString& InStage);

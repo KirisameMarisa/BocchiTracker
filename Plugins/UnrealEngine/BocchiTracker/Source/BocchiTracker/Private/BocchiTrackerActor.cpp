@@ -2,18 +2,24 @@
 #include "BocchiTrackerSettings.h"
 #include "BocchiTrackerTcpSocket.h"
 #include "BocchiTrackerPacket.h"
+#include "BocchiTrackerOutputDevice.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "Engine/GameViewportClient.h"
+
 #include "IImageWrapper.h"
 #include "Async/TaskGraphInterfaces.h"
 
 #include "flatbuffers/flatbuffers.h"
 #include "Query_generated.h"
 
+FBocchiTrackerOutputDevice gBocchiTrackerOutputDevice;
+
 ABocchiTrackerActor::ABocchiTrackerActor() 
 {
+    FOutputDeviceRedirector::Get()->AddOutputDevice(&gBocchiTrackerOutputDevice);
+
     PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -30,6 +36,7 @@ void ABocchiTrackerActor::BeginPlay()
         Socket = MakeUnique<FBocchiTrackerTcpSocket>();
         Socket->CreateSocket(Settings->IPAddress, Settings->Port, ReciveDelegate);
     }
+
     bSentAppBasicInfo = false;
 }
 
@@ -37,41 +44,18 @@ void ABocchiTrackerActor::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 
-    if(Socket->IsConnect())
+    if(!Socket->IsConnect())
     {
-        ProcessSendAppBasicInfo();
-
-        ProcessSendPlayerPosition();
-       
-        TArray<uint8> outPacket;
-        if(PendingProcessRequest.Dequeue(outPacket))
-        {
-            const BocchiTracker::ProcessLinkQuery::Queries::Packet* packet 
-                = BocchiTracker::ProcessLinkQuery::Queries::GetPacket(outPacket.GetData());
-            
-            switch (packet->query_id_type())
-            {
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_ScreenshotRequest:
-                    ProcessSendScreenshot(); break;
-                
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_IssueesRequest:
-                    break;
-
-                case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_JumpRequest:
-                    {
-                        const BocchiTracker::ProcessLinkQuery::Queries::JumpRequest* jumpRequest = packet->query_id_as_JumpRequest();
-                        BocchiTrackerLocation data;
-                        data.Location = FVector(jumpRequest->location()->x(), jumpRequest->location()->y(), jumpRequest->location()->z());
-                        data.Stage = FString(jumpRequest->stage()->c_str());  
-                        PendingJumpRequest.Enqueue(data);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        return;
     }
+
+    ProcessSendAppBasicInfo();
+
+    ProcessSendPlayerPosition();
+
+    ProcessSendLogData();
+    
+    ProcessRevicePacket();
 }
 
 void ABocchiTrackerActor::OnReciveData(TArray<uint8> inData)
@@ -131,6 +115,48 @@ void ABocchiTrackerActor::ProcessSendScreenshot()
 
     auto ScreenshotDataPacket = CreatePacketHelper::CreateScreenshotData(ViewportSize.X, ViewportSize.Y, ScreenshotData);
     Socket->AddSendData(ScreenshotDataPacket);
+}
+
+void ABocchiTrackerActor::ProcessSendLogData()
+{
+    FString outMessage;
+    if(gBocchiTrackerOutputDevice.GetLog(outMessage))
+    {
+        auto logDataPacket = CreatePacketHelper::CreateLogData(outMessage);
+        Socket->AddSendData(logDataPacket);
+    }
+}
+
+void ABocchiTrackerActor::ProcessRevicePacket()
+{
+    TArray<uint8> outPacket;
+    if(PendingProcessRequest.Dequeue(outPacket))
+    {
+        const BocchiTracker::ProcessLinkQuery::Queries::Packet* packet 
+            = BocchiTracker::ProcessLinkQuery::Queries::GetPacket(outPacket.GetData());
+        
+        switch (packet->query_id_type())
+        {
+            case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_ScreenshotRequest:
+                ProcessSendScreenshot(); break;
+            
+            case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_IssueesRequest:
+                break;
+
+            case BocchiTracker::ProcessLinkQuery::Queries::QueryID::QueryID_JumpRequest:
+                {
+                    const BocchiTracker::ProcessLinkQuery::Queries::JumpRequest* jumpRequest = packet->query_id_as_JumpRequest();
+                    BocchiTrackerLocation data;
+                    data.Location = FVector(jumpRequest->location()->x(), jumpRequest->location()->y(), jumpRequest->location()->z());
+                    data.Stage = FString(jumpRequest->stage()->c_str());  
+                    PendingJumpRequest.Enqueue(data);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
 }
 
 void ABocchiTrackerActor::SetPlayerPosition(const FVector &InTrackedPosition, const FString &InStage)

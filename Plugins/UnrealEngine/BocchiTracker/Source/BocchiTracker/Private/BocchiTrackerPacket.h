@@ -11,4 +11,6 @@ public:
     static TArray<uint8> CreateApplicationBsicInformation();
 
     static TArray<uint8> CreateScreenshotData(int inWidth, int inHeight, const TArray<uint8>& inData);
+
+    static TArray<uint8> CreateLogData(const FString& inData);
 };
