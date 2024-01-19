@@ -68,6 +68,8 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Log
         {
             if (_filename_generator == null) { return; }
 
+            if(!File.Exists(inAppStatusBundle.AppBasicInfo.LogFilepath)) { return; }
+
             if (!_save_process_map.ContainsKey(inAppStatusBundle.AppBasicInfo.ClientID))
             {
                 _save_process_map.Add(
