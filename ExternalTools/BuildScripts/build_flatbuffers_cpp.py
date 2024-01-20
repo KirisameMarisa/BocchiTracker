@@ -28,8 +28,8 @@ def Build():
 
 def RunMsBuild():
     subprocess.call(["cmake", "-G", "Visual Studio 17", "-DCMAKE_BUILD_TYPE=Release"], cwd=config.cFlatBuffersPath)
-    subprocess.call(["msbuild", config.cFlatBuffersPath / "FlatBuffers.sln", "-t:flatbuffers", "/p:Configuration=Release"], cwd=config.cFlatBuffersPath)
-    subprocess.call(["msbuild", config.cFlatBuffersPath / "FlatBuffers.sln", "-t:flatc", "/p:Configuration=Release"], cwd=config.cFlatBuffersPath)
+    subprocess.call(["msbuild", "FlatBuffers.sln", "-t:flatbuffers", "/p:Configuration=Release"], cwd=config.cFlatBuffersPath)
+    subprocess.call(["msbuild", "FlatBuffers.sln", "-t:flatc", "/p:Configuration=Release"], cwd=config.cFlatBuffersPath)
     
 def RunUnix():
     subprocess.call(["cmake", "-G", "Unix Makefiles", "-DCMAKE_BUILD_TYPE=Release"], cwd=config.cFlatBuffersPath)
