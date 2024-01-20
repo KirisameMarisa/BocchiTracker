@@ -23,7 +23,7 @@ def Build():
         release_lib_path = config.cFlatBuffersPath / "build" / "lib"
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Unix" / "Release"
 
-    unreal_engine_lib_path.resolve().mkdir(exist_ok=True)
+    unreal_engine_lib_path.resolve().mkdir(exist_ok=True, parents=True)
     shutil.copytree(release_lib_path.resolve(), unreal_engine_lib_path.resolve(), dirs_exist_ok=True)
 
 def RunMsBuild():
