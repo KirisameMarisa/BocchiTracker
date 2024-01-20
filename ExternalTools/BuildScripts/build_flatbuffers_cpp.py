@@ -20,7 +20,7 @@ def Build():
         release_lib_path = config.cFlatBuffersPath / "Release" / "flatbuffers.lib"
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Win64" / "Release"
     else:
-        release_lib_path = config.cFlatBuffersPath / "libflatbuffers,a"
+        release_lib_path = config.cFlatBuffersPath / "libflatbuffers.a"
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Unix" / "Release"
 
     unreal_engine_lib_path.resolve().mkdir(exist_ok=True, parents=True)
