@@ -46,6 +46,10 @@ jobs:
         if: runner.os == 'Windows'
         run: |
             choco install cmake
+
+      - name: Add msbuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.1
                     
       - name: setup python
         uses: actions/setup-python@v4
