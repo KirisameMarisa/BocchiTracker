@@ -59,7 +59,7 @@ Currently supported upload service include:
 - Add to feature file upload functionality.
   - Dropbox
   - Explorer (Your file servers)
-- [Assist in traking issues](https://github.com/KirisameMarisa/BocchiTracker/milestone/2)
+- Add to feature game play capture functionality.
 
 ## Getting Started
 
@@ -72,6 +72,13 @@ Currently supported upload service include:
 4. Read UserGuide - [JP](/Documents/JP/UserGuide.md)/[EN](/Documents/EN/UserGuide.md)
 
 ## How to build?
+
+#### Require
+
+* cmake ( for flatbuffer )
+* set path msbuild ( only windows )
+* python
+  * pip install scons ( for Godot )
 
 #### BocchiTracker(WPF) Build
 
@@ -97,14 +104,12 @@ Currently supported upload service include:
     - Enter directory path of Unity dll 
 2. Run `dotnet build Plugins\Unity\BocchiTracker\BocchiTracker.sln`
 
+#### Godot Build
+
+※ Required flatbuffers build and sons
+
+1. Run `python ExternalTools\BuildScripts\build_godot.py`
+
 ## Problems? 
 
 If you encounter any issues, have feature requests, or wish to provide feedback, please feel free to create issues
-
-If you want to communicate a problem directly with me, you can join Discord. Please feel free to ask!
-
-- Discord: [Join our Discord server](https://join.slack.com/t/bocchitracker/shared_invite/zt-20lzjarua-cmYTqEiBiCSFp_A1cq36Qg)
-
----
-
-[License](LICENCE.txt)
