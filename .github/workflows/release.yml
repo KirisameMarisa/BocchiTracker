@@ -43,7 +43,24 @@ jobs:
             echo "Unsupported operating system"
             exit 1
           fi
+          
+      - name: Install cmake on ubuntu-latest
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt update -y
+            sudo apt install -y cmake
 
+      - name: Install cmake on macos-latest
+        if: runner.os == 'macOS'
+        run: |
+            brew update
+            brew install cmake
+
+      - name: Install cmake on windows-latest
+        if: runner.os == 'Windows'
+        run: |
+            choco install cmake
+                    
       - name: setup python
         uses: actions/setup-python@v4
         with:
