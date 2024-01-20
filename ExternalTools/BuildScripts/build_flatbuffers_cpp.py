@@ -16,12 +16,13 @@ def Build():
     unreal_engine_include_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "include"
     shutil.copytree(include_path, unreal_engine_include_path.resolve(), dirs_exist_ok=True)
 
-    release_lib_path = config.cFlatBuffersPath / "Release"
     if platform.system() == "Windows":
+        release_lib_path = config.cFlatBuffersPath / "Release"
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Win64" / "Release"
     else:
+        release_lib_path = config.cFlatBuffersPath / "build" / "lib"
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Unix" / "Release"
-        
+
     unreal_engine_lib_path.resolve().mkdir(exist_ok=True)
     shutil.copytree(release_lib_path.resolve(), unreal_engine_lib_path.resolve(), dirs_exist_ok=True)
 
