@@ -24,7 +24,7 @@ def Build():
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Unix" / "Release"
 
     unreal_engine_lib_path.resolve().mkdir(exist_ok=True, parents=True)
-    shutil.copy(release_lib_path.resolve(), unreal_engine_lib_path.resolve(), dirs_exist_ok=True)
+    shutil.copy(release_lib_path.resolve(), unreal_engine_lib_path.resolve())
 
 def RunMsBuild():
     subprocess.call(["cmake", "-G", "Visual Studio 17", "-DCMAKE_BUILD_TYPE=Release"], cwd=config.cFlatBuffersPath)
