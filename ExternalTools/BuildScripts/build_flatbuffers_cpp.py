@@ -21,6 +21,8 @@ def Build():
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Win64" / "Release"
     else:
         unreal_engine_lib_path = config.cUnrealEnginePath / "ThirdParty" / "flatbuffers" / "lib" / "Unix" / "Release"
+        
+    unreal_engine_lib_path.resolve().mkdir(exist_ok=True)
     shutil.copytree(release_lib_path.resolve(), unreal_engine_lib_path.resolve(), dirs_exist_ok=True)
 
 def RunMsBuild():
