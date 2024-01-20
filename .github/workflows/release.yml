@@ -29,12 +29,28 @@ jobs:
 
       - name: Checkout submodules
         run: git submodule update --init --recursive
-
-      - name: Install CMake
+          
+      - name: Install cmake on ubuntu-latest
+        if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
+            sudo apt update -y
+            sudo apt install -y cmake
 
+      - name: Install cmake on macos-latest
+        if: runner.os == 'macOS'
+        run: |
+            brew update
+            brew install cmake
+
+      - name: Install cmake on windows-latest
+        if: runner.os == 'Windows'
+        run: |
+            choco install cmake
+
+      - name: Add msbuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.1
+                    
       - name: setup python
         uses: actions/setup-python@v4
         with:
