@@ -14,14 +14,10 @@ public class flatbuffers : ModuleRules
 		{
 			PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Win64", "Release", "flatbuffers.lib"));
 		}
-		// else if (Target.Platform == UnrealTargetPlatform.Mac)
-		// {
-		// 	PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Mac", "Release", "libzip.a"));
-		// }
-		// else if (Target.IsInPlatformGroup(UnrealPlatformGroup.Unix))
-		// {
-		// 	PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Unix", Target.Architecture.LinuxName, "Release", "libzip.a"));
-		// }
+		else if (Target.IsInPlatformGroup(UnrealPlatformGroup.Unix))
+		{
+			PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Unix", "Release", "libzip.a"));
+		}
 	}
 }
 

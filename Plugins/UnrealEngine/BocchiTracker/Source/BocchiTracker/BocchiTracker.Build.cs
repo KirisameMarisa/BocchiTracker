@@ -61,13 +61,9 @@ public class BocchiTracker : ModuleRules
 		{
 			PublicAdditionalLibraries.Add(Path.Combine(ThirdPartyPath, "flatbuffers", "lib", "Win64", "Release", "flatbuffers.lib"));
 		}
-		// else if (Target.Platform == UnrealTargetPlatform.Mac)
-		// {
-		// 	PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Mac", "Release", "flatbuffers.a"));
-		// }
-		// else if (Target.IsInPlatformGroup(UnrealPlatformGroup.Unix))
-		// {
-		// 	PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "Unix", Target.Architecture.LinuxName, "Release", "flatbuffers.a"));
-		// }
+		else if (Target.IsInPlatformGroup(UnrealPlatformGroup.Unix))
+		{
+			PublicAdditionalLibraries.Add(Path.Combine(ThirdPartyPath, "flatbuffers", "lib", "Unix", "Release", "libzip.a"));
+		}
 	}
 }
