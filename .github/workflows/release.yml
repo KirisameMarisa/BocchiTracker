@@ -11,6 +11,38 @@ permissions:
   contents: read
 
 jobs:
+  unity-build:
+    permissions:
+      contents: write
+      pull-requests: write
+
+    runs-on: windows-latest
+
+    steps:
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build flatbuffers
+        run: python ExternalTools/BuildScripts/build_flatbuffers_csharp.py
+
+      - name: Setup unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: Plugins/Unity/project
+          buildMethod: GenUnityPackage.Export
+      
+      - name: Upload Artifact Unity
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact-Unity-Plugin
+          path: Plugins/Unity/Artifact
+          
   upload-plugins-artifact:
     permissions:
       contents: write
