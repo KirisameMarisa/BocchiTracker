@@ -125,7 +125,7 @@ jobs:
           path: Application/WPF/Artifact/Release/net7.0-windows
 
   create_draft_release:
-    needs: [upload-app-artifact]
+    needs: [upload-app-artifact, upload-plugins-artifact]
     permissions:
       contents: write
       pull-requests: write
