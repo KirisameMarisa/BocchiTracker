@@ -139,7 +139,7 @@ jobs:
           path: Artifacts
           pattern: Artifact-*
       
-      - run: ls -R my-artifact
+      - run: ls -R Artifacts
 
       # - name: Delete drafts
       #   uses: hugo19941994/delete-draft-releases@v1.0.0
