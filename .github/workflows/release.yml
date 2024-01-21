@@ -11,72 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  upload-plugins-artifact:
-    permissions:
-      contents: write
-      pull-requests: write
-    
-    strategy:
-      matrix:
-        runs-on: [windows-latest,  macos-latest, ubuntu-latest, ]
-    runs-on: ${{ matrix.runs-on }}
-
-    env:
-      Builder: 1
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
-          
-      - name: Install cmake on ubuntu-latest
-        if: runner.os == 'Linux'
-        run: |
-            sudo apt update -y
-            sudo apt install -y cmake
-
-      - name: Install cmake on macos-latest
-        if: runner.os == 'macOS'
-        run: |
-            brew update
-            brew install cmake
-
-      - name: Install cmake on windows-latest
-        if: runner.os == 'Windows'
-        run: |
-            choco install cmake
-
-      - name: Add msbuild to PATH
-        if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.1
-                    
-      - name: setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - run: pip install SCons
-      
-      - name: Build flatbuffers
-        run: python ExternalTools/BuildScripts/build_flatbuffers.py
-
-      - name: Build Godot
-        run: python ExternalTools/BuildScripts/build_godot.py
-
-      - name: Upload Artifact Godot
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifact-Godot-Plugin
-          path: Plugins/Godot/project/addons
-
-      - name: Upload Artifact UnrealEngine
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifact-UnrealEngine-Plugin
-          path: Plugins/UnrealEngine
-
-  upload-app-artifact:
+  unity-build:
     permissions:
       contents: write
       pull-requests: write
@@ -84,22 +19,129 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        
+      - uses: actions/checkout@v3
+      
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
           
-      - name: Build C# application
-        run: dotnet build Application/BocchiTracker.WPF.sln -c Release
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-      - name: Upload Artifact Application
+      - name: Build flatbuffers
+        run: python ExternalTools/BuildScripts/build_flatbuffers_csharp.py
+
+      - name: Setup unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: Plugins/Unity/project
+          buildMethod: GenUnityPackage.Export
+      
+      - name: Upload Artifact Unity
         uses: actions/upload-artifact@v3
         with:
-          name: Artifact-BocchiTracker
-          path: Application/WPF/Artifact/Release/net7.0-windows
+          name: Artifact-Unity-Plugin
+          path: Plugins/Unity/Artifact
+          
+  # upload-plugins-artifact:
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+    
+  #   strategy:
+  #     matrix:
+  #       runs-on: [windows-latest,  macos-latest, ubuntu-latest, ]
+  #   runs-on: ${{ matrix.runs-on }}
+
+  #   env:
+  #     Builder: 1
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Checkout submodules
+  #       run: git submodule update --init --recursive
+          
+  #     - name: Install cmake on ubuntu-latest
+  #       if: runner.os == 'Linux'
+  #       run: |
+  #           sudo apt update -y
+  #           sudo apt install -y cmake
+
+  #     - name: Install cmake on macos-latest
+  #       if: runner.os == 'macOS'
+  #       run: |
+  #           brew update
+  #           brew install cmake
+
+  #     - name: Install cmake on windows-latest
+  #       if: runner.os == 'Windows'
+  #       run: |
+  #           choco install cmake
+
+  #     - name: Add msbuild to PATH
+  #       if: runner.os == 'Windows'
+  #       uses: microsoft/setup-msbuild@v1.1
+                    
+  #     - name: setup python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.10'
+
+  #     - run: pip install SCons
+      
+  #     - name: Build flatbuffers
+  #       run: python ExternalTools/BuildScripts/build_flatbuffers.py
+
+  #     - name: Build Godot
+  #       run: python ExternalTools/BuildScripts/build_godot.py
+
+  #     - name: Upload Artifact Godot
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Artifact-Godot-Plugin
+  #         path: Plugins/Godot/project/addons
+
+  #     - name: Upload Artifact UnrealEngine
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Artifact-UnrealEngine-Plugin
+  #         path: Plugins/UnrealEngine
+
+  # upload-app-artifact:
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+
+  #   runs-on: windows-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+        
+  #     - name: Set up .NET Core
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: 7.0.x
+          
+  #     - name: Build C# application
+  #       run: dotnet build Application/BocchiTracker.WPF.sln -c Release
+
+  #     - name: Upload Artifact Application
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Artifact-BocchiTracker
+  #         path: Application/WPF/Artifact/Release/net7.0-windows
 
   # create_draft_release:
   #   permissions:
