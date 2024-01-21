@@ -13,10 +13,8 @@ def Build():
 
     print("Copying flatbuffers to Unity directory...")
     artifact = config.cFlatBuffersPath / "net" / "FlatBuffers" / "bin" / "Release" / "netstandard2.1"
-    unity_thirdparty_path = config.cUnityPath / "ThirdParty" / "flatbuffers"
-    unity_plugin_artifact_path = config.cUnityPath / "Artifact"
-    shutil.copytree(artifact, unity_thirdparty_path.resolve(), dirs_exist_ok=True)
-    shutil.copytree(artifact, unity_plugin_artifact_path.resolve(), dirs_exist_ok=True)
+    unity_external_packages_path = config.cUnityPath / "ThirdParty" / "flatbuffers"
+    shutil.copytree(artifact, unity_external_packages_path.resolve(), dirs_exist_ok=True)
 
 if __name__ == '__main__':
     Build()
