@@ -175,16 +175,16 @@ jobs:
         id: create_draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+                
       - name: Archive Application
-        run: Compress-Archive -Path "./Artifacts/Artifact-BocchiTracker" -DestinationPath "BocchiTracker.zip"
+        run: zip -r BocchiTracker.zip ./Artifacts/Artifact-BocchiTracker
       
       - name: Archive UnrealEngine plugin
-        run: Compress-Archive -Path "./Artifacts/Artifact-UnrealEngine-Plugin" -DestinationPath "UnrealEngine.zip"
-
+        run: zip -r UnrealEngine.zip ./Artifacts/Artifact-UnrealEngine-Plugin
+      
       - name: Archive Godot plugin
-        run: Compress-Archive -Path "./Artifacts/Artifact-Godot-Plugin" -DestinationPath "Godot.zip"
-        
+        run: zip -r Godot.zip ./Artifacts/Artifact-Godot-Plugin
+  
       - name: Upload Application 
         uses: actions/upload-release-asset@v1
         env:
