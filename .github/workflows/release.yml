@@ -177,13 +177,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Archive Application
-        run: Compress-Archive -Path "Artifacts/Artifact-BocchiTracker" -DestinationPath "BocchiTracker.zip"
+        run: Compress-Archive -Path "./Artifacts/Artifact-BocchiTracker" -DestinationPath "BocchiTracker.zip"
       
       - name: Archive UnrealEngine plugin
-        run: Compress-Archive -Path "Artifacts/Artifact-UnrealEngine-Plugin" -DestinationPath "UnrealEngine.zip"
+        run: Compress-Archive -Path "./Artifacts/Artifact-UnrealEngine-Plugin" -DestinationPath "UnrealEngine.zip"
 
       - name: Archive Godot plugin
-        run: Compress-Archive -Path "Artifact-Godot-Plugin" -DestinationPath "Godot.zip"
+        run: Compress-Archive -Path "./Artifacts/Artifact-Godot-Plugin" -DestinationPath "Godot.zip"
         
       - name: Upload Application 
         uses: actions/upload-release-asset@v1
@@ -205,17 +205,17 @@ jobs:
           asset_name: UnrealEngine.zip
           asset_content_type: application/zip
 
-      - name: Upload Unity plugin
+      - name: Upload Godot plugin
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_draft.outputs.upload_url }} 
-          asset_path: ./Unity.zip
-          asset_name: Unity.zip
+          asset_path: ./Godot.zip
+          asset_name: Godot.zip
           asset_content_type: application/zip
 
-      - name: Upload Godot plugin
+      - name: Upload Unity plugin
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
