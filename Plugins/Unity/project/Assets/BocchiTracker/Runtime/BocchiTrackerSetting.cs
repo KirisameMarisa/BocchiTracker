@@ -9,7 +9,7 @@ namespace BocchiTracker
     {
         [Header("Settings")]
         [SerializeField]
-        private string serverAddress = "";
+        private string serverAddress = "127.0.0.1";
         public string ServerAddress => serverAddress;
 
         [SerializeField]
