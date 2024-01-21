@@ -11,93 +11,93 @@ permissions:
   contents: read
 
 jobs:          
-  # upload-plugins-artifact:
-  #   permissions:
-  #     contents: write
-  #     pull-requests: write
+  upload-plugins-artifact:
+    permissions:
+      contents: write
+      pull-requests: write
     
-  #   strategy:
-  #     matrix:
-  #       runs-on: [windows-latest,  macos-latest, ubuntu-latest, ]
-  #   runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        runs-on: [windows-latest,  macos-latest, ubuntu-latest, ]
+    runs-on: ${{ matrix.runs-on }}
 
-  #   env:
-  #     Builder: 1
+    env:
+      Builder: 1
 
-  #   steps:
-  #     - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Checkout submodules
-  #       run: git submodule update --init --recursive
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
       
-  #     - name: setup python
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: '3.10'
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-  #     - run: pip install SCons
+      - run: pip install SCons
 
-  #     - name: Set up .NET Core
-  #       if: runner.os == 'Linux'
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: 7.0.x
+      - name: Set up .NET Core
+        if: runner.os == 'Linux'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
 
-  #     - name: Install cmake on ubuntu-latest
-  #       if: runner.os == 'Linux'
-  #       run: |
-  #           sudo apt update -y
-  #           sudo apt install -y cmake
+      - name: Install cmake on ubuntu-latest
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt update -y
+            sudo apt install -y cmake
 
-  #     - name: Install cmake on macos-latest
-  #       if: runner.os == 'macOS'
-  #       run: |
-  #           brew update
-  #           brew install cmake
+      - name: Install cmake on macos-latest
+        if: runner.os == 'macOS'
+        run: |
+            brew update
+            brew install cmake
 
-  #     - name: Install cmake on windows-latest
-  #       if: runner.os == 'Windows'
-  #       run: |
-  #           choco install cmake
+      - name: Install cmake on windows-latest
+        if: runner.os == 'Windows'
+        run: |
+            choco install cmake
 
-  #     - name: Add msbuild to PATH
-  #       if: runner.os == 'Windows'
-  #       uses: microsoft/setup-msbuild@v1.1
+      - name: Add msbuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.1
       
-  #     - name: Build flatbuffers
-  #       run: python ExternalTools/BuildScripts/build_flatbuffers.py
+      - name: Build flatbuffers
+        run: python ExternalTools/BuildScripts/build_flatbuffers.py
 
-  #     - name: Build Godot
-  #       run: python ExternalTools/BuildScripts/build_godot.py
+      - name: Build Godot
+        run: python ExternalTools/BuildScripts/build_godot.py
 
-  #     - name: Build unity
-  #       if: runner.os == 'Linux'
-  #       uses: game-ci/unity-builder@v4
-  #       env:
-  #         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  #       with:
-  #         projectPath: Plugins/Unity/project
-  #         buildMethod: GenUnityPackage.Export
+      - name: Build unity
+        if: runner.os == 'Linux'
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: Plugins/Unity/project
+          buildMethod: GenUnityPackage.Export
       
-  #     - name: Upload Artifact Unity
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Artifact-Unity-Plugin
-  #         path: Plugins/Unity/Artifact
+      - name: Upload Artifact Unity
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact-Unity-Plugin
+          path: Plugins/Unity/Artifact
 
-  #     - name: Upload Artifact Godot
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Artifact-Godot-Plugin
-  #         path: Plugins/Godot/project/addons
+      - name: Upload Artifact Godot
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact-Godot-Plugin
+          path: Plugins/Godot/project/addons
 
-  #     - name: Upload Artifact UnrealEngine
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Artifact-UnrealEngine-Plugin
-  #         path: Plugins/UnrealEngine
+      - name: Upload Artifact UnrealEngine
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact-UnrealEngine-Plugin
+          path: Plugins/UnrealEngine
 
   upload-app-artifact:
     permissions:
@@ -140,64 +140,62 @@ jobs:
           pattern: Artifact-*
           merge-multiple: true
       
-      - run: ls -R Artifacts
-
-      # - name: Delete drafts
-      #   uses: hugo19941994/delete-draft-releases@v1.0.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete drafts
+        uses: hugo19941994/delete-draft-releases@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      # - name: Create release draft
-      #   uses: release-drafter/release-drafter@v5
-      #   id: create_draft
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Archive UnrealEngine plugin
-      #   run: Compress-Archive -Path "Plugins/UnrealEngine" -DestinationPath "UnrealEngine.zip"
-
-      # - name: Archive Unity plugin
-      #   run: Compress-Archive -Path "Plugins/Unity" -DestinationPath "Unity.zip"
-
-      # - name: Archive Godot plugin
-      #   run: Compress-Archive -Path "Plugins/Godot" -DestinationPath "Godot.zip"
-
-      # - name: Upload Application 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_draft.outputs.upload_url }} 
-      #     asset_path: ./BocchiTracker.zip
-      #     asset_name: BocchiTracker.zip
-      #     asset_content_type: application/zip
+      - name: Create release draft
+        uses: release-drafter/release-drafter@v5
+        id: create_draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      # - name: Upload UnrealEngine plugin 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_draft.outputs.upload_url }} 
-      #     asset_path: ./UnrealEngine.zip
-      #     asset_name: UnrealEngine.zip
-      #     asset_content_type: application/zip
+      - name: Archive Application
+        run: Compress-Archive -Path "Artifacts/Artifact-BocchiTracker" -DestinationPath "BocchiTracker.zip"
+      
+      - name: Archive UnrealEngine plugin
+        run: Compress-Archive -Path "Artifacts/Artifact-UnrealEngine-Plugin" -DestinationPath "UnrealEngine.zip"
 
-      # - name: Upload Unity plugin
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_draft.outputs.upload_url }} 
-      #     asset_path: ./Unity.zip
-      #     asset_name: Unity.zip
-      #     asset_content_type: application/zip
+      - name: Archive Godot plugin
+        run: Compress-Archive -Path "Artifact-Godot-Plugin" -DestinationPath "Godot.zip"
+        
+      - name: Upload Application 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./BocchiTracker.zip
+          asset_name: BocchiTracker.zip
+          asset_content_type: application/zip 
+          
+      - name: Upload UnrealEngine plugin 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./UnrealEngine.zip
+          asset_name: UnrealEngine.zip
+          asset_content_type: application/zip
 
-      # - name: Upload Godot plugin
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_draft.outputs.upload_url }} 
-      #     asset_path: ./Godot.zip
-      #     asset_name: Godot.zip
-      #     asset_content_type: application/zip
+      - name: Upload Unity plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./Unity.zip
+          asset_name: Unity.zip
+          asset_content_type: application/zip
+
+      - name: Upload Godot plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft.outputs.upload_url }} 
+          asset_path: ./Artifacts/Artifact-Unity-Plugin/BocchiTracker.unitypackage
+          asset_name: BocchiTracker.unitypackage
+          asset_content_type: application/zip
