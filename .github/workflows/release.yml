@@ -138,6 +138,7 @@ jobs:
         with:
           path: Artifacts
           pattern: Artifact-*
+          merge-multiple: true
       
       - run: ls -R Artifacts
 
