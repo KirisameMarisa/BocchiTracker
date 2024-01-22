@@ -75,18 +75,20 @@ Currently supported upload service include:
 
 #### Require
 
-* cmake ( for flatbuffer )
-* set path msbuild ( only windows )
-* python
-  * pip install scons ( for Godot )
-
+* cmake (for flatbuffer)
+* dotnet
+* Set the PATH for msbuild (Windows only)
+* Python
+  * Install SCons using pip (for Godot)
+* Unity (to export as .unitypackage)
+  
 #### BocchiTracker(WPF) Build
 
 1. Run `dotnet build Application/BocchiTracker.WPF.sln`
 
 #### flatbuffers Build
 
-1. Run `python ExternalTools\BuildScripts\build_flatbuffers.py`
+1. Run `python ExternalTools/BuildScripts/build_flatbuffers.py`
 
 #### UE Build
 
@@ -100,13 +102,13 @@ Currently supported upload service include:
 
 ※ Required flatbuffers build
 
-1. Run `Plugins\Unity\ThirdParty\Unity\Setup.bat`
-    - Enter directory path of Unity dll 
-2. Run `dotnet build Plugins\Unity\BocchiTracker\BocchiTracker.sln`
+1. Open `Plugins/Unity/project` on Unity
+
+2. Export: [ToolBar] -> [BochiTracker] -> [Export Package]
 
 #### Godot Build
 
-※ Required flatbuffers build and sons
+※ Required flatbuffers build and installed sons
 
 1. Run `python ExternalTools\BuildScripts\build_godot.py`
 
