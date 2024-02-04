@@ -3,27 +3,32 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
 using UnityEngine;
+using PlasticPipe.PlasticProtocol.Messages;
 
 namespace BocchiTracker
 {
     /// <summary>
     /// Manages TCP socket communication for the BocchiTracker system.
     /// </summary>
-    public class BocchiTrackerTcpSocket
+    public class BocchiTrackerTcpSocket : MonoBehaviour
     {
         public Action<List<byte>> ReciveCallback { private get; set; } // Callback to handle received data
 
         private Socket socket; // The TCP socket
         private Queue<List<byte>> sendDataQueue = new Queue<List<byte>>(); // Queue for outgoing data
 
-        public BocchiTrackerTcpSocket()
+        public void Start()
         {
             socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             socket.Blocking = false; // Set socket to non-blocking mode
+
+            var setting = GetComponent<BocchiTrackerSetting>();
+            StartCoroutine(Connect(setting.ServerAddress, setting.ServerPort));
         }
 
         /// <summary>
@@ -31,20 +36,14 @@ namespace BocchiTracker
         /// </summary>
         /// <param name="inIPAddress">The IP address to connect to.</param>
         /// <param name="inPort">The port number to connect to.</param>
-        public async Task Connect(string inIPAddress, int inPort)
+        private IEnumerator Connect(string inIPAddress, int inPort)
         {
             if (IPAddress.TryParse(inIPAddress, out IPAddress ipAddress))
             {
-                while (!IsConnect())
-                {
-                    try
-                    {
-                        await socket.ConnectAsync(ipAddress, inPort);
-                        Debug.Log("Connected to server.");
-                    }
-                    catch { }
-                }
+                Task connectTask = socket.ConnectAsync(ipAddress, inPort);
+                yield return new WaitUntil(() => connectTask.IsCompleted);
             }
+            yield break;
         }
 
         /// <summary>
@@ -59,13 +58,13 @@ namespace BocchiTracker
         /// <summary>
         /// Updates the socket, processing send and receive operations.
         /// </summary>
-        public async Task Update()
+        public void Update()
         {
             if (sendDataQueue.TryDequeue(out List<byte> data))
             {
-                await ProcessSendData(data);
+                StartCoroutine(ProcessSendData(data));
             }
-            await ProcessReceiveData();
+            StartCoroutine(ProcessReceiveData());
         }
 
         /// <summary>
@@ -77,30 +76,26 @@ namespace BocchiTracker
             sendDataQueue.Enqueue(inData);
         }
 
-        private async Task ProcessSendData(List<byte> inData)
+        private IEnumerator ProcessSendData(List<byte> inData)
         {
             if (!IsConnect())
-                return;
+                yield break;
 
-            int bytesSent = await socket.SendAsync(inData.ToArray(), SocketFlags.None);
-            if (bytesSent > 0)
-            {
-                Console.WriteLine("Data sent successfully: " + bytesSent + " bytes");
-            }
-            else
-            {
-                Console.WriteLine("Failed to send data.");
-            }
+            var task = socket.SendAsync(inData.ToArray(), SocketFlags.None);
+            yield return new WaitUntil(() => task.IsCompleted);
         }
 
-        private async Task ProcessReceiveData()
+        private IEnumerator ProcessReceiveData()
         {
             if (!IsConnect())
-                return;
+                yield break;
 
             byte[] receivedData = new byte[1024];
-            int bytesRead = await socket.ReceiveAsync(receivedData, SocketFlags.None);
-            if (bytesRead > 0)
+            var task = socket.ReceiveAsync(receivedData, SocketFlags.None);
+            yield return new WaitUntil(() => task.IsCompleted);
+            
+            int bytesRead = task.Result;
+            if (task.Result > 0)
             {
                 Console.WriteLine("ProcessReceiveData::Success, size=" + bytesRead);
                 List<byte> receivedDataList = new List<byte>(receivedData);

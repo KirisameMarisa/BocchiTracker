@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Google.FlatBuffers;
 using static UnityEngine.Application;
+using UnityEditor.SceneManagement;
 
 namespace BocchiTracker
 {
@@ -16,7 +17,7 @@ namespace BocchiTracker
     {
         public Queue<BocchiTrackerLocation> JumpRequest { get; set; } = new Queue<BocchiTrackerLocation>();
 
-        private static BocchiTrackerTcpSocket tcpSocket;
+        private BocchiTrackerTcpSocket tcpSocket;
         private BocchiTrackerSetting setting;
         private BocchiTrackerLogHook logHook;
         private bool isSentAppBasicInfo;
@@ -26,7 +27,6 @@ namespace BocchiTracker
         {
             if (tcpSocket == null)
                 tcpSocket = new BocchiTrackerTcpSocket();
-
         }
 
         private void Awake()
@@ -35,14 +35,13 @@ namespace BocchiTracker
                 logHook = new BocchiTrackerLogHook();
         }
 
-        private async void Start()
+        private void Start()
         {
             setting = GetComponent<BocchiTrackerSetting>();
+            if(tcpSocket == null)
+                tcpSocket = gameObject.AddComponent<BocchiTrackerTcpSocket>();
             if (!IsConnect())
-            {
                 isSentAppBasicInfo = false;
-                await tcpSocket.Connect(setting.ServerAddress, setting.ServerPort);
-            }
             tcpSocket.ReciveCallback = this.OnReceiveData;
         }
 
@@ -51,7 +50,7 @@ namespace BocchiTracker
             tcpSocket.DisConnect();
         }
 
-        private async void Update()
+        private void Update()
         {
             if (IsConnect())
             {
@@ -59,8 +58,6 @@ namespace BocchiTracker
                     ProcessSendAppBasicInfo();
 
                 ProcessSendLogMessage();
-
-                await tcpSocket.Update();
             }
         }
 
@@ -100,7 +97,7 @@ namespace BocchiTracker
 
         public bool IsConnect()
         {
-            return tcpSocket.IsConnect();
+            return tcpSocket != null && tcpSocket.IsConnect();
         }
 
         private void OnReceiveData(List<byte> inData)
