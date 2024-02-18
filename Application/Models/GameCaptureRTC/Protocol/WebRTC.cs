@@ -62,7 +62,7 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             {
                 if (rawImage.PixelFormat == SIPSorceryMedia.Abstractions.VideoPixelFormatsEnum.Rgb)
                 {
-                    inFrameStorage.AddFrame((int)rawImage.Width, (int)rawImage.Height, (int)rawImage.Stride, rawImage.Sample, rawImage.PixelFormat.ToString());
+                    inFrameStorage.AddFrame((int)rawImage.Width, (int)rawImage.Height, (int)rawImage.Stride, rawImage.Sample);
                 }
             };
 
