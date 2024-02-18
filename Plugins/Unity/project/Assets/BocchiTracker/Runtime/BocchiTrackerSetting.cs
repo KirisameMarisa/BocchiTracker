@@ -17,8 +17,7 @@ namespace BocchiTracker
         public int ServerPort => serverPort;
 
         [SerializeField]
-        private Camera screenshotCamera = null;
-        public Camera ScreenshotCamera => screenshotCamera;
-
+        private Camera captureCamera = null;
+        public Camera CaptureCamera => captureCamera;
     }
 }
