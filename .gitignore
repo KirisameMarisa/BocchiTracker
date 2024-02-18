@@ -17,6 +17,8 @@ Plugins/UnrealEngine/BocchiTracker/Intermediate
 Plugins/UnrealEngine/ThirdParty/flatbuffers/include
 Plugins/UnrealEngine/ThirdParty/flatbuffers/lib
 Google.FlatBuffers.*
+websocket-sharp.*
+
 
 ### Unity ###
 # This .gitignore file should be placed at the root of your Unity project directory
