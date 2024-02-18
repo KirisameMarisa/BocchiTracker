@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using SixLabors.ImageSharp.Formats;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using BocchiTracker.ImageProcessorAsync;
 using System.Reflection;
 using System;
 using static System.Net.Mime.MediaTypeNames;

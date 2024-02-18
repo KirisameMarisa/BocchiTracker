@@ -2,6 +2,10 @@
 
   <Import Project="..\..\BocchiTracker.Common.props" />
 
+  <PropertyGroup>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Res\LogFileIcon.png" />
     <None Remove="Res\PreviewLoadingIcon.png" />
@@ -12,13 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FFMpegCore" Version="5.1.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationInfoCollector\ApplicationInfoCollector.csproj" />
     <ProjectReference Include="..\Config\Config.csproj" />
-    <ProjectReference Include="..\ImageProcessorAsync\ImageProcessorAsync.csproj" />
     <ProjectReference Include="..\ProcessLinkQuery\ProcessLinkQuery.csproj" />
   </ItemGroup>
 

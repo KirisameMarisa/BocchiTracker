@@ -4,8 +4,11 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
+using SixLabors.ImageSharp.PixelFormats;
+using System.Threading;
 
-namespace BocchiTracker.ImageProcessorAsync
+namespace BocchiTracker.IssueAssetCollector
 {
     public class ImageProcessor
     {

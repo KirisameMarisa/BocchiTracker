@@ -7,6 +7,13 @@ using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Config.Configs
 {
+    public class CaptureSetting
+    {
+        public string? FFmpegPath { get; set; }
+
+        public SIPSorceryMedia.Abstractions.VideoCodecsEnum VideoCodecs { get; set; } = SIPSorceryMedia.Abstractions.VideoCodecsEnum.VP8;
+    }
+
     public class MonitoredDirectoryConfig
     {
         public string? Directory { get; set; }
@@ -60,6 +67,8 @@ namespace BocchiTracker.Config.Configs
         public List<string> QueryFields { get; set; } = new List<string>();
 
         public string FileSaveDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "FileSave");
+
+        public CaptureSetting CaptureSetting { get; set; } = new CaptureSetting();
 
         public List<MonitoredDirectoryConfig> MonitoredDirectoryConfigs { get; set; } = new List<MonitoredDirectoryConfig>();
 

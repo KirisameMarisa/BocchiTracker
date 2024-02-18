@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\BocchiTracker.Common.props" />
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <TargetFramework>net7.0-windows7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="obs-websocket-dotnet" Version="5.0.0.3" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="SIPSorcery" Version="6.2.0" />
+    <PackageReference Include="SIPSorcery.WebSocketSharp" Version="0.0.1" />
+    <PackageReference Include="SIPSorceryMedia.Abstractions" Version="1.2.1" />
+    <PackageReference Include="SIPSorceryMedia.Encoders" Version="0.0.13" />
+    <PackageReference Include="SIPSorceryMedia.FFmpeg" Version="1.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Config\Config.csproj" />
+    <ProjectReference Include="..\ModelEvent\ModelEvent.csproj" />
+  </ItemGroup>
+
+</Project>
