@@ -11,6 +11,18 @@ BocchiTracker is a bug reporting tool that allows you to report issues to variou
 <img src="./Documents/Resources/BocchiTracker_System.png" width="85%">
 
 <br>
+Currently supported capture features include:
+
+||Screenshot|Log(Application hooks)|Log(file directly copy)|Movie (Use WebRTC)|Movie (Use OBSStudio)|
+|:--:|:--:|:--:|:--:|:--:|:--:|
+|Unity|◯|◯|◯|◯||
+|UnrealEngine|◯|◯|◯|||
+|Godot|◯|☓|◯|☓||
+
+<br>
+
+
+<br>
 BocchiTracker View!
 
 <img src="./Documents/Resources/BocchiTracker.png" width="70%">
@@ -21,15 +33,6 @@ Coordinates and other cumbersome inputs are automatically entered.
 <br>
 Screenshots can also be taken with the push of a button!
 <img src="./Documents/Resources/Redmine_Sample.png" width="70%">
-
-<br>
-Currently supported game engine services include:
-
-|Unity|UnrealEngine|Godot|
-|:--:|:--:|:--:|
-|◯|◯|◯|
-
-<br>
 
 <br>
 Currently supported report services include:
