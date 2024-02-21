@@ -7,6 +7,9 @@ using Unity.Plastic.Newtonsoft.Json;
 
 public class BocchiTrackerVideoCapture : MonoBehaviour
 {
+    public string ServerAddr { get; set; }
+    public Camera CaptureCamera { get; set; }
+
     [System.Serializable]
     public class RTCMessage
     {
@@ -18,22 +21,16 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
     }
 
     private WebSocket webSocket;
-
     private RenderTexture cameraTexture;
-
     private RTCPeerConnection rtcPeerConnection;
-
     private Queue<string> messageQueue = new Queue<string>();
-
     private bool isProcessing = false;
-
-    public string ServerAddr { get; set; }
-
-    public Camera CaptureCamera { get; set; }
+    private bool isRecivedConfigParam = false;
+    private RTCConfiguration rtcConfig = new RTCConfiguration();
 
     private void Start()
     {
-        CreatePeerConnection();
+        StartCoroutine(CreatePeerConnection());
         StartCoroutine(ConnectServerTask());
     }
 
@@ -82,12 +79,13 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
         isProcessing = false;
     }
 
-    private void CreatePeerConnection()
+    private IEnumerator CreatePeerConnection()
     {
         Debug.LogWarning("create new peerConnection start");
 
-        RTCConfiguration config = default;
-        rtcPeerConnection = new RTCPeerConnection(ref config);
+        yield return new WaitUntil(() => isRecivedConfigParam);
+
+        rtcPeerConnection = new RTCPeerConnection(ref rtcConfig);
         rtcPeerConnection.OnIceConnectionChange = (state) => { Debug.LogWarning($"OnIceConnectionChange {state}"); };
         rtcPeerConnection.OnIceGatheringStateChange = (state) => { Debug.LogWarning($"OnIceGatheringStateChange {state}"); };
         rtcPeerConnection.OnConnectionStateChange = (state) => { Debug.LogWarning($"OnConnectionStateChange {state}"); };
@@ -115,6 +113,8 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
             }
         }
         StartCoroutine(WebRTC.Update());
+
+        yield break;
     }
 
     private IEnumerator ConnectServerTask()
@@ -162,6 +162,12 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
                         }
                     );
                     rtcPeerConnection.AddIceCandidate(candidate);
+                }
+                break;
+            case "config":
+                {
+                    //!< TODO...
+                    isRecivedConfigParam = true;
                 }
                 break;
             default:
