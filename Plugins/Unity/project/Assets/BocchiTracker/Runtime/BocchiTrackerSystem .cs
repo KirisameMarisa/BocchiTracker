@@ -34,8 +34,6 @@ namespace BocchiTracker
             setting = GetComponent<BocchiTrackerSetting>();
             tcpSocket = gameObject.AddComponent<BocchiTrackerTcpSocket>();
             var video_capture = gameObject.AddComponent<BocchiTrackerVideoCapture>();
-            video_capture.ServerAddr = $"ws://{setting.ServerAddress}:{setting.ServerPort}";
-            video_capture.CaptureCamera = setting.CaptureCamera;
 
             if (!IsConnect())
                 isSentAppBasicInfo = false;
