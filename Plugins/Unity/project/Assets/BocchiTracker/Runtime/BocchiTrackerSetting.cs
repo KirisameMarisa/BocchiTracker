@@ -17,7 +17,7 @@ namespace BocchiTracker
         public int ServerPort => serverPort;
 
         [SerializeField]
-        private int websocketPort = serverPort + 1;
+        private int websocketPort = 8822;
         public int WebSocketPort => websocketPort;
 
         [SerializeField]
