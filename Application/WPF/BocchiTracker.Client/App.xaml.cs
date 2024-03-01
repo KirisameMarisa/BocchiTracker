@@ -36,6 +36,7 @@ using System.Linq;
 using BocchiTracker.Config;
 using BocchiTracker.CrossServiceUploader;
 using BocchiTracker.ModelEvent;
+using BocchiTracker.GameCaptureRTC;
 
 namespace BocchiTracker.Client
 {
@@ -55,6 +56,9 @@ namespace BocchiTracker.Client
         {
             var connection = Container.Resolve<Connection>();
             connection.Stop();
+
+            var recording = Container.Resolve<RecordingController>();
+            recording.Stop();
 
             base.OnExit(e);
         }
@@ -128,6 +132,7 @@ namespace BocchiTracker.Client
 
             var cacheProvider               = Container.Resolve<ICacheProvider>();
             var connection                  = Container.Resolve<Connection>();
+            var recording                   = Container.Resolve<RecordingController>();
             var dataRepository              = Container.Resolve<IDataRepository>();
             var issueInfoBundle             = Container.Resolve<IssueInfoBundle>();
             var serviceClientFactory        = Container.Resolve<IServiceClientFactory>();
@@ -136,6 +141,7 @@ namespace BocchiTracker.Client
             authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
 
             _ = connection.StartAsync(projectConfig.Port);
+            recording.Start(projectConfig.WebSocketPort, projectConfig, userConfig);
 
             cacheProvider.SetCacheDirectory(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory);
 
@@ -180,6 +186,11 @@ namespace BocchiTracker.Client
             moduleCatalog.AddModule<ConfigModule>();
             moduleCatalog.AddModule<ApplicationInfoCollectorModule>();
             moduleCatalog.AddModule<ProcessLinkModule>();
+            moduleCatalog.AddModule<GameCaptureRTCModule>(
+                dependsOn: new string[] 
+                {
+                    typeof(ConfigModule).Name
+                });
             moduleCatalog.AddModule<ServiceClientAdaptersModule>(
                 dependsOn: new string[]
                 {
