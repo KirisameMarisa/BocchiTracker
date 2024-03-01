@@ -77,7 +77,7 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
     private void Start()
     {
         var setting = GetComponent<BocchiTrackerSetting>();
-        serverAddr = $"ws://{setting.ServerAddress}:{setting.ServerPort}";
+        serverAddr = $"ws://{setting.ServerAddress}:{setting.WebSocketPort}";
         captureCamera = setting.CaptureCamera;
 
         CreatePeerConnection();
