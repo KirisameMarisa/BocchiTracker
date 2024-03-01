@@ -2,6 +2,7 @@
 using BocchiTracker.Config.Configs;
 using BocchiTracker.IssueAssetCollector.Handlers.Coredump;
 using BocchiTracker.IssueAssetCollector.Handlers.Log;
+using BocchiTracker.IssueAssetCollector.Handlers.Movie;
 using BocchiTracker.IssueAssetCollector.Handlers.Screenshot;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLinkQuery.Queries;
@@ -26,13 +27,15 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
         private readonly IEventAggregator _eventAggregator;
         private readonly IFilenameGeneratorFactory _filenameGeneratorFactory;
         private readonly ProjectConfig _projectConfig;
+        private readonly UserConfig _userConfig;
         private readonly AppStatusBundles _appStatusBundles;
 
-        public CreateActionHandler(IEventAggregator inEventAggregator, IFilenameGeneratorFactory inFilenameGenFac, AppStatusBundles inAppStatusBundles, ProjectConfig inConfig)
+        public CreateActionHandler(IEventAggregator inEventAggregator, IFilenameGeneratorFactory inFilenameGenFac, AppStatusBundles inAppStatusBundles, ProjectConfig inProjectConfig, UserConfig inUserConfig)
         {
             _eventAggregator = inEventAggregator;
             _filenameGeneratorFactory = inFilenameGenFac;
-            _projectConfig = inConfig;
+            _projectConfig = inProjectConfig;
+            _userConfig = inUserConfig;
             _appStatusBundles = inAppStatusBundles;
         }
 
@@ -68,6 +71,12 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
             else if (inType == typeof(LogFileCaptureHandler))
             {
                 var handler = new LogFileCaptureHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(RunningAppFilenameGenerator)));
+                _cacheHandles.Add(inType, handler);
+            }
+
+            if(inType == typeof(MovieHandler))
+            {
+                var handler = new MovieHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(TimestampedFilenameGenerator)), _projectConfig.CaptureSetting.FFmpegPath);
                 _cacheHandles.Add(inType, handler);
             }
 

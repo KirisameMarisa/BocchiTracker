@@ -3,7 +3,7 @@ using Prism.Modularity;
 
 namespace BocchiTracker.GameCaptureRTC
 {
-    public class Module : IModule
+    public class GameCaptureRTCModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider) {}
 

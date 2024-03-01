@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BocchiTracker.Config.Configs;
 using OBSWebsocketDotNet;
 
 namespace BocchiTracker.GameCaptureRTC.Protocol
 {
     public class OBSCapture : ICaptureProtocol
     {
-        private OBSWebsocket _obsWebSocket;
+        private OBSWebsocket _obsWebSocket = default!;
 
-        public OBSCapture(int inPort, string inCaptureSource) 
+        public OBSCapture() 
         {
-            _obsWebSocket = new OBSWebsocket();
-            var scenes = _obsWebSocket.ListScenes();
+
         }
 
         public bool IsConnect()
         {
             throw new NotImplementedException();
         }
-
-        public void Start()
+  
+        public void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig)
         {
             throw new NotImplementedException();
         }

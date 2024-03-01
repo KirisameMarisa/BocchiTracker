@@ -9,7 +9,7 @@ namespace BocchiTracker.Config.Configs
 {
     public class CaptureSetting
     {
-        public string? FFmpegPath { get; set; }
+        public string? FFmpegPath { get; set; } = string.Empty;
 
         public SIPSorceryMedia.Abstractions.VideoCodecsEnum VideoCodecs { get; set; } = SIPSorceryMedia.Abstractions.VideoCodecsEnum.VP8;
     }
@@ -56,7 +56,9 @@ namespace BocchiTracker.Config.Configs
 
     public class ProjectConfig
     {
-        public int Port { get; set; }                  = 8888;
+        public int Port { get; set; }                   = 8888;
+
+        public int WebSocketPort { get; set; }          = 8822;
 
         public List<string> TicketTypes { get; set; }  = new List<string> { "Bug", "Task", "Question" };
 

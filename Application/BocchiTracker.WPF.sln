@@ -50,6 +50,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCaptureRTC", "Models\Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BocchiTracker.WebRTCTest", "Tests\BocchiTracker.WebRTCTest\BocchiTracker.WebRTCTest.csproj", "{B3675F7D-DF3F-4F0E-A9E0-9575381BC964}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalTools", "ExternalTools", "{75B25179-1B35-461D-80AA-80EF52E7E101}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "websocket-sharp", "..\ExternalTools\websocket-sharp\websocket-sharp\websocket-sharp.csproj", "{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +206,14 @@ Global
 		{B3675F7D-DF3F-4F0E-A9E0-9575381BC964}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3675F7D-DF3F-4F0E-A9E0-9575381BC964}.Release|x64.ActiveCfg = Release|x64
 		{B3675F7D-DF3F-4F0E-A9E0-9575381BC964}.Release|x64.Build.0 = Release|x64
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Debug|x64.Build.0 = Debug|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Release|x64.ActiveCfg = Release|Any CPU
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +238,7 @@ Global
 		{D214D1D6-7DBA-4F53-B070-9672BA3F7CBA} = {12AAC0C3-970D-43F6-BD47-0B662B7157F6}
 		{ADEDB772-6FFB-4198-9107-1AD791899679} = {677ECDC0-9125-4E30-8B8C-E0CC5F98DFF5}
 		{B3675F7D-DF3F-4F0E-A9E0-9575381BC964} = {E876F453-952B-4D58-AA0E-1D95DFF58FB5}
+		{0D0785D7-4A07-4FA0-919F-FD3AB6AED2F4} = {75B25179-1B35-461D-80AA-80EF52E7E101}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F04B3FFB-34D2-4BBE-85BA-F28DEE1BCAB6}

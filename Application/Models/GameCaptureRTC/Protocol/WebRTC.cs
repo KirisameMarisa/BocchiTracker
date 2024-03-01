@@ -13,6 +13,10 @@ using BocchiTracker.Config.Configs;
 using WebSocketSharp;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
+using System.Net.Sockets;
+using System.Threading;
+using System.Reflection.Metadata;
+using System.IO;
 
 namespace BocchiTracker.GameCaptureRTC.Protocol
 {
@@ -54,10 +58,6 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
                     Context.WebSocket.Send(AddPlayerIdJson(answerSdp.toJSON()));
                 }
             }
-            else
-            {
-                Console.WriteLine("websocket-server could not parse JSON message. " + e.Data);
-            }
         }
 
         protected override async void OnOpen()
@@ -91,14 +91,11 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
                     Context.WebSocket.Send(AddPlayerIdJson(iceCandidate.toJSON()));
                 }
             };
-
-            if (Context.QueryString["role"] != "offer")
-            {
-                RTCSessionDescriptionInit offerSdp = _pc.createOffer(OfferOptions);
-                await _pc.setLocalDescription(offerSdp).ConfigureAwait(continueOnCapturedContext: false);
-                Console.WriteLine($"Sending SDP offer to client {Context.UserEndPoint}.");
-                Context.WebSocket.Send(AddPlayerIdJson(offerSdp.toJSON()));
-            }
+            
+            RTCSessionDescriptionInit offerSdp = _pc.createOffer(OfferOptions);
+            await _pc.setLocalDescription(offerSdp).ConfigureAwait(continueOnCapturedContext: false);
+            Console.WriteLine($"Sending SDP offer to client {Context.UserEndPoint}.");
+            Context.WebSocket.Send(AddPlayerIdJson(offerSdp.toJSON()));
         }
 
         private string AddPlayerIdJson(string inJson)
@@ -112,24 +109,21 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
     public class WebRTC : WebSocketBehavior, ICaptureProtocol, IDisposable
     {
         private readonly IEventAggregator _eventAggregator;
-        private WebSocketServer _web_socket;
-        private CaptureFrameStorage _captureFrameStorage;
+        private WebSocketServer _web_socket = default!;
+        private CaptureFrameStorage _captureFrameStorage = default!;
         private static bool _isConnecting;
+        private SubscriptionToken _subscriptionToken;
 
-        public WebRTC(IEventAggregator inEventAggregator, int inPort, bool inSecure, CaptureSetting inCaptureSetting, UserCaptureSetting inUserCaptureSetting)
+        public WebRTC(IEventAggregator inEventAggregator)
         {
             _eventAggregator = inEventAggregator;
-            _captureFrameStorage = new CaptureFrameStorage(inUserCaptureSetting.RecordingFrameRate, inUserCaptureSetting.RecordingMintes);
-            _web_socket = new WebSocketServer(IPAddress.Any, inPort, inSecure);
-            _web_socket.Log.Level = WebSocketSharp.LogLevel.Trace;
-            _web_socket.AllowForwardedRequest = true;
-            _web_socket.AddWebSocketService<WebRTCWebSocketPeer>("/", (peer) => peer.CreatePeerConnection = () => CreatePeerConnection(inCaptureSetting, inUserCaptureSetting, _captureFrameStorage));
-            _web_socket.Start();
+            _subscriptionToken = _eventAggregator.GetEvent<GameCaptureStopRequest>().Subscribe(Stop, ThreadOption.BackgroundThread);
         }
 
         public void Dispose()
         {
             _web_socket.Stop();
+            _eventAggregator.GetEvent<GameCaptureStopRequest>().Unsubscribe(_subscriptionToken);
         }
 
         public bool IsConnect()
@@ -137,17 +131,27 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             return _isConnecting;
         }
 
-        public void Start() 
+        public void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig)
         {
+            string? ffmpeg = inProjectConfig.CaptureSetting.FFmpegPath;
+            if (ffmpeg == null || !Path.Exists(ffmpeg))
+                throw new Exception("FFmpeg path is not set.");
 
+            int maxFrameCount = (60 * inUserConfig.UserCaptureSetting.RecordingFrameRate) * inUserConfig.UserCaptureSetting.RecordingMintes;
+            _captureFrameStorage = new CaptureFrameStorage(ffmpeg, maxFrameCount, maxFrameCount / 10);
+            _web_socket = new WebSocketServer(IPAddress.Any, inPort, false);
+            _web_socket.Log.Level = WebSocketSharp.LogLevel.Trace;
+            _web_socket.AllowForwardedRequest = true;
+            _web_socket.AddWebSocketService<WebRTCWebSocketPeer>("/", (peer) => peer.CreatePeerConnection = () => CreatePeerConnection(inProjectConfig.CaptureSetting, inUserConfig.UserCaptureSetting, _captureFrameStorage));
+            _web_socket.Start();
         }
 
         public void Stop()
         {
-            _eventAggregator
-                .GetEvent<GameCaptureFinishEvent>()
-                .Publish(new GameCaptureFinishEventParameter { CaptureStreamParameter = _captureFrameStorage.CaptureStreamParameter });
-            _captureFrameStorage.CaptureStreamParameter.Frames.Clear();
+            string movie = _captureFrameStorage.ConcatMovie();
+            if(movie.IsNullOrEmpty()) 
+                return;
+            _eventAggregator.GetEvent<GameCaptureFinishEvent>().Publish(movie);
         }
 
         private static Task<RTCPeerConnection> CreatePeerConnection(CaptureSetting inCaptureSetting, UserCaptureSetting inUserCaptureSetting, CaptureFrameStorage inFrameStorage)
