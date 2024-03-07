@@ -131,18 +131,18 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             return _isConnecting;
         }
 
-        public void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig)
+        public void Start(int inPort, string inFFmpegPath, Config.Parts.CaptureSetting inCaptureSetting)
         {
-            string? ffmpeg = inProjectConfig.CaptureSetting.FFmpegPath;
+            string? ffmpeg = inFFmpegPath;
             if (ffmpeg == null || !Path.Exists(ffmpeg))
                 throw new Exception("FFmpeg path is not set.");
 
-            int maxFrameCount = (60 * inUserConfig.UserCaptureSetting.RecordingFrameRate) * inUserConfig.UserCaptureSetting.RecordingMintes;
+            int maxFrameCount = (60 * inCaptureSetting.RecordingFrameRate) * inCaptureSetting.RecordingMintes;
             _captureFrameStorage = new CaptureFrameStorage(ffmpeg, maxFrameCount, maxFrameCount / 10);
             _web_socket = new WebSocketServer(IPAddress.Any, inPort, false);
             _web_socket.Log.Level = WebSocketSharp.LogLevel.Trace;
             _web_socket.AllowForwardedRequest = true;
-            _web_socket.AddWebSocketService<WebRTCWebSocketPeer>("/", (peer) => peer.CreatePeerConnection = () => CreatePeerConnection(inProjectConfig.CaptureSetting, inUserConfig.UserCaptureSetting, _captureFrameStorage));
+            _web_socket.AddWebSocketService<WebRTCWebSocketPeer>("/", (peer) => peer.CreatePeerConnection = () => CreatePeerConnection(ffmpeg, inCaptureSetting, _captureFrameStorage));
             _web_socket.Start();
         }
 
@@ -154,9 +154,9 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             _eventAggregator.GetEvent<GameCaptureFinishEvent>().Publish(movie);
         }
 
-        private static Task<RTCPeerConnection> CreatePeerConnection(CaptureSetting inCaptureSetting, UserCaptureSetting inUserCaptureSetting, CaptureFrameStorage inFrameStorage)
+        private static Task<RTCPeerConnection> CreatePeerConnection(string inFFmpegPath, Config.Parts.CaptureSetting inCaptureSetting, CaptureFrameStorage inFrameStorage)
         {
-            FFmpegInit.Initialise(FfmpegLogLevelEnum.AV_LOG_VERBOSE, inCaptureSetting.FFmpegPath);
+            FFmpegInit.Initialise(FfmpegLogLevelEnum.AV_LOG_VERBOSE, inFFmpegPath);
             var videoEP = new FFmpegVideoEndPoint();
             videoEP.RestrictFormats(format => format.Codec == inCaptureSetting.VideoCodecs);
 
@@ -175,7 +175,7 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             };
             var pc = new RTCPeerConnection(config);
 
-            if (inUserCaptureSetting.IncludeAudio)
+            if (inCaptureSetting.IncludeAudio)
             {
                 MediaStreamTrack audioTrack = new MediaStreamTrack(SDPMediaTypesEnum.audio, false,
                     new List<SDPAudioVideoMediaFormat> { new SDPAudioVideoMediaFormat(SDPWellKnownMediaFormatsEnum.PCMU) }, MediaStreamStatusEnum.RecvOnly);

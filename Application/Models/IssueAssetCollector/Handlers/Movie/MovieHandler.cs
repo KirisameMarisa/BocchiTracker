@@ -1,6 +1,5 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
 using BocchiTracker.ModelEvent;
-using FFMpegCore;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -18,14 +17,12 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Movie
         public string Output { get; set; } = string.Empty;
         private IEventAggregator _eventAggregator;
 
-        public GameCaptureFrameConvertMovieProcess(IEventAggregator inEventAggregator, string inFFmpegPath)
+        public GameCaptureFrameConvertMovieProcess(IEventAggregator inEventAggregator)
         {
             _eventAggregator = inEventAggregator;
             _eventAggregator
                 .GetEvent<GameCaptureFinishEvent>()
                 .Subscribe(OnGameCaptureFinishEvent, ThreadOption.BackgroundThread);
-
-            GlobalFFOptions.Configure(options => options.BinaryFolder = inFFmpegPath);
         }
 
         public void OnGameCaptureFinishEvent(string inMoviePath)
@@ -40,12 +37,11 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Movie
         private IEventAggregator _eventAggregator;
         private GameCaptureFrameConvertMovieProcess _convert_movie_process;
 
-        public MovieHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator, string? inFFmpegPath)
+        public MovieHandler(IEventAggregator inEventAggregator, IFilenameGenerator inFilenameGenerator)
         {
-            Debug.Assert(inFFmpegPath != null, "should need ffmpegpath");
             _filenameGenerator = inFilenameGenerator;
             _eventAggregator = inEventAggregator;
-            _convert_movie_process = new GameCaptureFrameConvertMovieProcess(inEventAggregator, inFFmpegPath);
+            _convert_movie_process = new GameCaptureFrameConvertMovieProcess(inEventAggregator);
         }
 
         public void Handle(AppStatusBundle inAppStatusBundle, int inPID, string inOutput)

@@ -141,7 +141,7 @@ namespace BocchiTracker.Client
             authConfigRepositoryFactory.Initialize(Path.Combine("Configs", nameof(AuthConfig) + "s"));
 
             _ = connection.StartAsync(projectConfig.Port);
-            recording.Start(projectConfig.WebSocketPort, projectConfig, userConfig);
+            recording.Start(projectConfig.WebSocketPort, projectConfig.ExternalToolsPath.FFmpegPath, userConfig.CaptureSetting);
 
             cacheProvider.SetCacheDirectory(string.IsNullOrEmpty(projectConfig.CacheDirectory) ? Path.GetTempPath() : projectConfig.CacheDirectory);
 

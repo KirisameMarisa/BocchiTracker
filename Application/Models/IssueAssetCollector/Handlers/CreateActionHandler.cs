@@ -76,7 +76,7 @@ namespace BocchiTracker.IssueAssetCollector.Handlers
 
             if(inType == typeof(MovieHandler))
             {
-                var handler = new MovieHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(TimestampedFilenameGenerator)), _projectConfig.CaptureSetting.FFmpegPath);
+                var handler = new MovieHandler(_eventAggregator, _filenameGeneratorFactory.GetFilenameGenerator(typeof(TimestampedFilenameGenerator)));
                 _cacheHandles.Add(inType, handler);
             }
 

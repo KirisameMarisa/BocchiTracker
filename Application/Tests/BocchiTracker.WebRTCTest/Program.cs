@@ -15,22 +15,14 @@ namespace BocchiTracker.WebRTCTest
 
             var eventAggregator = new EventAggregator();
             var recordingController = new RecordingController(eventAggregator);
-            var movieSaveProcess = new GameCaptureFrameConvertMovieProcess(eventAggregator, ffmpeg);
+            var movieSaveProcess = new GameCaptureFrameConvertMovieProcess(eventAggregator);
 
-            var p_config = new Config.Configs.ProjectConfig
-            {
-                CaptureSetting = new Config.Configs.CaptureSetting
-                {
-                    FFmpegPath = ffmpeg,
-                    VideoCodecs = SIPSorceryMedia.Abstractions.VideoCodecsEnum.VP8
-                }
-            };
+            var p_config = new Config.Configs.ProjectConfig();
             var u_config = new Config.Configs.UserConfig
             {
-                UserCaptureSetting = new Config.Configs.UserCaptureSetting
+                CaptureSetting = new Config.Parts.CaptureSetting
                 {
-                    RecordingMintes = 1,
-                    GameCaptureType = Config.GameCaptureType.WebRTC
+                    VideoCodecs = SIPSorceryMedia.Abstractions.VideoCodecsEnum.VP8
                 }
             };
 
@@ -40,7 +32,7 @@ namespace BocchiTracker.WebRTCTest
 
             Console.WriteLine("キャプチャーを開始しました。");
             {
-                recordingController.Start(p_config.WebSocketPort, p_config, u_config);
+                recordingController.Start(p_config.WebSocketPort, ffmpeg, u_config.CaptureSetting);
                 Thread.Sleep(5000);
                 recordingController.Stop();
             }

@@ -9,7 +9,7 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
 {
     public interface ICaptureProtocol
     {
-        void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig);
+        void Start(int inPort, string inFFmpegPath, Config.Parts.CaptureSetting inCaptureSetting);
 
         void Stop();
 

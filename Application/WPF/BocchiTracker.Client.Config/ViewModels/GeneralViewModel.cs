@@ -62,10 +62,16 @@ namespace BocchiTracker.Client.Config.ViewModels
         [Range(1024, 65535, ErrorMessage = "Please enter value in 1024~65535")]
         public ReactiveProperty<string> TcpPort { get; set; }
 
+        [Range(1024, 65535, ErrorMessage = "Please enter value in 1024~65535")]
+        public ReactiveProperty<string> WebSocketPort { get; set; }
+
         public GeneralViewModel(IEventAggregator inEventAggregator, ProjectConfig inProjectConfig)
         {
             TcpPort = new ReactiveProperty<string>("8888").SetValidateAttribute(() => this.TcpPort);
             TcpPort.Subscribe(value => inProjectConfig.Port = int.Parse(value));
+
+            WebSocketPort = new ReactiveProperty<string>("8822").SetValidateAttribute(() => this.WebSocketPort);
+            WebSocketPort.Subscribe(value => inProjectConfig.WebSocketPort = int.Parse(value));
 
             inEventAggregator
                 .GetEvent<ConfigReloadEvent>()

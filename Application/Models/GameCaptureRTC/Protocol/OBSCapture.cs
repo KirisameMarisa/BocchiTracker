@@ -22,7 +22,7 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
             throw new NotImplementedException();
         }
   
-        public void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig)
+        public void Start(int inPort, string inFFmpegPath, Config.Parts.CaptureSetting inCaptureSetting)
         {
             throw new NotImplementedException();
         }

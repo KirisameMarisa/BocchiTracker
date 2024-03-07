@@ -3,17 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using BocchiTracker.Config.Parts;
 using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Config.Configs
 {
-    public class CaptureSetting
-    {
-        public string? FFmpegPath { get; set; } = string.Empty;
-
-        public SIPSorceryMedia.Abstractions.VideoCodecsEnum VideoCodecs { get; set; } = SIPSorceryMedia.Abstractions.VideoCodecsEnum.VP8;
-    }
-
     public class MonitoredDirectoryConfig
     {
         public string? Directory { get; set; }
@@ -49,10 +43,6 @@ namespace BocchiTracker.Config.Configs
         public List<ValueMapping>               DefaultValue { get; set;} = new List<ValueMapping>();
     }
 
-    public class ExternalToolsPath
-    {
-        public string? ProcDumpPath { get; set; }
-    }
 
     public class ProjectConfig
     {
@@ -69,8 +59,6 @@ namespace BocchiTracker.Config.Configs
         public List<string> QueryFields { get; set; } = new List<string>();
 
         public string FileSaveDirectory { get; set; }  = Path.Combine(Environment.CurrentDirectory, "FileSave");
-
-        public CaptureSetting CaptureSetting { get; set; } = new CaptureSetting();
 
         public List<MonitoredDirectoryConfig> MonitoredDirectoryConfigs { get; set; } = new List<MonitoredDirectoryConfig>();
 

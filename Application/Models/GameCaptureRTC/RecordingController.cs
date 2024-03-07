@@ -24,9 +24,9 @@ namespace BocchiTracker.GameCaptureRTC
             return _captureProtocol.IsConnect();
         }
 
-        public void Start(int inPort, ProjectConfig inProjectConfig, UserConfig inUserConfig)
+        public void Start(int inPort, string inFFmpegPath, Config.Parts.CaptureSetting inCaptureSetting)
         {
-            switch (inUserConfig.UserCaptureSetting.GameCaptureType)
+            switch (inCaptureSetting.GameCaptureType)
             {
                 case Config.GameCaptureType.OBSStudio:
                     {
@@ -43,7 +43,7 @@ namespace BocchiTracker.GameCaptureRTC
             }
 
             if(_captureProtocol != null)
-                _captureProtocol.Start(inPort, inProjectConfig, inUserConfig);
+                _captureProtocol.Start(inPort, inFFmpegPath, inCaptureSetting);
         }
 
         public void Stop()
