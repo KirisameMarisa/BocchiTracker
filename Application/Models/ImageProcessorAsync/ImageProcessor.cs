@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp;
 using System.IO;
 using System.Reflection;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace BocchiTracker.ImageProcessorAsync
 {
