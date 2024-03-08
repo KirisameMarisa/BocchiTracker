@@ -1,0 +1,4 @@
+ignore:
+  - "**/Module.cs"
+  - "Application/Models/ModelEvent/*.cs"
+  - "Application/Models/IssueAssetCollector/Utils/Win32/GetWindowHandleFromPid.cs"
