@@ -46,7 +46,6 @@ namespace BocchiTracker
             yield break;
         }
 
-
         private void OnDestroy()
         {
             if (IsConnect())
