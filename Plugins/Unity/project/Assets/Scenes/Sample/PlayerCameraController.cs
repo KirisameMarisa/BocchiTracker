@@ -27,7 +27,6 @@ public class CameraController : MonoBehaviour
     private Vector3 _presentCamRotation;
     private Vector3 _presentCamPos;
 
-
     void Start()
     {
         _camTransform = this.gameObject.transform;
