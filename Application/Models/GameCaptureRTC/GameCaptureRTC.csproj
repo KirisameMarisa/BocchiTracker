@@ -8,17 +8,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FFMpegCore" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="obs-websocket-dotnet" Version="5.0.0.3" />
+    <PackageReference Include="OpenCvSharp4" Version="4.9.0.20240103" />
+    <PackageReference Include="OpenCvSharp4.runtime.centos7-x64" Version="4.0.0.20190129" />
+    <PackageReference Include="OpenCvSharp4.runtime.linux-arm" Version="4.9.0.20240103" />
+    <PackageReference Include="OpenCvSharp4.runtime.linux-arm64.cuda" Version="4.5.2.20210803" />
+    <PackageReference Include="OpenCvSharp4.runtime.osx.10.15-universal" Version="4.7.0.20230224" />
+    <PackageReference Include="OpenCvSharp4.runtime.osx.10.15-x64" Version="4.6.0.20230105" />
+    <PackageReference Include="OpenCvSharp4.runtime.ubuntu.18.04-x64" Version="4.6.0.20220608" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.9.0.20240103" />
+    <PackageReference Include="OpenCvSharp4_.runtime.ubuntu.20.04-x64" Version="4.9.0.20240103" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="SIPSorcery" Version="6.2.0" />
-    <PackageReference Include="SIPSorcery.WebSocketSharp" Version="0.0.1" />
     <PackageReference Include="SIPSorceryMedia.Abstractions" Version="1.2.1" />
     <PackageReference Include="SIPSorceryMedia.Encoders" Version="0.0.13" />
     <PackageReference Include="SIPSorceryMedia.FFmpeg" Version="1.4.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ExternalTools\websocket-sharp\websocket-sharp\websocket-sharp.csproj" />
     <ProjectReference Include="..\Config\Config.csproj" />
     <ProjectReference Include="..\ModelEvent\ModelEvent.csproj" />
   </ItemGroup>

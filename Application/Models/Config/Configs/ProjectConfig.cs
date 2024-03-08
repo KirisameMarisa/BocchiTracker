@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using BocchiTracker.Config.Parts;
 using BocchiTracker.ServiceClientData;
 
 namespace BocchiTracker.Config.Configs
@@ -49,14 +50,11 @@ namespace BocchiTracker.Config.Configs
         public List<ValueMapping>               DefaultValue { get; set;} = new List<ValueMapping>();
     }
 
-    public class ExternalToolsPath
-    {
-        public string? ProcDumpPath { get; set; }
-    }
-
     public class ProjectConfig
     {
-        public int Port { get; set; }                  = 8888;
+        public int Port { get; set; }                   = 8888;
+
+        public int WebSocketPort { get; set; }          = 8822;
 
         public List<string> TicketTypes { get; set; }  = new List<string> { "Bug", "Task", "Question" };
 

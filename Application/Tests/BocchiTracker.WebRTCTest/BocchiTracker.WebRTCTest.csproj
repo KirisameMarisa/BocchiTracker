@@ -9,11 +9,12 @@
     <Copyright>YutoArita</Copyright>
     <BaseOutputPath>..\Artifact</BaseOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FFMpegCore" Version="5.1.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>
 

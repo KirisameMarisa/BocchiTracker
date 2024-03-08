@@ -30,6 +30,7 @@ using BocchiTracker.Data;
 using BocchiTracker.Client.Share.Commands;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.IssueAssetCollector.Handlers.Log;
+using BocchiTracker.IssueAssetCollector.Handlers.Movie;
 
 namespace BocchiTracker.Client.ViewModels.ReportParts
 {
@@ -39,6 +40,7 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
 
         public ICommand TakeScreenshotCommand { get; private set; }
         public ICommand CaptureCoredumpCommand { get; private set; }
+        public ICommand TakeMovieCommand { get; private set; }
         public ICommand PostIssueCommand { get; private set; }
 
         [Required(ErrorMessage = "Required")]
@@ -66,6 +68,7 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
         {
             TakeScreenshotCommand   = new DelegateCommand(OnTakeScreenshot);
             CaptureCoredumpCommand  = new DelegateCommand(OnCaptureCoredump);
+            TakeMovieCommand        = new AsyncCommand(OnTakeMovie);
             PostIssueCommand        = new AsyncCommand(OnPostIssue);
 
             PostServices            = new ReactiveCollection<PostServiceItem>();
@@ -187,6 +190,22 @@ namespace BocchiTracker.Client.ViewModels.ReportParts
 
             var handler = _createActionHandler.Create(typeof(RemoteScreenshotHandler));
             handler.Handle(_appStatusBundles.TrackerApplication, 0, _projectConfig.FileSaveDirectory);
+        }
+
+        public async Task OnTakeMovie()
+        {
+            if (_projectConfig == null)
+                return;
+
+            _eventAggregator.GetEvent<StartProgressEvent>().Publish(new ProgressEventParameter { Message = "Take movie" });
+            {
+                await Task.Run(() => 
+                {
+                    var handler = _createActionHandler.Create(typeof(MovieHandler));
+                    handler.Handle(_appStatusBundles.TrackerApplication, 0, _projectConfig.FileSaveDirectory);
+                });
+            }
+            _eventAggregator.GetEvent<EndProgressEvent>().Publish();
         }
 
         public void OnConnectedCreateHandle(AppStatusBundle inAppStatusBundle)

@@ -41,20 +41,36 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Margin="10" Header="Game Connect Settings">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label   Grid.Column="0" 
+                    <Label   Grid.Column="0" 
                          Content="TCP Port" HorizontalAlignment="Center" FontSize="16"></Label>
-                <TextBox Grid.Column="1" 
+                    <TextBox Grid.Column="1" 
                          Text="{Binding TcpPort.Value, UpdateSourceTrigger=PropertyChanged}"
                          MinWidth="120"
                          HorizontalContentAlignment="Right"
                          HorizontalAlignment="Center"  FontSize="16" Foreground="White"></TextBox>
-            </Grid>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label   Grid.Column="0" 
+                         Content="WebSocket Port" HorizontalAlignment="Center" FontSize="16"></Label>
+                    <TextBox Grid.Column="1" 
+                         Text="{Binding WebSocketPort.Value, UpdateSourceTrigger=PropertyChanged}"
+                         MinWidth="120"
+                         HorizontalContentAlignment="Right"
+                         HorizontalAlignment="Center"  FontSize="16" Foreground="White"></TextBox>
+                </Grid>
+            </StackPanel>
         </GroupBox>
     </StackPanel>
 </UserControl>

@@ -27,6 +27,7 @@ namespace BocchiTracker.Client.ViewModels
         public UserConfigParts.AuthenticationParts AuthenticationParts { get; set; }
         public UserConfigParts.ChoiceProjectConfigParts ChoiceProjectConfigParts  { get; set; }
         public UserConfigParts.MiscParts MiscParts { get; set; }
+        public UserConfigParts.MovieCaptureParts MovieCaptureParts { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
         private IAuthConfigRepositoryFactory _authConfigRepository;
@@ -53,6 +54,7 @@ namespace BocchiTracker.Client.ViewModels
             AuthenticationParts = new UserConfigParts.AuthenticationParts();
             MiscParts = new UserConfigParts.MiscParts();
             ChoiceProjectConfigParts = new UserConfigParts.ChoiceProjectConfigParts();
+            MovieCaptureParts = new UserConfigParts.MovieCaptureParts();
         }
 
         private void OnConfigReload(ConfigReloadEventParameter inParam)
@@ -61,14 +63,14 @@ namespace BocchiTracker.Client.ViewModels
             if (userConfig == null)
                 _userConfigRepository.Save(new UserConfig());
 
-            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts })
+            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts, MovieCaptureParts })
                 ui.Initialize(_userConfigRepository, _authConfigRepository, _projectConfigRepository.Load());
         }
 
        public void OnSave()
        {
             bool isNeedRestart = false;
-            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts })
+            foreach (var ui in new List<UserConfigParts.IConfig> { AuthenticationParts, ChoiceProjectConfigParts, MiscParts, MovieCaptureParts })
                 ui.Save(ref isNeedRestart);
 
             var config = _userConfigRepository.Load();

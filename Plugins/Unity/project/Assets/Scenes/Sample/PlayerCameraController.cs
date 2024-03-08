@@ -5,28 +5,27 @@ using UnityEngine.SocialPlatforms;
 
 public class CameraController : MonoBehaviour
 {
-    // WASDF‘OŒã¶‰E‚ÌˆÚ“®
-    // QEFã¸E~‰º
-    // ¶ƒhƒ‰ƒbƒOF‹“_‚ÌˆÚ“®
+    // WASDï¼šå‰å¾Œå·¦å³ã®ç§»å‹•
+    // QEï¼šä¸Šæ˜‡ãƒ»é™ä¸‹
+    // å·¦ãƒ‰ãƒ©ãƒƒã‚°ï¼šè¦–ç‚¹ã®ç§»å‹•
 
-    //ƒJƒƒ‰‚ÌˆÚ“®—Ê
+    //ã‚«ãƒ¡ãƒ©ã®ç§»å‹•é‡
     [SerializeField, Range(0.1f, 20.0f)]
     private float _positionStep = 5.0f;
 
-    //ƒ}ƒEƒXŠ´“x
+    //ãƒã‚¦ã‚¹æ„Ÿåº¦
     [SerializeField, Range(30.0f, 300.0f)]
     private float _mouseSensitive = 90.0f;
 
-    //ƒJƒƒ‰‚Ìtransform  
+    //ã‚«ãƒ¡ãƒ©ã®transform  
     private Transform _camTransform;
 
-    //ƒ}ƒEƒX‚Ìn“_ 
+    //ãƒã‚¦ã‚¹ã®å§‹ç‚¹ 
     private Vector3 _startMousePos;
 
-    //ƒJƒƒ‰‰ñ“]‚Ìn“_î•ñ
+    //ã‚«ãƒ¡ãƒ©å›è»¢ã®å§‹ç‚¹æƒ…å ±
     private Vector3 _presentCamRotation;
     private Vector3 _presentCamPos;
-
 
     void Start()
     {
@@ -35,15 +34,14 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        CameraRotationMouseControl(); //ƒJƒƒ‰‚Ì‰ñ“] ƒ}ƒEƒX
-        CameraPositionKeyControl();   //ƒJƒƒ‰‚Ìƒ[ƒJƒ‹ˆÚ“® ƒL[
+        CameraRotationMouseControl(); //ã‚«ãƒ¡ãƒ©ã®å›è»¢ ãƒã‚¦ã‚¹
+        CameraPositionKeyControl();   //ã‚«ãƒ¡ãƒ©ã®ãƒ­ãƒ¼ã‚«ãƒ«ç§»å‹• ã‚­ãƒ¼
     }
 
-
-    //ƒJƒƒ‰‚Ì‰ñ“] ƒ}ƒEƒX
+    //ã‚«ãƒ¡ãƒ©ã®å›è»¢ ãƒã‚¦ã‚¹
     private void CameraRotationMouseControl()
     {
-        /* ƒ}ƒEƒX‚ªƒNƒŠƒbƒN‚³‚ê‚½‚Æ‚« */
+        /* ãƒã‚¦ã‚¹ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã¨ã */
         if (Input.GetMouseButtonDown(0))
         {
             _startMousePos = Input.mousePosition;
@@ -51,22 +49,22 @@ public class CameraController : MonoBehaviour
             _presentCamRotation.y = _camTransform.transform.eulerAngles.y;
         }
 
-        /* ƒ}ƒEƒX‚ªƒNƒŠƒbƒN‚³‚ê‚Ä‚¢‚éŠÔ */
+        /* ãƒã‚¦ã‚¹ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹é–“ */
         if (Input.GetMouseButton(0))
         {
-            //(ˆÚ“®ŠJnÀ•W - ƒ}ƒEƒX‚ÌŒ»İÀ•W) / ‰ğ‘œ“x ‚Å³‹K‰»
+            //(ç§»å‹•é–‹å§‹åº§æ¨™ - ãƒã‚¦ã‚¹ã®ç¾åœ¨åº§æ¨™) / è§£åƒåº¦ ã§æ­£è¦åŒ–
             float x = (_startMousePos.x - Input.mousePosition.x) / Screen.width;
             float y = (_startMousePos.y - Input.mousePosition.y) / Screen.height;
 
-            //‰ñ“]ŠJnŠp“x { ƒ}ƒEƒX‚Ì•Ï‰»—Ê * ƒ}ƒEƒXŠ´“x
-            float eulerX = _presentCamRotation.x + y * _mouseSensitive;
-            float eulerY = _presentCamRotation.y + x * _mouseSensitive;
+            //å›è»¢é–‹å§‹è§’åº¦ ï¼‹ ãƒã‚¦ã‚¹ã®å¤‰åŒ–é‡ * ãƒã‚¦ã‚¹æ„Ÿåº¦
+            float eulerX = _presentCamRotation.x + (y * _mouseSensitive);
+            float eulerY = _presentCamRotation.y + (x * _mouseSensitive);
 
             _camTransform.rotation = Quaternion.Euler(eulerX, eulerY, 0);
         }
     }
 
-    //ƒJƒƒ‰‚Ìƒ[ƒJƒ‹ˆÚ“® ƒL[
+    //ã‚«ãƒ¡ãƒ©ã®ãƒ­ãƒ¼ã‚«ãƒ«ç§»å‹• ã‚­ãƒ¼
     private void CameraPositionKeyControl()
     {
         Vector3 campos = _camTransform.position;
