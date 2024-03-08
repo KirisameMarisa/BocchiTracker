@@ -46,13 +46,12 @@ namespace BocchiTracker
             yield break;
         }
 
-        /// <summary>
-        /// Disconnects the socket.
-        /// </summary>
-        public void DisConnect()
+        private void OnDestroy()
         {
-            if(IsConnect())
+            if (IsConnect())
+            {
                 socket.Disconnect(true);
+            }
         }
 
         /// <summary>
@@ -94,14 +93,18 @@ namespace BocchiTracker
             var task = socket.ReceiveAsync(receivedData, SocketFlags.None);
             yield return new WaitUntil(() => task.IsCompleted);
             
-            int bytesRead = task.Result;
-            if (task.Result > 0)
+            try
             {
-                Console.WriteLine("ProcessReceiveData::Success, size=" + bytesRead);
-                List<byte> receivedDataList = new List<byte>(receivedData);
-                receivedDataList.RemoveRange(bytesRead, receivedData.Length - bytesRead);
-                ReciveCallback?.Invoke(receivedDataList);
+                int bytesRead = task.Result;
+                if (task.Result > 0)
+                {
+                    Console.WriteLine("ProcessReceiveData::Success, size=" + bytesRead);
+                    List<byte> receivedDataList = new List<byte>(receivedData);
+                    receivedDataList.RemoveRange(bytesRead, receivedData.Length - bytesRead);
+                    ReciveCallback?.Invoke(receivedDataList);
+                }
             }
+            catch { }
         }
 
         /// <summary>
