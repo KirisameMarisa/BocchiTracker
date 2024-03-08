@@ -35,6 +35,9 @@ jobs:
       - name: Build flatbuffers
         run: python ExternalTools/BuildScripts/build_flatbuffers_csharp.py
 
+      - name: Build Websocket-CSharp
+        run: python ExternalTools/BuildScripts/build_websocket_csharp.py
+
       - name: Setup unity
         uses: game-ci/unity-builder@v4
         env:
@@ -133,6 +136,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
