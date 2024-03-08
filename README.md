@@ -13,10 +13,10 @@ BocchiTracker is a bug reporting tool that allows you to report issues to variou
 <br>
 Currently supported capture features include:
 
-||Screenshot|Log(Application hooks)|Log(file directly copy)|Movie (Use WebRTC)|Movie (Use OBSStudio)|
+||Screenshot|Log(Application hooks)|Log(file directly copy)|Movie (Use WebRTC)|Movie (Use OBSStudio Coming soon)|
 |:--:|:--:|:--:|:--:|:--:|:--:|
 |Unity|◯|◯|◯|◯||
-|UnrealEngine|◯|◯|◯|||
+|UnrealEngine|◯|◯|◯|◯||
 |Godot|◯|☓|◯|☓||
 
 <br>
