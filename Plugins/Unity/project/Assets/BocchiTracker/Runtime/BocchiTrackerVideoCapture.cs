@@ -246,9 +246,6 @@ public class BocchiTrackerVideoCapture : MonoBehaviour
                 }
                 break;
             case "config":
-                { 
-
-                }
                 break;
             default:
                 {

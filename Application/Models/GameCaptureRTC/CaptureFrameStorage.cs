@@ -88,7 +88,6 @@ namespace BocchiTracker.GameCaptureRTC
                         _curFrameCount++;
                         _curSpliteFrameCount++;
                     }
-
                 }
 
                 if (_curSpliteFrameCount > _maxSplitFrameCount)
@@ -111,7 +110,6 @@ namespace BocchiTracker.GameCaptureRTC
                     _curFrameCount -= _maxSplitFrameCount;
                 }
             }
-
         }
 
         public string ConcatMovie()

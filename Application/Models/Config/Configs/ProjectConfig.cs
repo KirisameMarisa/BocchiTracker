@@ -43,7 +43,6 @@ namespace BocchiTracker.Config.Configs
         public List<ValueMapping>               DefaultValue { get; set;} = new List<ValueMapping>();
     }
 
-
     public class ProjectConfig
     {
         public int Port { get; set; }                   = 8888;

@@ -13,7 +13,6 @@ namespace BocchiTracker.IssueAssetCollector.Handlers.Movie
 {
     public class GameCaptureFrameConvertMovieProcess
     {
-
         public string Output { get; set; } = string.Empty;
         private IEventAggregator _eventAggregator;
 

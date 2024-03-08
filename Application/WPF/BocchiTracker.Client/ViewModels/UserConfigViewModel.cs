@@ -29,7 +29,6 @@ namespace BocchiTracker.Client.ViewModels
         public UserConfigParts.MiscParts MiscParts { get; set; }
         public UserConfigParts.MovieCaptureParts MovieCaptureParts { get; set; }
 
-
         private readonly IEventAggregator _eventAggregator;
         private IAuthConfigRepositoryFactory _authConfigRepository;
         private CachedConfigRepository<ProjectConfig> _projectConfigRepository;

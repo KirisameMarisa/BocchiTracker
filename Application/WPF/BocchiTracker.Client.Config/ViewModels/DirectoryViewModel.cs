@@ -74,7 +74,6 @@ namespace BocchiTracker.Client.Config.ViewModels
 
         public ReactiveProperty<string> FFmpegPath { get; set; }
 
-
         public ExternalToolPathes(ProjectConfig inProjectConfig)
         {
             ProcdumpPath = new ReactiveProperty<string>();

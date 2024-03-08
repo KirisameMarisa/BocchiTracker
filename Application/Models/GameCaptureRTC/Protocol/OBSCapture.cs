@@ -12,10 +12,7 @@ namespace BocchiTracker.GameCaptureRTC.Protocol
     {
         private OBSWebsocket _obsWebSocket = default!;
 
-        public OBSCapture() 
-        {
-
-        }
+        public OBSCapture() {}
 
         public bool IsConnect()
         {
