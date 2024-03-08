@@ -30,9 +30,16 @@
         </GroupBox>
 
         <GroupBox Header="External tool Path" Margin="0,10,0,0">
-            <controls:PathInput 
+            <StackPanel>
+                <controls:PathInput 
                 Text="{Binding ExternalToolPathes.ProcdumpPath.Value}"
                 Hint="Please set path for procdump.exe"/>
+
+                <controls:PathInput 
+                Text="{Binding ExternalToolPathes.FFmpegPath.Value}"
+                Hint="Please set path for ffmpeg"/>
+            </StackPanel>
+
         </GroupBox>
     </StackPanel>
 </UserControl>

@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -35,6 +38,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
 
     - name: Setup .NET on Windows
       uses: actions/setup-dotnet@v4
@@ -62,6 +68,9 @@ jobs:
       Builder: 1
     steps:
       - uses: actions/checkout@v3
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4

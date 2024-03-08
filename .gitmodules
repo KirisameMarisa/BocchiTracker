@@ -4,3 +4,6 @@
 [submodule "ExternalTools/godot-cpp"]
 	path = ExternalTools/godot-cpp
 	url = https://github.com/godotengine/godot-cpp
+[submodule "ExternalTools/websocket-sharp"]
+	path = ExternalTools/websocket-sharp
+	url = https://github.com/sta/websocket-sharp

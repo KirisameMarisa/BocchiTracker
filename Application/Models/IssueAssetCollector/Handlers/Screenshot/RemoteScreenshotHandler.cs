@@ -1,5 +1,4 @@
 ﻿using BocchiTracker.ApplicationInfoCollector;
-using BocchiTracker.ImageProcessorAsync;
 using BocchiTracker.ModelEvent;
 using BocchiTracker.ProcessLinkQuery.Queries;
 using Prism.Events;

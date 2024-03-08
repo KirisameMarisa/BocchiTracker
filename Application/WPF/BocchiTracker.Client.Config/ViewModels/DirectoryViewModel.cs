@@ -72,10 +72,15 @@ namespace BocchiTracker.Client.Config.ViewModels
     {
         public ReactiveProperty<string> ProcdumpPath { get; set; }
 
+        public ReactiveProperty<string> FFmpegPath { get; set; }
+
         public ExternalToolPathes(ProjectConfig inProjectConfig)
         {
             ProcdumpPath = new ReactiveProperty<string>();
             ProcdumpPath.Subscribe(value => inProjectConfig.ExternalToolsPath.ProcDumpPath = value);
+
+            FFmpegPath = new ReactiveProperty<string>();
+            FFmpegPath.Subscribe(value => inProjectConfig.ExternalToolsPath.FFmpegPath = value);
         }
     }
 
@@ -124,6 +129,7 @@ namespace BocchiTracker.Client.Config.ViewModels
                 MonitoredDirectories.OnAddItem(new Tuple<string, string>(dir.Directory, dir.Filter));
             }
             ExternalToolPathes.ProcdumpPath.Value       = config.ExternalToolsPath.ProcDumpPath;
+            ExternalToolPathes.FFmpegPath.Value         = config.ExternalToolsPath.FFmpegPath;
             FileSaveDirectory.WorkingDirectory.Value    = config.FileSaveDirectory;
             FileSaveDirectory.CacheDirectory.Value      = config.CacheDirectory;
         }
@@ -144,6 +150,7 @@ namespace BocchiTracker.Client.Config.ViewModels
                 projectConfig.MonitoredDirectoryConfigs.Add(moniteredDirectory);
             }
             projectConfig.ExternalToolsPath.ProcDumpPath = ExternalToolPathes.ProcdumpPath.Value;
+            projectConfig.ExternalToolsPath.FFmpegPath = ExternalToolPathes.FFmpegPath.Value;
             projectConfig.CacheDirectory = FileSaveDirectory.CacheDirectory.Value;
             projectConfig.FileSaveDirectory = FileSaveDirectory.WorkingDirectory.Value;
         }

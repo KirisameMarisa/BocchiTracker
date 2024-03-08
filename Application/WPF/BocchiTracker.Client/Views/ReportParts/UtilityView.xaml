@@ -36,6 +36,18 @@
                             </StackPanel>
                         </Grid>
                     </Button>
+                    <Button Margin="5" Command="{Binding TakeMovieCommand}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="Movie" VerticalAlignment="Center" Width="24" Height="24"/>
+                            <StackPanel Grid.Column="1">
+                                <Label Content="Take movie" FontWeight="Bold" VerticalContentAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </Button>
                     <Button Margin="5" Command="{Binding CaptureCoredumpCommand}">
                         <Grid>
                             <Grid.ColumnDefinitions>

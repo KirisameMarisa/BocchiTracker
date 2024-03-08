@@ -1,7 +1,9 @@
 {
     "name": "BocchiTrackerPlugin",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Unity.WebRTC"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

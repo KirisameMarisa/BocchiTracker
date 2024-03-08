@@ -23,12 +23,6 @@ namespace BocchiTracker
         private bool isSentAppBasicInfo;
         private Queue<object> pendingProcessRequest = new Queue<object>();
 
-        public BocchiTrackerSystem()
-        {
-            if (tcpSocket == null)
-                tcpSocket = new BocchiTrackerTcpSocket();
-        }
-
         private void Awake()
         {
             if (logHook == null)
@@ -38,16 +32,12 @@ namespace BocchiTracker
         private void Start()
         {
             setting = GetComponent<BocchiTrackerSetting>();
-            if(tcpSocket == null)
-                tcpSocket = gameObject.AddComponent<BocchiTrackerTcpSocket>();
+            tcpSocket = gameObject.AddComponent<BocchiTrackerTcpSocket>();
+            var video_capture = gameObject.AddComponent<BocchiTrackerVideoCapture>();
+
             if (!IsConnect())
                 isSentAppBasicInfo = false;
             tcpSocket.ReciveCallback = this.OnReceiveData;
-        }
-
-        private void OnDestroy()
-        {
-            tcpSocket.DisConnect();
         }
 
         private void Update()
@@ -171,14 +161,14 @@ namespace BocchiTracker
 
             // Capture the screenshot
             RenderTexture rt = new RenderTexture(screenWidth, screenHeight, 32);
-            RenderTexture prev_rt = setting.ScreenshotCamera.targetTexture;
-            Quaternion prev_rot = setting.ScreenshotCamera.transform.rotation;
+            RenderTexture prev_rt = setting.CaptureCamera.targetTexture;
+            Quaternion prev_rot = setting.CaptureCamera.transform.rotation;
             Texture2D screenShot = new Texture2D(screenWidth, screenHeight, TextureFormat.RGBA32, false);
 
             // Configure camera for screenshot
-            setting.ScreenshotCamera.targetTexture = rt;
-            setting.ScreenshotCamera.Render();
-            setting.ScreenshotCamera.targetTexture = prev_rt;
+            setting.CaptureCamera.targetTexture = rt;
+            setting.CaptureCamera.Render();
+            setting.CaptureCamera.targetTexture = prev_rt;
 
             // Read and apply the screenshot data
             RenderTexture.active = rt;

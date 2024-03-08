@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <TargetFramework>net7.0-windows7.0</TargetFramework>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <Copyright>YutoArita</Copyright>
+    <BaseOutputPath>..\Artifact</BaseOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>x64</Platforms>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FFMpegCore" Version="5.1.0" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\Config\Config.csproj" />
+    <ProjectReference Include="..\..\Models\GameCaptureRTC\GameCaptureRTC.csproj" />
+    <ProjectReference Include="..\..\Models\IssueAssetCollector\IssueAssetCollector.csproj" />
+    <ProjectReference Include="..\..\Models\ModelEvent\ModelEvent.csproj" />
+  </ItemGroup>
+
+</Project>
