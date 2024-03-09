@@ -1,6 +1,6 @@
 .vs/
 .godot/
-
+docker/
 bin/
 obj/
 Artifact/
