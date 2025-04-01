@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <UseWPF>true</UseWPF>
-    <OutputType>Exe</OutputType>
-    <Nullable>disable</Nullable>
-    <TargetFramework>net7.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net7.0</TargetFramework>
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <Copyright>YutoArita</Copyright>
     <BaseOutputPath>..\Artifact</BaseOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 

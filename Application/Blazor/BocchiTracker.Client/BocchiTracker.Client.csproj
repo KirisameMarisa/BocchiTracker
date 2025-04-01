@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\ExternalTools\websocket-sharp\websocket-sharp\websocket-sharp.csproj" />
+      <ProjectReference Include="..\..\Models\ApplicationInfoCollector\ApplicationInfoCollector.csproj" />
+      <ProjectReference Include="..\..\Models\Config\Config.csproj" />
+      <ProjectReference Include="..\..\Models\CrossServiceReporter\CrossServiceReporter.csproj" />
+      <ProjectReference Include="..\..\Models\CrossServiceUploader\CrossServiceUploader.csproj" />
+      <ProjectReference Include="..\..\Models\GameCaptureRTC\GameCaptureRTC.csproj" />
+      <ProjectReference Include="..\..\Models\IssueAssetCollector\IssueAssetCollector.csproj" />
+      <ProjectReference Include="..\..\Models\IssueInfoCollector\IssueInfoCollector.csproj" />
+      <ProjectReference Include="..\..\Models\ModelEvent\ModelEvent.csproj" />
+      <ProjectReference Include="..\..\Models\ProcessLinkQuery\ProcessLinkQuery.csproj" />
+      <ProjectReference Include="..\..\Models\ProcessLink\ProcessLink.csproj" />
+      <ProjectReference Include="..\..\Models\ServiceClientAdapters\ServiceClientAdapters.csproj" />
+      <ProjectReference Include="..\..\Models\ServiceClientData\ServiceClientData.csproj" />
+    </ItemGroup>
+
+</Project>

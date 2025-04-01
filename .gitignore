@@ -9,6 +9,7 @@ Artifact/
 *.yaml
 *.dblite
 *.unityproj
+*.idea
 launchSettings.json
 
 Plugins/UnrealEngine/BocchiTracker/Content
