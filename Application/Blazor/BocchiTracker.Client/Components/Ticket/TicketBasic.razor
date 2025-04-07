@@ -1,0 +1,37 @@
+@* Components/Ticket/TicketBasic.razor *@
+<div class="ticket-basic p-3">
+    <div class="form-group d-flex mb-3">
+        <select class="form-control me-2" style="width: 30%;" @bind="SelectedTicketType">
+            <option disabled selected value="">TicketType</option>
+            @foreach (var type in TicketTypes)
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+
+        <input type="text"
+               class="form-control"
+               placeholder="Summary..."
+               @bind="Summary"
+               style="font-size: 15px;" />
+    </div>
+
+    <div class="form-group">
+        <textarea class="form-control"
+                  rows="5"
+                  placeholder="Description..."
+                  @bind="Description"
+                  style="font-size: 16px;"></textarea>
+    </div>
+</div>
+
+@code {
+    private string SelectedTicketType { get; set; } = "";
+    private string Summary { get; set; } = "";
+    private string Description { get; set; } = "";
+
+    private List<string> TicketTypes = new()
+    {
+        "Bug", "Feature", "Support", "Task"
+    };
+}

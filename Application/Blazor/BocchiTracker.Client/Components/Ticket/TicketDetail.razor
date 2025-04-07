@@ -1,0 +1,106 @@
+@* Components/Ticket/TicketDetail.razor *@
+<div class="ticket-detail p-3">
+    <div class="form-group mb-3">
+        <label>Connected To</label>
+        <select class="form-control" @bind="ConnectedTo">
+            @foreach (var option in ConnectedToOptions)
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Assign</label>
+        <input class="form-control" placeholder="Assignee name..." @bind="AssignText" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Class</label>
+        <select class="form-control" @bind="Class">
+            @foreach (var option in ClassOptions)
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Priority</label>
+        <select class="form-control" @bind="Priority">
+            @foreach (var option in PriorityOptions)
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Labels</label>
+        <ul class="list-group mb-2">
+            @foreach (var label in Labels)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @label
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveLabel(label)">x</button>
+                </li>
+            }
+        </ul>
+        <input class="form-control" placeholder="Add label..." @bind="NewLabelText" />
+        <button class="btn btn-sm btn-primary mt-1" @onclick="AddLabel">Add</button>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Watchers</label>
+        <ul class="list-group mb-2">
+            @foreach (var watcher in Watchers)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @watcher
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveWatcher(watcher)">x</button>
+                </li>
+            }
+        </ul>
+        <input class="form-control" placeholder="Add watcher..." @bind="NewWatcherText" />
+        <button class="btn btn-sm btn-primary mt-1" @onclick="AddWatcher">Add</button>
+    </div>
+</div>
+
+@code {
+    private string ConnectedTo { get; set; } = "";
+    private string AssignText { get; set; } = "";
+    private string Class { get; set; } = "";
+    private string Priority { get; set; } = "";
+
+    private List<string> ConnectedToOptions = new() { "None", "Issue A", "Issue B" };
+    private List<string> ClassOptions = new() { "Bug", "Feature", "Task" };
+    private List<string> PriorityOptions = new() { "Low", "Medium", "High" };
+
+    private List<string> Labels = new() { "UI", "Backend" };
+    private string NewLabelText { get; set; } = "";
+
+    private List<string> Watchers = new() { "Alice", "Bob" };
+    private string NewWatcherText { get; set; } = "";
+
+    private void AddLabel()
+    {
+        if (!string.IsNullOrWhiteSpace(NewLabelText))
+        {
+            Labels.Add(NewLabelText);
+            NewLabelText = "";
+        }
+    }
+
+    private void RemoveLabel(string label) => Labels.Remove(label);
+
+    private void AddWatcher()
+    {
+        if (!string.IsNullOrWhiteSpace(NewWatcherText))
+        {
+            Watchers.Add(NewWatcherText);
+            NewWatcherText = "";
+        }
+    }
+
+    private void RemoveWatcher(string watcher) => Watchers.Remove(watcher);
+}

@@ -75,3 +75,10 @@ main {
         padding-right: 1.5rem !important;
     }
 }
+
+.background-color {
+    background-color: #1e1e2f;
+    color: white;
+    height: 100vh;
+    padding-top: 1rem;
+}
